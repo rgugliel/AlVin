@@ -1,0 +1,6 @@
+<map id="AlgebraicInteger" name="AlgebraicInteger">
+<area shape="rect" id="node2" href="$class_quadratic_integer.html" title="Quadratic integers. " alt="" coords="5,80,124,107"/>
+<area shape="rect" id="node3" href="$class_quadratic_integer_big.html" title="Quadratic integers with bigint components. " alt="" coords="148,80,285,107"/>
+<area shape="rect" id="node4" href="$class_rational_integer.html" title="Rational integers. " alt="" coords="309,80,420,107"/>
+<area shape="rect" id="node5" href="$class_r_cyclotomic7_integer.html" title="RC7 and their operations. " alt="" coords="444,80,589,107"/>
+</map>

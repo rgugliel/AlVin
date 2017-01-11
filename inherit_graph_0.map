@@ -1,0 +1,7 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$class_algebraic_integer.html" title="Parent class for rational, quadratic and rc7 integers. " alt="" coords="5,81,121,108"/>
+<area shape="rect" id="node2" href="$class_quadratic_integer.html" title="Quadratic integers. " alt="" coords="183,5,301,32"/>
+<area shape="rect" id="node3" href="$class_quadratic_integer_big.html" title="Quadratic integers with bigint components. " alt="" coords="173,56,311,83"/>
+<area shape="rect" id="node4" href="$class_rational_integer.html" title="Rational integers. " alt="" coords="187,107,297,133"/>
+<area shape="rect" id="node5" href="$class_r_cyclotomic7_integer.html" title="RC7 and their operations. " alt="" coords="169,157,315,184"/>
+</map>

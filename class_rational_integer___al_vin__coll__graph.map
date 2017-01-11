@@ -1,0 +1,5 @@
+<map id="RationalInteger_AlVin" name="RationalInteger_AlVin">
+<area shape="rect" id="node2" href="$class_al_vin.html" title="Main class for AlVin. " alt="" coords="53,184,106,211"/>
+<area shape="rect" id="node3" href="$class_al_vin_fractions.html" title="This class represents a set of possible fractions x_0^2 / (e,e) We generate series of the type: (x0 +..." alt="" coords="26,95,133,121"/>
+<area shape="rect" id="node4" href="$class_algebraic_integer.html" title="Parent class for rational, quadratic and rc7 integers. " alt="" coords="21,5,137,32"/>
+</map>
