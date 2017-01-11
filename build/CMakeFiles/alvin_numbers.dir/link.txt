@@ -1,2 +1,0 @@
-/usr/bin/ar qc libalvin_numbers.a  CMakeFiles/alvin_numbers.dir/media/Data/Rafael/phd/codes/C++/CoxIter/lib/math_tools.cpp.o CMakeFiles/alvin_numbers.dir/quadraticinteger.cpp.o CMakeFiles/alvin_numbers.dir/rationalinteger.cpp.o CMakeFiles/alvin_numbers.dir/algebraicinteger.cpp.o CMakeFiles/alvin_numbers.dir/rcyclotomic7integer.cpp.o
-/usr/bin/ranlib libalvin_numbers.a

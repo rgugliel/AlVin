@@ -1,2 +1,0 @@
-/usr/bin/ar qc libalvin_fractions.a  CMakeFiles/alvin_fractions.dir/alvinfraction.cpp.o CMakeFiles/alvin_fractions.dir/alvinfractions.cpp.o CMakeFiles/alvin_fractions.dir/rationalinteger_alvinfractions.cpp.o CMakeFiles/alvin_fractions.dir/quadraticinteger_alvinfractions.cpp.o CMakeFiles/alvin_fractions.dir/rcyclotomic7integer_alvinfractions.cpp.o CMakeFiles/alvin_fractions.dir/rcyclotomic7integer.cpp.o
-/usr/bin/ranlib libalvin_fractions.a

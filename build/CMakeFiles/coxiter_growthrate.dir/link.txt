@@ -1,2 +1,0 @@
-/usr/bin/ar qc libcoxiter_growthrate.a  CMakeFiles/coxiter_growthrate.dir/media/Data/Rafael/phd/codes/C++/CoxIter/lib/paripolynomials.cpp.o CMakeFiles/coxiter_growthrate.dir/media/Data/Rafael/phd/codes/C++/CoxIter/growthrate.cpp.o
-/usr/bin/ranlib libcoxiter_growthrate.a

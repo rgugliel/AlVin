@@ -1,2 +1,0 @@
-/usr/bin/ar qc libalvin_nr.a  CMakeFiles/alvin_nr.dir/rationalinteger_notreflexive.cpp.o CMakeFiles/alvin_nr.dir/notreflexive.cpp.o CMakeFiles/alvin_nr.dir/infinitensymetries.cpp.o CMakeFiles/alvin_nr.dir/rationalinteger_infinitensymetries.cpp.o CMakeFiles/alvin_nr.dir/quadraticinteger_infinitensymetries.cpp.o CMakeFiles/alvin_nr.dir/quadraticinteger_big.cpp.o CMakeFiles/alvin_nr.dir/rcyclotomic7integer_infinitensymetries.cpp.o
-/usr/bin/ranlib libalvin_nr.a

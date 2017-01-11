@@ -1,2 +1,0 @@
-/usr/bin/ar qc libcoxiter.a  CMakeFiles/coxiter.dir/media/Data/Rafael/phd/codes/C++/CoxIter/gbd.cpp.o CMakeFiles/coxiter.dir/media/Data/Rafael/phd/codes/C++/CoxIter/coxiter.cpp.o CMakeFiles/coxiter.dir/media/Data/Rafael/phd/codes/C++/CoxIter/arithmeticity.cpp.o
-/usr/bin/ranlib libcoxiter.a
