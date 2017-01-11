@@ -231,7 +231,7 @@ bool AlVin::Run( unsigned int iMinVectors, unsigned int iMaxVectors, bool bLastC
 				for( j = 0; j <= iDimension; j++ )
 					strFilename += aiQF[j]->to_string( "filename" ) + ( j < iDimension ? "," : "" );
 
-				if( !ptrCI->bWriteGraph( "../output/" + strFilename ) || !ptrCI->bWriteGraphToDraw( "../output/" + strFilename ) )
+				if( !ptrCI->bWriteGraph( "output/" + strFilename ) || !ptrCI->bWriteGraphToDraw( "output/" + strFilename ) )
 					cout << "Error:\n\tCheck that the folder 'output/' exists and is writable" << endl;
 				else if( bWriteInfo )
 				{
@@ -242,13 +242,13 @@ bool AlVin::Run( unsigned int iMinVectors, unsigned int iMaxVectors, bool bLastC
 						if( iCreateImage == 1 || ( iCreateImage == -1 && iVectorsCount <= 25 ) )
 						{
 							FILE *fin;
-							string strCmd( "dot -Tjpg -o../../AlVin/output/" + strFilename + ".jpg  ../../AlVin/output/" + strFilename + ".graphviz" );
+							string strCmd( "dot -Tjpg -ooutput/" + strFilename + ".jpg  output/" + strFilename + ".graphviz" );
 							if( ( fin = popen( strCmd.c_str(), "r" ) ) )
 								pclose( fin );
 						}
 						else
 						{
-							cout << "\nCommand to create the image: \n\tdot -Tjpg -o../../AlVin/output/" << strFilename << ".jpg  ../../AlVin/output/" << strFilename << ".graphviz\n" << endl;
+							cout << "\nCommand to create the image: \n\tdot -Tjpg -ooutput/" << strFilename << ".jpg  output/" << strFilename << ".graphviz\n" << endl;
 						}
 					}
 				}
@@ -272,20 +272,20 @@ bool AlVin::Run( unsigned int iMinVectors, unsigned int iMaxVectors, bool bLastC
 	for( j = 0; j <= iDimension; j++ )
 		strFilename += aiQF[j]->to_string() + ( j < iDimension ? "," : "" );
 
-	ci.bWriteGraph( "../output/" + strFilename );
-	ci.bWriteGraphToDraw( "../output/" + strFilename );
+	ci.bWriteGraph( "output/" + strFilename );
+	ci.bWriteGraphToDraw( "output/" + strFilename );
 	
 	if( bWriteInfo )
 	{
 		if( iCreateImage == 1 || ( iCreateImage == -1 && iVectorsCount <= 25 ) )
 		{
 			FILE *fin;
-			string strCmd( "dot -Tjpg -o../../AlVin/output/" + strFilename + ".jpg  ../../AlVin/output/" + strFilename + ".graphviz" );
+			string strCmd( "dot -Tjpg -ooutput/" + strFilename + ".jpg output/" + strFilename + ".graphviz" );
 			if( ( fin = popen( strCmd.c_str(), "r" ) ) )
 				pclose( fin );
 		}
 		else
-			cout << "\nCommand to create the image: \n\tdot -Tjpg -o../../AlVin/output/" << strFilename << ".jpg  ../../AlVin/output/" << strFilename << ".graphviz\n" << endl;
+			cout << "\nCommand to create the image: \n\tdot -Tjpg -ooutput/" << strFilename << ".jpg output/" << strFilename << ".graphviz\n" << endl;
 		
 		print_finallInformation();
 	}
