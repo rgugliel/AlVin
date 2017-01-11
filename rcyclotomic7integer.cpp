@@ -43,7 +43,7 @@ void RCyclotomic7Integer::computePrimesDecomposition_factorMinimalPolynomial( GE
 	// ----------------------------------------------
 	// Create the polynomial mod iPrime
 	GEN pol( cgetg( iMinimalPolynomialSize+2, t_POL) ); // iMinimalPolynomialSize coefficients, sign and variable number
-	pol[1] = evalsigne(1) | evalvarn(iVar) | evallgef(iMinimalPolynomialSize+2); // not equal to zero, variable, coefficients
+	pol[1] = evalsigne(1) | evalvarn(iVar) | evallgefint(iMinimalPolynomialSize+2); // not equal to zero, variable, coefficients
 	
 	for( unsigned int i(0); i < iMinimalPolynomialSize; i++ )
 	{
