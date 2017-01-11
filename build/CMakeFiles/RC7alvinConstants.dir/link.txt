@@ -1,0 +1,2 @@
+/usr/bin/ar qc libRC7alvinConstants.a  CMakeFiles/RC7alvinConstants.dir/rcyclotomic7integer_constants.cpp.o
+/usr/bin/ranlib libRC7alvinConstants.a

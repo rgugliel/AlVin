@@ -1,0 +1,2 @@
+/usr/bin/ar qc libalvin_maths.a  CMakeFiles/alvin_maths.dir/media/Data/Rafael/phd/codes/C++/CoxIter/lib/math_tools.cpp.o CMakeFiles/alvin_maths.dir/media/Data/Rafael/phd/codes/C++/CoxIter/lib/polynomials.cpp.o CMakeFiles/alvin_maths.dir/media/Data/Rafael/phd/codes/C++/CoxIter/lib/numbers/number_template.cpp.o CMakeFiles/alvin_maths.dir/media/Data/Rafael/phd/codes/C++/CoxIter/lib/numbers/mpz_rational.cpp.o
+/usr/bin/ranlib libalvin_maths.a

@@ -1,0 +1,40 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/media/Data/Rafael/phd/codes/C++/CoxIter/growthrate.cpp
+growthrate.h
+/media/Data/Rafael/phd/codes/C++/CoxIter/growthrate.h
+
+/media/Data/Rafael/phd/codes/C++/CoxIter/growthrate.h
+vector
+-
+pari/pari.h
+-
+gmpxx.h
+/media/Data/Rafael/phd/codes/C++/CoxIter/gmpxx.h
+gmpxx.h
+-
+iostream
+-
+lib/paripolynomials.h
+/media/Data/Rafael/phd/codes/C++/CoxIter/lib/paripolynomials.h
+
+/media/Data/Rafael/phd/codes/C++/CoxIter/lib/paripolynomials.cpp
+paripolynomials.h
+/media/Data/Rafael/phd/codes/C++/CoxIter/lib/paripolynomials.h
+
+/media/Data/Rafael/phd/codes/C++/CoxIter/lib/paripolynomials.h
+vector
+-
+pari/pari.h
+-
+gmpxx.h
+/media/Data/Rafael/phd/codes/C++/CoxIter/lib/gmpxx.h
+gmpxx.h
+-
+
