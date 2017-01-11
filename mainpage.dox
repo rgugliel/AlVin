@@ -1,0 +1,575 @@
+/*!
+\mainpage Main page of the documentation
+
+\author Rafael Guglielmetti
+
+\section main_infosGens General information
+%AlVin is a C++ implementation of the Vinberg algorithm for diagonal quadratic forms. The coefficients of the quadratic forms must be in the ring of integers of one of the following fields:
+- Rational numbers
+- Quadratic field Q[sqrt d], for d=2, 3, 5, 6, 7, 11, 13, 14, 17, 19, 21, 22, 23, 29, 31, 33, 37, 38, 41, 43, 46, 47, 51, 53, 57, 58, 59, 61, 62, 67, 69, 71, 73, 74, 77, 78, 79, 82, 83, 85, 86, 89, 91, 93, 94, 95, 97
+- Q[ cos(2*pi/7) ]
+
+\section main_infosInstall Installing AlVin
+- \ref main_compilation_gnu
+- \ref main_compilation_win_cygwin
+- \ref main_compilation_osx
+
+Remark: On Windows and OSX it is not possible to use the field RC7.
+
+\tableofcontents
+
+\section sec_toc Table of contents
+- \ref pageInstall
+- \ref pageAlVin
+*/
+
+/*! \page pageInstall Building %AlVin
+\tableofcontents
+
+This page is divided into the following sections:
+- \subpage main_compilation_gnu
+- \subpage main_compilation_win_cygwin
+- \subpage main_compilation_osx
+
+\section main_compilation_gnu Compilation with GNU/Linux
+The following steps were tested on Ubuntu, Linux Mint and Fedora. With other distributions the commands may vary slightly.
+
+\subsection main_compilation_gnu_gen Preliminaries
+First, install everything you will need to compile the program. 
+
+You will need g++ and cmake to compile AlVin and CoxIter. The libraries graphviz, pcre and pari are needed for CoxIter and libxml2 is an additional library needed by AlVin. 
+The easiest way to obtain the source code is using git.
+
+On Ubuntu, Linux Mint or any Debian-based distribution, type the following commands in a Shell:
+\code
+sudo apt-get install g++ cmake graphviz libpcre3-dev libpari-dev libgmp-dev libxml2-dev git
+\endcode
+
+On Fedora, type the following commands in a Shell:
+\code
+sudo yum install g++ cmake graphviz pcre-devel pari-devel libxml2-devel git
+\endcode
+
+We can now download CoxIter and Alvin. With a shell, go to the directory where you want to install %AlVin and type the following: 
+\code
+git clone https://github.com/rgugliel/CoxIter
+git clone https://github.com/rgugliel/AlVin
+\endcode
+
+We also need the following libraries: <a href="http://lipforge.ens-lyon.fr/frs/?group_id=8&release_id=123" target="_blank">crlibm</a>, <a href="https://sourceforge.net/projects/gaol/" target="_blank">GAOL</a>, <a href="http://igraph.org/c/" target="_blank">igraph</a> and <a href="http://eigen.tuxfamily.org/index.php" target="_blank">Eigen</a><br />
+You can either download the libraries separately or use the versions given with AlVin. In the latter case, type the following commands:
+\code
+cd AlVin/lib/
+tar -xf crlibm-1.0beta5.tgz
+cd crlibm/
+./configure
+make
+sudo make install
+cd ..
+
+tar -xf gaol-4.2.0.tar.gz
+cd gaol-4.2.0/
+./configure -q --disable-verbose-mode --with-mathlib=crlibm
+sudo make install
+cd ..
+
+tar -xf igraph-0.7.1.tar.gz
+cd igraph-0.7.1/
+./configure
+make
+sudo make install
+cd ..
+
+tar -xf eigen-eigen-f562a193118d.tar.bz2
+cd eigen-eigen-f562a193118d/
+mkdir build
+cd build
+cmake ../
+sudo make install
+cd ../../
+
+rm -rf gaol-4.2.0/
+rm -rf crlibm/
+rm -rf igraph-0.7.1/
+sudo rm -rf eigen-eigen-f562a193118d/
+cd ../../
+\endcode
+
+You can now build AlVin:
+\code
+cd AlVin/build/
+cmake ../
+make
+\endcode
+
+\subsection main_compilation_gnu_compile Compilation
+With a shell, go to the directory where you want to install %AlVin and type the following: 
+\code
+cd AlVin/build
+cmake ../
+make
+\endcode
+The compilation should be done withour error or warning. Now, %AlVin is usable.
+
+Remark: If you don't have Git, you can simply download %AlVin and CoxIter here: <a href="https://github.com/rgugliel/CoxIter/archive/master.zip">https://github.com/rgugliel/CoxIter/archive/master.zip</a> and <a href="https://github.com/rgugliel/AlVin/archive/master.zip">https://github.com/rgugliel/AlVin/archive/master.zip</a>
+
+\subsection main_compilation_gnu_troubleshooting Troubleshooting
+If one of the library (PCRE, PARI/GP) is installed but is not found, try to run the following command:
+\code
+sudo ldconfig
+\endcode
+
+\subsection main_compilation_gnu_advanced Advanced information
+If you want to manually install PCRE, you can do as follows:
+Get the latest 8.x version on <a href="http://www.pcre.org/" target="_blank">the officiel website</a> or use version 8.39 (do not use PCRE2). To do that, type the following commands in a shell:
+\code
+wget ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.39.tar.gz
+tar -xvzf pcre-8.39.tar.gz
+cd pcre-8.39/
+./configure
+make
+sudo make install
+\endcode
+Then, you can delete the temporary files:
+\code
+cd ..
+rm -rf pcre-8.39
+rm pcre-8.39.tar.gz
+\endcode
+
+\section main_compilation_osx Compilation on OSX
+First, open a terminal and enter the following command to install the prerequisites:
+\code
+xcode-select --install
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+brew install cmake graphviz pcre++
+brew install Caskroom/cask/xquartz
+brew install homebrew/x11/pari
+\endcode
+
+Now, download the last version of GMP from the <a href="https://gmplib.org/#DOWNLOAD">official website</a>.<br />
+Extract the downloaded file and open a terminal in GMP folder. Then, use the following commands:
+\code
+./configure
+make
+make check
+sudo make install
+\endcode
+
+We can now download %CoxIter and %Alvin. With a shell, go to the directory where you want to install %AlVin and type the following: 
+\code
+git clone https://github.com/rgugliel/CoxIter
+git clone https://github.com/rgugliel/AlVin
+\endcode
+
+We also need the following libraries: <a href="http://igraph.org/c/" target="_blank">igraph</a> and <a href="http://eigen.tuxfamily.org/index.php" target="_blank">Eigen</a><br />
+You can either download the libraries separately or use the versions given with AlVin. In the latter case, type the following commands:
+\code
+cd AlVin/lib/
+
+tar -xf igraph-0.7.1.tar.gz
+cd igraph-0.7.1/
+./configure
+make
+sudo make install
+cd ..
+
+tar -xf eigen-eigen-dc6cfdf9bcec.tar.bz2
+cd eigen-eigen-dc6cfdf9bcec/
+mkdir build
+cd build
+cmake ../
+sudo make install
+cd ../../
+
+rm -rf igraph-0.7.1/
+sudo rm -rf eigen-eigen-dc6cfdf9bcec/
+cd ../../
+\endcode
+
+You can now build AlVin:
+\code
+cd AlVin/build/
+cmake ../
+make
+\endcode
+
+\section main_compilation_win_cygwin Compilation on Windows with CygWin
+First, we need to download CygWin: <a href="https://cygwin.com/install.html">https://cygwin.com/install.html</a>
+
+Then, we need to install CygWin together with the following packages:
+- Devel > cmake
+- Devel > gcc-g++
+- Devel > git
+- Devel > make
+- Libs > libgmp-devel
+- Libs > libpcre-devel
+
+We will suppose that CygWin was installed in "c:/cygwin/". You can choose any path you want but be sure not to include any space.
+
+Once this is done, download PARI (<a href="http://pari.math.u-bordeaux.fr/">http://pari.math.u-bordeaux.fr/</a>) into your CygWin folder (c:/cygwin/home/YOURNAME/) and extract it.
+Then, to install PARI, open the CgyWin terminal, and type the following:
+\code
+cd pari*
+./configure
+make install
+\endcode
+
+Copy the file "c:/cygwin/usr/local/lib/libpari-gmp.dll" to "c:/cygwin/bin/libpari-gmp.dll"
+
+<!-- We can now download %CoxIter and %Alvin. With a shell, go to the directory where you want to install %AlVin and type the following: 
+\code
+git clone https://github.com/rgugliel/CoxIter
+git clone https://github.com/rgugliel/AlVin
+\endcode -->
+
+With a shell, go to the directory where which contains %AlVin and CoxIter
+
+We also need the following libraries: <a href="http://igraph.org/c/" target="_blank">igraph</a> and <a href="http://eigen.tuxfamily.org/index.php" target="_blank">Eigen</a><br />
+You can either download the libraries separately or use the versions given with AlVin. In the latter case, type the following commands:
+\code
+cd AlVin/lib/
+
+tar -xf igraph-0.7.1.tar.gz
+cd igraph-0.7.1/
+./configure
+make
+make install
+cd ..
+
+tar -xf eigen-eigen-f562a193118d.tar.bz2
+cd eigen-eigen-f562a193118d/
+mkdir build
+cd build
+cmake ../
+make install
+cd ../../
+
+rm -rf igraph-0.7.1/
+rm -rf eigen-eigen-f562a193118d/
+cd ../../
+\endcode
+
+You can now build AlVin:
+\code
+cd AlVin/build/
+cmake ../
+make
+\endcode
+
+*/
+
+/*! \page pageAlVin Using %AlVin
+
+\tableofcontents
+
+\section AlVin_params Parameters of AlVin
+
+The parameters of %AlVin can be separated in the following types:
+- Basic mandatory parameters: 
+	- quadratic form
+	- field of definition of the quadratic form
+- Basic optional parameters:
+	- Number of vectors to compute
+- Output (optional):
+	- What we want to compute
+	- Format of the output
+- Non-reflexivity (optional)<br />
+	If we want to determine whether the form is non-reflexive
+
+We present the parameters separately.
+
+\subsection AlVin_paramsBasic Basic mandatory parameters
+
+\param -qf The quadratic form
+
+\param -k The field of definition<br />
+Can have the following values:
+- Q
+- Q[ sqrt d ]
+- RC7 for the field Q[ cos(2*pi*\/7) ]
+Remark: One does not have to specify the field if the quadratic form is defined over the rationals.
+
+\subsection AlVin_paramsBasicOpt Basic optional parameters
+\param -minv Minimal number of vectors to compute (integer)
+	As long as this number is not reached, %AlVin does not test whether the polyhedron has finite volume or not.
+\param -maxv Maximal number of vectors to compute (integer)
+
+\subsection AlVin_paramsOutput Parameters regarding the output (optional)
+
+\param -ip Invariants of the polyhedron<br />
+	If specified and if the algorithm terminates, the following information will be displayed:
+	- Euler characteristic
+	- f-vector
+	- Number of vertices at infinity
+	- Growth series
+	- Growth rate and some of its properties (Perron number, Salem number, Pisot number)
+	
+\param -iqf Invariants of the quadratic field<br />
+	If the field of definition is Q, the complete invariant of the commensurability class of the quadratic form will be displayed.
+
+\param -oformat The format of the output<br />
+Possible values: latex, mathematica, pari
+
+\subsection AlVin_paramsNonReflexivity Testing the non-reflexivity (optional)
+
+\param -nr Non-reflexivity<br />
+	If specified, %AlVin will try to determine whether the quadratic form is non-reflexive or not.<br />
+	More information here: \ref AlVin_examplesNR
+	
+\param -nrequations Non-reflexivity (K=Q)<br />
+	If the quadratic form is defined over Z, create the systems of equations to test the non-reflexivity of the quadratic form.
+
+\section AlVin_examples Examples
+
+\subsection AlVin_example1 First example, over the rationals
+To find the fundamental polyhedron associated to the quadratic form <-2,3,1,1,1>, we call %AlVin as follows:
+\code
+	./alvin -qf -2,3,1,1,1
+\endcode
+and the output is the following:
+\code
+Quadratic form (4,1): -2, 1, 1, 1, 3
+Field of definition: Q
+
+Vectors: 
+	e1 = (0, -1, 1, 0, 0)
+	e2 = (0, 0, -1, 1, 0)
+	e3 = (0, 0, 0, -1, 0)
+	e4 = (0, 0, 0, 0, -1)
+	e5 = (1, 1, 0, 0, 1)
+	e6 = (1, 2, 0, 0, 0)
+	e7 = (1, 1, 1, 1, 0)
+	e8 = (3, 3, 3, 0, 1)
+Algorithm ended
+
+Graph written in the file: 
+	output/4-2,1,1,1,3.coxiter
+
+Computation time: 0.0650726s
+\endcode
+
+If we want the information about the associated polyhedron, we add "-ip" (invariants polyhedron):
+\code
+	./alvin -qf -2,3,1,1,1 -ip
+\endcode
+and we get
+\code
+Quadratic form (4,1): -2, 1, 1, 1, 3
+Field of definition: Q
+
+Vectors: 
+	e1 = (0, -1, 1, 0, 0)
+	e2 = (0, 0, -1, 1, 0)
+	e3 = (0, 0, 0, -1, 0)
+	e4 = (0, 0, 0, 0, -1)
+	e5 = (1, 1, 0, 0, 1)
+	e6 = (1, 2, 0, 0, 0)
+	e7 = (1, 1, 1, 1, 0)
+	e8 = (3, 3, 3, 0, 1)
+Algorithm ended
+
+Graph written in the file: 
+	output/4-2,1,1,1,3.coxiter
+
+---------------------------------
+Information about the polyhedron:
+---------------------------------
+Euler characteristic: 5/192
+Volume: pi^2 * 5/144
+f-vector: (13, 28, 23, 8, 1)
+Number of vertices at infinity: 1
+
+Growth series: 
+f(x) = C(2,2,2,2,3,4,4,6,8)/(1 - 4 * x + 4 * x^2 - 7 * x^3 + 9 * x^4 - 9 * x^5 + 13 * x^6 - 10 * x^7 + 15 * x^8 - 8 * x^9 + 10 * x^10 - 5 * x^11 + 5 * x^12 - 3 * x^13 + x^14 - 2 * x^15)
+
+Growth rate: 3.2137002182040596788604014104377817271
+	Perron number: yes
+	Pisot number: no
+	Salem number: no
+
+Computation time: 0.0689565s
+\endcode
+
+To change the format of the output (e.g. to use it in Mathematica), we add "-oformat mathematica", and we get:
+\code
+Quadratic form (4,1): -2, 1, 1, 1, 3
+Field of definition: Q
+
+F[x_, y_] := Sum[x[[i]]*y[[i]]*qform[[i]], {i, 1, Length[x]}];
+S[x_, y_] := F[x, y]/Sqrt[F[x, x]*F[y, y]];
+qform := {-(2), 1, 1, 1, 3};
+vectors := {{0, -1, 1, 0, 0}};
+vectors = Append[vectors, {0, 0, -1, 1, 0}]; (* vector 2 *); 
+vectors = Append[vectors, {0, 0, 0, -1, 0}]; (* vector 3 *); 
+vectors = Append[vectors, {0, 0, 0, 0, -1}]; (* vector 4 *); 
+vectors = Append[vectors, {1, 1, 0, 0, 1}]; (* vector 5 *); 
+vectors = Append[vectors, {1, 2, 0, 0, 0}]; (* vector 6 *); 
+vectors = Append[vectors, {1, 1, 1, 1, 0}]; (* vector 7 *); 
+vectors = Append[vectors, {3, 3, 3, 0, 1}]; (* vector 8 *); 
+grammatrix := Table[S[vectors[[i]], vectors[[j]]], {i, 1, Length[vectors]}, {j, 1, Length[vectors]}];
+Algorithm ended
+
+Graph written in the file: 
+	output/4-2,1,1,1,3.coxiter
+
+---------------------------------
+Information about the polyhedron:
+---------------------------------
+Euler characteristic: 5/192
+Volume: pi^2 * 5/144
+f-vector: (13, 28, 23, 8, 1)
+Number of vertices at infinity: 1
+
+Growth series: 
+Cyclo[s_, x_] := Product[Cyclotomic[s[[i]], x], {i, 1, Length[s]}];
+f[x_] := Cyclo[{2,2,2,2,3,4,4,6,8},x]/(1 - 4 * x + 4 * x^2 - 7 * x^3 + 9 * x^4 - 9 * x^5 + 13 * x^6 - 10 * x^7 + 15 * x^8 - 8 * x^9 + 10 * x^10 - 5 * x^11 + 5 * x^12 - 3 * x^13 + x^14 - 2 * x^15);
+
+Growth rate: 3.2137002182040596788604014104377817271
+	Perron number: yes
+	Pisot number: no
+	Salem number: no
+
+Computation time: 0.111749s
+\endcode
+
+\subsection AlVin_example2 Second example, over Q[sqrt 2]
+We want to compute the polyhedron associated to the form <-1-sqrt(2),1,1,1,1>, over Q[ sqrt 2 ]. We call %AlVin as follows:
+\code
+./alvin -qf -1-T,1,1,1,1 -k Q[sqrt 2]
+\endcode
+and the output is then:
+\code
+Quadratic form (4,1): -1 - 1 * T(2), 1, 1, 1, 1
+Field of definition: Q[ sqrt(2) ]
+
+Vectors: 
+	e1 = (0, -1, 1, 0, 0)
+	e2 = (0, 0, -1, 1, 0)
+	e3 = (0, 0, 0, -1, 1)
+	e4 = (0, 0, 0, 0, -1)
+	e5 = (1, 1 + 1 * T(2), 0, 0, 0)
+	e6 = (1 + 1 * T(2), 1 + 1 * T(2), 1 + 1 * T(2), 1 + 1 * T(2), 0)
+	e7 = (2 + 1 * T(2), 2 + 1 * T(2), 1 + 1 * T(2), 1 + 1 * T(2), 1 + 1 * T(2))
+Algorithm ended
+
+Graph written in the file: 
+	output/4-1+T2,1,1,1,1.coxiter
+
+Computation time: 0.06541
+\endcode
+
+<b>Remark:</b><br />
+T correspond to the generator of the ring of integers of Q[ sqrt d ], that is:
+- T = sqrt(d) if d is 2,3 mod 4
+- T = ( 1 + sqrt(d) )/2 if d is 1 mod 4
+
+\subsection AlVin_example3 Third example, over Q[cos(2*pi/7)]
+The designation for this field is RC7 (for maximal Real subfield of the p-th Cyclotomic field with p=7). Each element in the ring of integers of RC7 can be written in the Z-basis {2*cos(2*pi/7),2*cos(4*pi/7),2*cos(6*pi/7)} and will be designated by its 3 components [x,y,z]. For example, to do the computations for the quadratic form <-2*cos(2*pi/7),1,1,1,1>, we do:
+\code
+./alvin -k rc7 -qf [-1,0,0],1,1,1,1
+\endcode
+and the result is
+\code
+Quadratic form (4,1): [-1,0,0], 1, 1, 1, 1
+Field of definition: RC7
+
+Vectors: 
+	e1 = (0, -1, 1, 0, 0)
+	e2 = (0, 0, -1, 1, 0)
+	e3 = (0, 0, 0, -1, 1)
+	e4 = (0, 0, 0, 0, -1)
+	e5 = (1, [0,0,-1], 0, 0, 0)
+	e6 = ([-1,-2,-2], [0,-1,-1], [0,-1,-1], [0,-1,-1], 0)
+	e7 = ([0,-2,-4], [-1,-2,-3], [-1,-2,-3], [0,-1,-2], [0,-1,-2])
+	e8 = ([-1,-4,-7], [-1,-3,-5], [-1,-3,-5], [-1,-2,-3], [-1,-2,-3])
+Algorithm ended
+
+Graph written in the file: 
+	output/4-[1,0,0],1,1,1,1.coxiter
+
+Computation time: 9.06708s
+\endcode
+
+\subsection AlVin_examplesNR Testing the non-reflexivity
+In order to test whether a quadratic form is non-reflexive, %AlVin does as follows:
+1. It computes a certain (specified my the "-maxv" parameter) number of vectors (corresponding to normal vector of sides of the polyhedron)
+2. It computes isometries of the polyhedron which preserves the quadratic lattice.
+
+The isometries in 2. are found via isomorphism of subgraphs of the Coxeter graph. The possible sizes of these subgraphs have to be specified. If the quadratic form is of signature (n,1), then we usually can take sizes n+1,n+2 and n+3.
+
+For example, to study the quadratic form <-1,1,1,13> we can do:
+\code
+./alvin -qf -1,1,1,13 -maxv 15 -nr[5,6]
+\endcode
+Here, %AlVin will compute the first 15 vectors and use subgraphs of 5 and 6 vertices. The output is then the following:
+\code
+Quadratic form (3,1): -1, 1, 1, 13
+Field of definition: Q
+
+Vectors: 
+	e1 = (0, -1, 1, 0)
+	e2 = (0, 0, -1, 0)
+	e3 = (0, 0, 0, -1)
+	e4 = (1, 1, 1, 0)
+	e5 = (4, 2, 1, 1)
+	e6 = (13, 13, 0, 1)
+	e7 = (6, 5, 0, 1)
+	e8 = (11, 2, 1, 3)
+	e9 = (18, 1, 0, 5)
+	e10 = (52, 13, 0, 14)
+	e11 = (91, 13, 0, 25)
+	e12 = (34, 25, 8, 6)
+	e13 = (143, 104, 39, 25)
+	e14 = (72, 55, 17, 12)
+	e15 = (312, 234, 78, 53)
+
+The algorithm did not terminate; the polyhedron may be of infinite volume
+
+Checking if the form is non-reflexive...
+	The form is non reflexive
+
+Computation time: 0.277623s
+\endcode
+
+The parameter "-debug" can be used to get more information:
+\code
+Quadratic form (3,1): -1, 1, 1, 13
+Field of definition: Q
+Conditions on the coefficients: 
+	x2 <= x1
+
+Possible values for (e,e): 1, 2, 13, 26
+
+Vectors: 
+	e1 = (0, -1, 1, 0)
+	e2 = (0, 0, -1, 0)
+	e3 = (0, 0, 0, -1)
+	e4 = (1, 1, 1, 0)
+	e5 = (4, 2, 1, 1)
+	e6 = (13, 13, 0, 1)
+	e7 = (6, 5, 0, 1)
+	e8 = (11, 2, 1, 3)
+	e9 = (18, 1, 0, 5)
+	e10 = (52, 13, 0, 14)
+	e11 = (91, 13, 0, 25)
+	e12 = (34, 25, 8, 6)
+	e13 = (143, 104, 39, 25)
+	e14 = (72, 55, 17, 12)
+	e15 = (312, 234, 78, 53)
+
+The algorithm did not terminate; the polyhedron may be of infinite volume
+
+Checking if the form is non-reflexive...
+	The form is non reflexive
+	List of used involutions:
+		e2 <-> e4, e3 <-> e6, e5
+		e4, e5 <-> e7, e6 <-> e13
+
+Computation time: 0.28202s
+\endcode
+
+<b>Remark:</b><br />
+Since the tests are run in parallel in more than one processor, the involutions used can changeif you run %AlVin again.
+
+*/
