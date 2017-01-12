@@ -74,6 +74,8 @@ class App
 		
 		string strOuputMathematicalFormat; ///< Format for mathematical output (generic, mathematica)
 		
+		bool bPrintHelp; ///< If true, display help and then exit
+		
 	public:
 		App();
 		~App();
@@ -85,6 +87,8 @@ class App
 		AlVin* instanciateAlVin();
 		NotReflexive* instanciateNotReflexiveEquations( AlVin* v );
 		InfiniteNSymetries* instanciateInfiniteNSymetries( AlVin* v );
+		
+		void printHelp() const;
 };
 
 #endif // APP_H

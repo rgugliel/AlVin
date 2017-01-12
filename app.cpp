@@ -7,6 +7,7 @@ bCheckNREquations( false ),
 bComputeInvariantsQF( false ), 
 bComputeInvariantsPolyhedron( false ), 
 bDebug( false ), 
+bPrintHelp( false ),
 iCreateImage( -1 ),
 iMaxVectors( 0 ),
 iMinVectors( 0 ),
@@ -37,6 +38,14 @@ void App::readMainParameters( int argc, char **argv )
 	string strParams;
 	for( int i( 0 ); i < argc; ++i ) 
 		strParams += " " + std::string( argv[i] );
+		
+	// --------------------------------------------------
+	// Debug?
+	if( strParams.find( "-h" ) != string::npos || strParams.find( "-help" ) != string::npos || argc == 1 )
+	{
+		bPrintHelp = true;
+		return;
+	}
 	
 	// --------------------------------------------------
 	// Field of definition
@@ -374,6 +383,12 @@ InfiniteNSymetries* App::instanciateInfiniteNSymetries(AlVin* v)
 
 void App::Run()
 {
+	if( bPrintHelp )
+	{
+		printHelp();
+		return;
+	}
+	
 	if( !aiQF.size() )
 		throw( string( "No quadratic form given" ) );
 	
@@ -572,4 +587,30 @@ void App::Run()
 		cout << "Error: " << strE << endl;
 		return;
 	}
+}
+
+void App::printHelp() const
+{
+	cout << "           _ __      __ _        \n"
+"    /\\    | |\\ \\    / /(_)       \n"
+"   /  \\   | | \\ \\  / /  _  _ ___  \n"
+"  / /\\ \\  | |  \\ \\/ /  | || '_  \\ \n"
+" / ____ \\ | |   \\  /   | || | | |\n"
+"/_/    \\_\\|_|    \\/    |_||_| |_|\n" << endl;
+
+	cout << "AlVin is an implementation of the Vinberg algorithm"
+"for the fields Q, Q[sqrt(d)] and Q(cos(2*pi/7))\n\n"
+"One basic example is the following: \n"
+"\t./alvin -qf -1,2,2,3\n"
+"\tHere, we applied the algorithm to the diagonal quadratic"
+"\n\tform <-1,2,2,3>\n\n"
+"If we want to work over the quadratic field Q[sqrt(2)], we can use\n"
+"\t./alvin -k=Q[sqrt 2] -qf -1-T,1,1,1,1\n"
+"\twhere T denotes the generator of the ring of integers\n\n"
+"Another example over Q[sqrt(3)] is given by\n"
+"\t./alvin -k=Q[sqrt 3] -qf -3-2T,1,1,1,1 -ip\n"
+"\tthe -ip parameter asks AlVin to compute the Invariants of the\n"
+"\tcorresponding Polyhedron\n\n"
+"The complete documentation is available here:\n"
+"\thttps://rgugliel.github.io/AlVin/\n" << endl;
 }
