@@ -287,7 +287,7 @@ We present the parameters separately.
 Can have the following values:
 - Q
 - Q[ sqrt d ]
-- RC7 for the field Q[ cos(2*pi*\/7) ]
+- RC7 for the field Q[ cos(2*pi/7) ]
 Remark: One does not have to specify the field if the quadratic form is defined over the rationals.
 
 \subsection AlVin_paramsBasicOpt Basic optional parameters
@@ -305,7 +305,7 @@ Remark: One does not have to specify the field if the quadratic form is defined 
 	- Growth series
 	- Growth rate and some of its properties (Perron number, Salem number, Pisot number)
 	
-\param -iqf Invariants of the quadratic field<br />
+\param -iqf Invariants of the quadratic form<br />
 	If the field of definition is Q, the complete invariant of the commensurability class of the quadratic form will be displayed.
 
 \param -oformat The format of the output<br />
