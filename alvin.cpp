@@ -473,13 +473,12 @@ void AlVin::print_initialInformation() const
 	}
 	else if( strOuputMathematicalFormat == "pari" )
 	{
-		cout << "qform = [";
+		cout << "qform = matdiagonal([";
 		for( unsigned int i(0); i <= iDimension; i++ )
 			cout << ( i ? ", " : "-(" ) << aiQF[i]->to_string( "pari" ) << ( i ? "" : ")" );
-		cout << "];" << endl;
+		cout << "]);" << endl;
 		
-		cout << "F = (x,y) -> sum(i=1, " << iDimension + 1 << ", qform[i] * x[i] * y[i] );" << endl;
-		cout << "S = (x,y) -> F(x,y)/sqrt( F(x,x) * F(y,y) );" << endl;
+		cout << "S = (x,y) -> qfeval(qform,x,y)/sqrt( qfeval(qform,x) * qfeval(qform,y) );" << endl;
 	}
 	else
 		cout << "Vectors: " << endl;
