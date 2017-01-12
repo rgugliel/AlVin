@@ -1,5 +1,25 @@
 var searchData=
 [
-  ['to_5fdouble',['to_double',['../class_algebraic_integer.html#a54075b84bc1dc4ba69a73a63e06dddc5',1,'AlgebraicInteger::to_double()'],['../class_quadratic_integer.html#a0e982571678b2ad3373139968085e094',1,'QuadraticInteger::to_double()'],['../class_quadratic_integer_big.html#a539b0bc656fb6daed76168a39178fc46',1,'QuadraticIntegerBig::to_double()'],['../class_rational_integer.html#a5c6d80e096de67b8270f04f1f21e6861',1,'RationalInteger::to_double()'],['../class_r_cyclotomic7_integer.html#a46e190671ec6a1aaf944a70e870433ed',1,'RCyclotomic7Integer::to_double()']]],
-  ['to_5fstring',['to_string',['../class_algebraic_integer.html#a9886570000921f378b39a9bf7402caf2',1,'AlgebraicInteger::to_string()'],['../class_quadratic_integer.html#a81614cc8356ebadbdae3f70f2164e988',1,'QuadraticInteger::to_string()'],['../class_quadratic_integer_big.html#af02cf6efba468fb63dcf9b8c65aea4eb',1,'QuadraticIntegerBig::to_string()'],['../class_rational_integer.html#af78259d88cd62e9ee3988d5a040aeb07',1,'RationalInteger::to_string()'],['../class_r_cyclotomic7_integer.html#ae8856d2aab939f7cd17e9061111da5f9',1,'RCyclotomic7Integer::to_string()']]]
+  ['rationalinteger',['RationalInteger',['../class_rational_integer.html',1,'']]],
+  ['rationalinteger_2eh',['rationalinteger.h',['../rationalinteger_8h.html',1,'']]],
+  ['rationalinteger_5falvin',['RationalInteger_AlVin',['../class_rational_integer___al_vin.html',1,'']]],
+  ['rationalinteger_5falvin_2eh',['rationalinteger_alvin.h',['../rationalinteger__alvin_8h.html',1,'']]],
+  ['rationalinteger_5falvinfractions_2eh',['rationalinteger_alvinfractions.h',['../rationalinteger__alvinfractions_8h.html',1,'']]],
+  ['rationalinteger_5finfinitensymetries',['RationalInteger_InfiniteNSymetries',['../class_rational_integer___infinite_n_symetries.html',1,'']]],
+  ['rationalinteger_5finfinitensymetries_2eh',['rationalinteger_infinitensymetries.h',['../rationalinteger__infinitensymetries_8h.html',1,'']]],
+  ['rationalinteger_5finvariantsqf_2eh',['rationalinteger_invariantsqf.h',['../rationalinteger__invariantsqf_8h.html',1,'']]],
+  ['rationalinteger_5fnotreflexive',['RationalInteger_NotReflexive',['../class_rational_integer___not_reflexive.html',1,'']]],
+  ['rationalinteger_5fnotreflexive_2eh',['rationalinteger_notreflexive.h',['../rationalinteger__notreflexive_8h.html',1,'']]],
+  ['rationalinteger_5fvfs',['RationalInteger_VFs',['../class_rational_integer___v_fs.html',1,'']]],
+  ['rcyclotomic7integer',['RCyclotomic7Integer',['../class_r_cyclotomic7_integer.html',1,'']]],
+  ['rcyclotomic7integer_2eh',['rcyclotomic7integer.h',['../rcyclotomic7integer_8h.html',1,'']]],
+  ['rcyclotomic7integer_5falvin',['RCyclotomic7Integer_AlVin',['../class_r_cyclotomic7_integer___al_vin.html',1,'']]],
+  ['rcyclotomic7integer_5falvin_2eh',['rcyclotomic7integer_alvin.h',['../rcyclotomic7integer__alvin_8h.html',1,'']]],
+  ['rcyclotomic7integer_5falvinfractions_2eh',['rcyclotomic7integer_alvinfractions.h',['../rcyclotomic7integer__alvinfractions_8h.html',1,'']]],
+  ['rcyclotomic7integer_5fconstants_2eh',['rcyclotomic7integer_constants.h',['../rcyclotomic7integer__constants_8h.html',1,'']]],
+  ['rcyclotomic7integer_5finfinitensymetries',['RCyclotomic7Integer_InfiniteNSymetries',['../class_r_cyclotomic7_integer___infinite_n_symetries.html',1,'']]],
+  ['rcyclotomic7integer_5finfinitensymetries_2eh',['rcyclotomic7integer_infinitensymetries.h',['../rcyclotomic7integer__infinitensymetries_8h.html',1,'']]],
+  ['rcyclotomic7integer_5fvfs',['RCyclotomic7Integer_VFs',['../class_r_cyclotomic7_integer___v_fs.html',1,'']]],
+  ['removesquarefactors',['removeSquareFactors',['../class_algebraic_integer.html#a0982940f581cf6dec9b106a20454bc51',1,'AlgebraicInteger::removeSquareFactors()'],['../class_quadratic_integer.html#a24eef7a25300316611dea5f3b16015da',1,'QuadraticInteger::removeSquareFactors()'],['../class_quadratic_integer_big.html#a04453922a0e23b76d49be961e4b4d82f',1,'QuadraticIntegerBig::removeSquareFactors()'],['../class_rational_integer.html#addc6202e0c40e13dd9d3a577c9671ce8',1,'RationalInteger::removeSquareFactors()'],['../class_r_cyclotomic7_integer.html#acdfd785c76805b0ce73c6f3ccafb2031',1,'RCyclotomic7Integer::removeSquareFactors()']]],
+  ['run',['Run',['../class_al_vin.html#a5a111e5682b25991238e91486280849b',1,'AlVin']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['building_20_25alvin',['Building %AlVin',['../pageInstall.html',1,'']]]
+  ['1_2e2',['1.2',['../md__media_Data_Rafael_phd_codes_C++_AlVin_CHANGELOG.html',1,'']]]
 ];

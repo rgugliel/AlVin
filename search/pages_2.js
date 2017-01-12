@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['using_20_25alvin',['Using %AlVin',['../pageAlVin.html',1,'']]]
+  ['building_20_25alvin',['Building %AlVin',['../pageInstall.html',1,'']]]
 ];
