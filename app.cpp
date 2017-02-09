@@ -598,7 +598,7 @@ void App::printHelp() const
 " / ____ \\ | |   \\  /   | || | | |\n"
 "/_/    \\_\\|_|    \\/    |_||_| |_|\n" << endl;
 
-	cout << "AlVin is an implementation of the Vinberg algorithm"
+	cout << "AlVin is an implementation of the Vinberg algorithm\n"
 "for the fields Q, Q[sqrt(d)] and Q(cos(2*pi/7))\n\n"
 "One basic example is the following: \n"
 "\t./alvin -qf -1,2,2,3\n"
