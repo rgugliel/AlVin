@@ -127,8 +127,10 @@ void App::readMainParameters( int argc, char **argv )
 		std::transform( regexpRes[1][0].begin(), regexpRes[1][0].end(), regexpRes[1][0].begin(), ::tolower );
 		
 		strOuputMathematicalFormat = regexpRes[1][0];
+		
+		str_replace( strParams, regexpRes[0][0], "" );
 	}
-	
+
 	// --------------------------------------------------
 	// Compute invariants of the polyhedron
 	if( strParams.find( "-ip" ) != string::npos || strParams.find( "-ipolyhedron" ) != string::npos || strParams.find( "-invariantpolyhedron" ) != string::npos || strParams.find( "-invariantspolyhedron" ) != string::npos )
