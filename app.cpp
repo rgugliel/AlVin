@@ -49,7 +49,7 @@ void App::readMainParameters( int argc, char **argv )
 	
 	// --------------------------------------------------
 	// Field of definition
-	if( regexp.preg_match_all( "(-k|-field|k=|field=)[[:space:]Q]*[\\[\\(]?[[:space:]]*sqrt[[:space:]\\[\\(]*([0-9]{1,5})", strParams, regexpRes, PCRE_CASELESS ) )
+	if( regexp.preg_match_all( "([-]*[[:space:]]*k|-[[:space:]]*field)[[:space:]]*[=]*[[[:space:]Q]*[\\[\\(]?[[:space:]]*sqrt[[:space:]\\[\\(]*([0-9]{1,5})", strParams, regexpRes, PCRE_CASELESS ) )
 	{
 		iFieldSupp = stoi( regexpRes[2][0] );
 		
@@ -177,7 +177,7 @@ void App::readMainParameters( int argc, char **argv )
 	}
 	else if( strField == "quadratic" )
 	{
-		if( regexp.preg_match_all( "(-f|-qf|- f|- qf)([[:digit:],Tt\\+\\-\\* ]+)", strParams, regexpRes ) )
+		if( regexp.preg_match_all( "(-[[:space:]]*f|-[[:space:]]*qf)([[:digit:],Tt\\+\\-\\* ]+)", strParams, regexpRes ) )
 		{	
 			strTemp = regexpRes[2][0];
 			str_replace( strTemp, " ", "");
@@ -215,7 +215,6 @@ void App::readMainParameters( int argc, char **argv )
 				else
 					throw( string( "Quadratic form: unknown coefficient: " + c ) );
 			}
-			
 		}
 	}
 	#ifdef _RC7AVAILABLE_
