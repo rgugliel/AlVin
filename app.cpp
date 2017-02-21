@@ -59,7 +59,7 @@ void App::readMainParameters( int argc, char **argv )
 		strField = "quadratic";
 	}
 	#ifdef _RC7AVAILABLE_
-	else if( regexp.preg_match_all( "(-k|-field|k=|field=)[[:space:]]*RC7", strParams, regexpRes, PCRE_CASELESS ) )
+	else if( regexp.preg_match_all( "(-k|-[[:space:]]*k|-[[:space:]]*field)[[:space:]]*[=]*[[:space:]]*RC7", strParams, regexpRes, PCRE_CASELESS ) )
 	{
 		strField = "rc7";
 	}
@@ -157,7 +157,7 @@ void App::readMainParameters( int argc, char **argv )
 	// Quadratic form
 	if( strField == "rationals" )
 	{
-		if( regexp.preg_match_all( "(-f|-qf)([[:digit:]-, ]+)", strParams, regexpRes ) )
+		if( regexp.preg_match_all( "(-f|-qf|- f|- qf)([[:digit:]-, ]+)", strParams, regexpRes ) )
 		{
 			strTemp = regexpRes[2][0];
 			str_replace( strTemp, " ", "");
@@ -177,7 +177,7 @@ void App::readMainParameters( int argc, char **argv )
 	}
 	else if( strField == "quadratic" )
 	{
-		if( regexp.preg_match_all( "(-f|-qf)([[:digit:],Tt\\+\\-\\* ]+)", strParams, regexpRes ) )
+		if( regexp.preg_match_all( "(-f|-qf|- f|- qf)([[:digit:],Tt\\+\\-\\* ]+)", strParams, regexpRes ) )
 		{	
 			strTemp = regexpRes[2][0];
 			str_replace( strTemp, " ", "");
@@ -221,7 +221,7 @@ void App::readMainParameters( int argc, char **argv )
 	#ifdef _RC7AVAILABLE_
 	else if( strField == "rc7" )
 	{
-		if( regexp.preg_match_all( "(-f|-qf)([[:digit:],\\+\\-\\* \\[\\]\\(\\)]+)", strParams, regexpRes ) )
+		if( regexp.preg_match_all( "(-f|-qf|- f|- qf)([[:digit:],\\+\\-\\* \\[\\]\\(\\)]+)", strParams, regexpRes ) )
 		{
 			str_replace( regexpRes[0][0], " ", "" );
 			str_replace( regexpRes[0][0], "-f", "" );
