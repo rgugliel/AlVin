@@ -1,6 +1,6 @@
-#include "notreflexive.h"
+#include "notreflective.h"
 
-NotReflexive::NotReflexive( AlVin* v )
+NotReflective::NotReflective( AlVin* v )
 : alvin( v ), iDimension( v->get_iDimension() ), aiQF( v->get_aiQF() ), aiVectors( v->get_aiVectors() ), strOFormat( "mathematica" ), strAlgebraicIntegerType( v->get_strAlgebraicIntegerType() ), aiPossibleNorm2( v->get_aiPossibleNorm2() )
 {
 	AlgebraicInteger* ai2( aiQF[0]->aiCopyToInteger( 2 ) );
@@ -11,7 +11,7 @@ NotReflexive::NotReflexive( AlVin* v )
 	}
 }
 
-NotReflexive::~NotReflexive()
+NotReflective::~NotReflective()
 {
 	for( auto grs : graphs )
 	{
@@ -23,7 +23,7 @@ NotReflexive::~NotReflexive()
 	}
 }
 
-void NotReflexive::Run()
+void NotReflective::Run()
 {
 	prepareGraphsList();
 	
@@ -31,7 +31,7 @@ void NotReflexive::Run()
 		createSystemsEquations();
 }
 
-void NotReflexive::prepareGraphsList()
+void NotReflective::prepareGraphsList()
 {
 	// We get the euclidean graphs which cannot be extended
 	CoxIter ci( alvin->get_iCoxeterMatrix(), iDimension );
@@ -44,7 +44,7 @@ void NotReflexive::prepareGraphsList()
 		return;
 	}
 	
-	graphs = vector< vector< NotReflexive_Graph > >( iDimension + 1 );
+	graphs = vector< vector< NotReflective_Graph > >( iDimension + 1 );
 	
 	for( auto& iGVertices : iGraphsNotExtendable )
 	{
@@ -104,11 +104,11 @@ void NotReflexive::prepareGraphsList()
 			}
 		}
 		
-		graphs[iVariablesCount].push_back( NotReflexive_Graph( { iGVertices, iVariablesName, iVariablesToCoeff, iVariablesGreaterThan, aiVariableCount } ) );
+		graphs[iVariablesCount].push_back( NotReflective_Graph( { iGVertices, iVariablesName, iVariablesToCoeff, iVariablesGreaterThan, aiVariableCount } ) );
 	}
 }
 
-void NotReflexive::createSystemsEquations()
+void NotReflective::createSystemsEquations()
 {
 	for( unsigned int i(2); i <= ( 5 <= iDimension ? 5 : iDimension ); i++ )
 	{

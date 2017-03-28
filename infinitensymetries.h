@@ -25,7 +25,7 @@ along with AlVin. If not, see <http://www.gnu.org/licenses/>.
  * \author Rafael Guglielmetti
  * 
  * \class InfiniteNSymetries
- * \brief Try to find integral symmetries of the polyhedron which do not have any common fixed point inside the hyperbolic space. If success: the form is not reflexive.
+ * \brief Try to find integral symmetries of the polyhedron which do not have any common fixed point inside the hyperbolic space. If success: the form is not reflective.
 */
 
 #ifndef INFINITENSYMETRIES_H
@@ -69,7 +69,7 @@ class InfiniteNSymetries
 		const unsigned int iVectorSize; ///< iDimension + 1
 		
 		unsigned int iFixedPointsDimension; ///< Actual dimension of the space of fixed points
-		bool bFinished; ///< If true, the form is non reflexive
+		bool bFinished; ///< If true, the form is non-reflective
 		
 		vector< GraphInvolution > usefulInvolutions;
 		

@@ -30,7 +30,7 @@ target_link_libraries(alvin ${PARI_LIBRARY})
 add_library( coxiter_graphs STATIC ../CoxIter/graphs.product.set.cpp ../CoxIter/graphs.product.cpp ../CoxIter/graphs.list.n.cpp ../CoxIter/graphs.list.iterator.cpp ../CoxIter/graphs.list.cpp ../CoxIter/graph.cpp )
 
 # CoxIter
-add_library( coxiter STATIC ../CoxIter/gbd.cpp ../CoxIter/coxiter.cpp ../CoxIter/arithmeticity.cpp )
+add_library( coxiter STATIC ../CoxIter/coxiter.cpp)
 target_link_libraries( coxiter coxiter_graphs )
 
 add_library( coxiter_growthrate STATIC ../CoxIter/lib/paripolynomials.cpp ../CoxIter/growthrate.cpp )
@@ -66,7 +66,7 @@ if( GAOL_LIBRARY )
 	target_link_libraries( alvin RC7alvinConstants )
 endif()
 
-add_library( alvin_nr rationalinteger_notreflexive.cpp notreflexive.cpp infinitensymetries.cpp rationalinteger_infinitensymetries.cpp quadraticinteger_infinitensymetries.cpp quadraticinteger_big.cpp)
+add_library( alvin_nr rationalinteger_notreflective.cpp notreflective.cpp infinitensymetries.cpp rationalinteger_infinitensymetries.cpp quadraticinteger_infinitensymetries.cpp quadraticinteger_big.cpp)
 if( GAOL_LIBRARY )
 	target_sources( alvin_nr PUBLIC "${CMAKE_CURRENT_LIST_DIR}/rcyclotomic7integer_infinitensymetries.cpp" )
 endif()

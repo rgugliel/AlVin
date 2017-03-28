@@ -1,12 +1,12 @@
-#include "rationalinteger_notreflexive.h"
+#include "rationalinteger_notreflective.h"
 
-RationalInteger_NotReflexive::RationalInteger_NotReflexive( AlVin* v )
-: NotReflexive( v )
+RationalInteger_NotReflective::RationalInteger_NotReflective( AlVin* v )
+: NotReflective( v )
 {
 
 }
 
-void RationalInteger_NotReflexive::createSystemEquations( NotReflexive_Graph nrg )
+void RationalInteger_NotReflective::createSystemEquations( NotReflective_Graph nrg )
 {
 	cout << "\nSystem:" << endl;
 	unsigned int iVariablesCount( nrg.iVariablesToCoeff.size() );

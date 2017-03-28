@@ -274,8 +274,8 @@ The parameters of %AlVin can be separated in the following types:
 - Output (optional):
 	- What we want to compute
 	- Format of the output
-- Non-reflexivity (optional)<br />
-	If we want to determine whether the form is non-reflexive
+- Non-reflectivity (optional)<br />
+	If we want to determine whether the form is non-reflective
 
 We present the parameters separately.
 
@@ -311,14 +311,14 @@ Remark: One does not have to specify the field if the quadratic form is defined 
 \param -oformat The format of the output<br />
 Possible values: latex, mathematica, pari
 
-\subsection AlVin_paramsNonReflexivity Testing the non-reflexivity (optional)
+\subsection AlVin_paramsNonReflectivity Testing the non-reflectivity (optional)
 
-\param -nr Non-reflexivity<br />
-	If specified, %AlVin will try to determine whether the quadratic form is non-reflexive or not.<br />
+\param -nr Non-reflectivity<br />
+	If specified, %AlVin will try to determine whether the quadratic form is non-reflective or not.<br />
 	More information here: \ref AlVin_examplesNR
 	
-\param -nrequations Non-reflexivity (K=Q)<br />
-	If the quadratic form is defined over Z, create the systems of equations to test the non-reflexivity of the quadratic form.
+\param -nrequations Non-reflectivity (K=Q)<br />
+	If the quadratic form is defined over Z, create the systems of equations to test the non-reflectivity of the quadratic form.
 
 \section AlVin_examples Examples
 
@@ -491,8 +491,8 @@ Graph written in the file:
 Computation time: 9.06708s
 \endcode
 
-\subsection AlVin_examplesNR Testing the non-reflexivity
-In order to test whether a quadratic form is non-reflexive, %AlVin does as follows:
+\subsection AlVin_examplesNR Testing the non-reflectivity
+In order to test whether a quadratic form is non-reflective, %AlVin does as follows:
 1. It computes a certain (specified my the "-maxv" parameter) number of vectors (corresponding to normal vector of sides of the polyhedron)
 2. It computes isometries of the polyhedron which preserves the quadratic lattice.
 
@@ -526,8 +526,8 @@ Vectors:
 
 The algorithm did not terminate; the polyhedron may be of infinite volume
 
-Checking if the form is non-reflexive...
-	The form is non reflexive
+Checking if the form is non-reflective...
+	The form is non-reflective
 
 Computation time: 0.277623s
 \endcode
@@ -560,8 +560,8 @@ Vectors:
 
 The algorithm did not terminate; the polyhedron may be of infinite volume
 
-Checking if the form is non-reflexive...
-	The form is non reflexive
+Checking if the form is non-reflective...
+	The form is non-reflective
 	List of used involutions:
 		e2 <-> e4, e3 <-> e6, e5
 		e4, e5 <-> e7, e6 <-> e13

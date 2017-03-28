@@ -103,7 +103,7 @@ void App::readMainParameters( int argc, char **argv )
 	}
 	
 	// --------------------------------------------------
-	// Non reflexive with symmetries
+	// Non reflective with symmetries
 	if( regexp.preg_match_all( "-nr[[:space:]]?\\[[[:space:]]?([[:digit:]]+)[[:space:]]?,[[:space:]]?([[:digit:]]+)\\][[:space:]]?", strParams, regexpRes, PCRE_CASELESS ) )
 	{
 		bCheckNR = true;
@@ -113,7 +113,7 @@ void App::readMainParameters( int argc, char **argv )
 	}
 	
 	// --------------------------------------------------
-	// Non reflexive with equations
+	// Non reflective with equations
 	if( strParams.find( "-nrequations" ) != string::npos )
 	{
 		str_replace( strParams, "-nrequations", "" );
@@ -334,13 +334,13 @@ AlVin* App::instanciateAlVin()
 	return v;
 }
 
-NotReflexive* App::instanciateNotReflexiveEquations( AlVin* v )
+NotReflective* App::instanciateNotReflectiveEquations( AlVin* v )
 {
-	NotReflexive* nr( nullptr );
+	NotReflective* nr( nullptr );
 	
 	if( strField == "rationals" )
 	{
-		nr = new RationalInteger_NotReflexive( v );
+		nr = new RationalInteger_NotReflective( v );
 	}
 	else
 		throw( string( "Not implemented for this field" ) );
@@ -396,7 +396,7 @@ void App::Run()
 	try{
 		AlVin* v( instanciateAlVin() );
 		
-		NotReflexive* nrEquations( nullptr );
+		NotReflective* nrEquations( nullptr );
 		InfiniteNSymetries* ins( nullptr );
 
 		chrono::time_point< std::chrono::system_clock > timeStart( chrono::system_clock::now() );
@@ -408,7 +408,7 @@ void App::Run()
 			{
 				if( iMaxVectors )
 				{
-					nrEquations = instanciateNotReflexiveEquations( v );
+					nrEquations = instanciateNotReflectiveEquations( v );
 					nrEquations->Run();
 					delete nrEquations;
 				}
@@ -420,10 +420,10 @@ void App::Run()
 			{
 				try{
 					ins = instanciateInfiniteNSymetries( v );
-					cout << "Checking if the form is non-reflexive..." << endl;
+					cout << "Checking if the form is non-reflective..." << endl;
 					if( ins->Run( iNRMin, iNRMax ) )
 					{
-						cout << "\tThe form is non-reflexive" << endl;
+						cout << "\tThe form is non-reflective" << endl;
 						
 						if( bDebug )
 						{

@@ -21,20 +21,20 @@ along with AlVin. If not, see <http://www.gnu.org/licenses/>.
 */
 
 /*!
- * \file notreflexive.h
+ * \file notreflective.h
  * \author Rafael Guglielmetti
  * 
- * \class NotReflexive
- * \brief Create systems of equations to test the non-reflexivity of a quadratic form defined over Z
+ * \class NotReflective
+ * \brief Create systems of equations to test the non-reflectivity of a quadratic form defined over Z
 */
 
-#ifndef NOTREFLEXIVE_H
-#define NOTREFLEXIVE_H
+#ifndef NOTREFLECTIVE_H
+#define NOTREFLECTIVE_H
 
 #include "alvin.h"
 
-///< \struct NotReflexive_Graph notreflexive.h "Structure which corresponds to one Euclidean graph which cannot be extended"
-struct NotReflexive_Graph
+///< \struct NotReflective_Graph notreflective.h "Structure which corresponds to one Euclidean graph which cannot be extended"
+struct NotReflective_Graph
 {
 	vector< short unsigned int > iGraphVertices; ///< Vertices of the graph
 	vector< short unsigned int > iVariablesName; ///< For each vertex, the corresponding variable
@@ -44,7 +44,7 @@ struct NotReflexive_Graph
 	vector< AlgebraicInteger* > aiVariablesCount; ///< Number of time each variable appear (useful for the norm equation)
 };
 
-class NotReflexive
+class NotReflective
 {
 	protected:
 		AlVin *alvin;
@@ -54,7 +54,7 @@ class NotReflexive
 		vector< AlgebraicInteger* > aiQF;
 		vector< AlgebraicInteger* > ai2QF;
 		
-		vector< vector< NotReflexive_Graph > > graphs; ///< The first index is for the number of variables, then one for each graph which cannot be extended
+		vector< vector< NotReflective_Graph > > graphs; ///< The first index is for the number of variables, then one for each graph which cannot be extended
 		
 		string strOFormat;
 		string strAlgebraicIntegerType;
@@ -62,15 +62,15 @@ class NotReflexive
 		vector< AlgebraicInteger* > aiPossibleNorm2;
 		
 	public:
-		NotReflexive( AlVin *v );
-		virtual ~NotReflexive();
+		NotReflective( AlVin *v );
+		virtual ~NotReflective();
 		
 		void Run();
 		
 	private:
 		void prepareGraphsList();
 		void createSystemsEquations();
-		virtual void createSystemEquations( NotReflexive_Graph nrg ) = 0;
+		virtual void createSystemEquations( NotReflective_Graph nrg ) = 0;
 };
 
-#endif // NOTREFLEXIVE_H
+#endif // NOTREFLECTIVE_H
