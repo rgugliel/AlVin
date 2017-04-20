@@ -1,19 +1,19 @@
-<map id="/media/Data/Rafael/phd/codes/C++/AlVin/app.h" name="/media/Data/Rafael/phd/codes/C++/AlVin/app.h">
-<area shape="rect" id="node2" href="$rationalinteger__alvin_8h.html" title="rationalinteger_alvin.h" alt="" coords="419,169,567,196"/>
-<area shape="rect" id="node19" href="$rationalinteger__notreflexive_8h.html" title="rationalinteger_notreflexive.h" alt="" coords="543,95,731,121"/>
-<area shape="rect" id="node21" href="$rationalinteger__invariantsqf_8h.html" title="rationalinteger_invariantsqf.h" alt="" coords="235,251,423,278"/>
-<area shape="rect" id="node23" href="$rationalinteger__infinitensymetries_8h.html" title="rationalinteger_infinitensymetries.h" alt="" coords="755,95,978,121"/>
-<area shape="rect" id="node28" href="$quadraticinteger__alvin_8h.html" title="quadraticinteger_alvin.h" alt="" coords="1345,169,1503,196"/>
-<area shape="rect" id="node32" href="$quadraticinteger__infinitensymetries_8h.html" title="quadraticinteger_infinitensymetries.h" alt="" coords="1052,95,1287,121"/>
-<area shape="rect" id="node4" href="$rationalinteger_8h.html" title="rationalinteger.h" alt="" coords="499,333,613,360"/>
-<area shape="rect" id="node10" href="$alvin_8h.html" title="alvin.h" alt="" coords="934,251,994,278"/>
-<area shape="rect" id="node18" href="$rationalinteger__alvinfractions_8h.html" title="rationalinteger_alvinfractions.h" alt="" coords="682,251,881,278"/>
-<area shape="rect" id="node5" href="$algebraicinteger_8h.html" title="algebraicinteger.h" alt="" coords="1111,483,1235,509"/>
-<area shape="rect" id="node16" href="$alvinfractions_8h.html" title="alvinfractions.h" alt="" coords="1041,333,1151,360"/>
-<area shape="rect" id="node17" href="$alvinfraction_8h.html" title="alvinfraction.h" alt="" coords="1145,408,1247,435"/>
-<area shape="rect" id="node20" href="$notreflexive_8h.html" title="notreflexive.h" alt="" coords="591,169,691,196"/>
-<area shape="rect" id="node24" href="$infinitensymetries_8h.html" title="infinitensymetries.h" alt="" coords="1065,169,1199,196"/>
-<area shape="rect" id="node29" href="$quadraticinteger_8h.html" title="quadraticinteger.h" alt="" coords="1779,333,1904,360"/>
-<area shape="rect" id="node31" href="$quadraticinteger__alvinfractions_8h.html" title="quadraticinteger_alvinfractions.h" alt="" coords="1485,251,1694,278"/>
-<area shape="rect" id="node33" href="$quadraticinteger__big_8h.html" title="quadraticinteger_big.h" alt="" coords="1940,251,2089,278"/>
+<map id="app.h" name="app.h">
+<area shape="rect" id="node2" href="$rationalinteger__alvin_8h.html" title="rationalinteger_alvin.h" alt="" coords="467,155,615,181"/>
+<area shape="rect" id="node19" href="$rationalinteger__notreflective_8h.html" title="rationalinteger_notreflective.h" alt="" coords="589,80,781,107"/>
+<area shape="rect" id="node21" href="$rationalinteger__invariantsqf_8h.html" title="rationalinteger_invariantsqf.h" alt="" coords="243,237,431,263"/>
+<area shape="rect" id="node23" href="$rationalinteger__infinitensymetries_8h.html" title="rationalinteger_infinitensymetries.h" alt="" coords="806,80,1029,107"/>
+<area shape="rect" id="node28" href="$quadraticinteger__alvin_8h.html" title="quadraticinteger_alvin.h" alt="" coords="1402,155,1561,181"/>
+<area shape="rect" id="node32" href="$quadraticinteger__infinitensymetries_8h.html" title="quadraticinteger_infinitensymetries.h" alt="" coords="1103,80,1337,107"/>
+<area shape="rect" id="node4" href="$rationalinteger_8h.html" title="rationalinteger.h" alt="" coords="488,319,603,345"/>
+<area shape="rect" id="node10" href="$alvin_8h.html" title="alvin.h" alt="" coords="923,237,983,263"/>
+<area shape="rect" id="node18" href="$rationalinteger__alvinfractions_8h.html" title="rationalinteger_alvinfractions.h" alt="" coords="671,237,870,263"/>
+<area shape="rect" id="node5" href="$algebraicinteger_8h.html" title="algebraicinteger.h" alt="" coords="1101,468,1225,495"/>
+<area shape="rect" id="node16" href="$alvinfractions_8h.html" title="alvinfractions.h" alt="" coords="1030,319,1141,345"/>
+<area shape="rect" id="node17" href="$alvinfraction_8h.html" title="alvinfraction.h" alt="" coords="1134,393,1237,420"/>
+<area shape="rect" id="node20" href="$notreflective_8h.html" title="notreflective.h" alt="" coords="640,155,744,181"/>
+<area shape="rect" id="node24" href="$infinitensymetries_8h.html" title="infinitensymetries.h" alt="" coords="1151,155,1286,181"/>
+<area shape="rect" id="node29" href="$quadraticinteger_8h.html" title="quadraticinteger.h" alt="" coords="1756,319,1881,345"/>
+<area shape="rect" id="node31" href="$quadraticinteger__alvinfractions_8h.html" title="quadraticinteger_alvinfractions.h" alt="" coords="1462,237,1671,263"/>
+<area shape="rect" id="node33" href="$quadraticinteger__big_8h.html" title="quadraticinteger_big.h" alt="" coords="1917,237,2067,263"/>
 </map>

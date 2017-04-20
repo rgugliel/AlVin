@@ -1,0 +1,6 @@
+<map id="RationalInteger_NotReflective" name="RationalInteger_NotReflective">
+<area shape="rect" id="node2" href="$class_not_reflective.html" title="Create systems of equations to test the non&#45;reflectivity of a quadratic form defined over Z..." alt="" coords="53,273,155,300"/>
+<area shape="rect" id="node3" href="$class_al_vin.html" title="Main class for AlVin. " alt="" coords="77,184,131,211"/>
+<area shape="rect" id="node4" href="$class_al_vin_fractions.html" title="This class represents a set of possible fractions x_0^2 / (e,e) We generate series of the type: (x0 +..." alt="" coords="51,95,157,121"/>
+<area shape="rect" id="node5" href="$class_algebraic_integer.html" title="Parent class for rational, quadratic and rc7 integers. " alt="" coords="46,5,162,32"/>
+</map>

@@ -20,5 +20,5 @@ var searchData=
   ['get_5fstrqf',['get_strQF',['../class_al_vin.html#aa319dc6a461d8794bf0f48a683b8f5eb',1,'AlVin']]],
   ['getnextalvinfraction',['getNextAlVinFraction',['../class_al_vin_fractions.html#aae230fca9855fcd0268871c6dfa28860',1,'AlVinFractions']]],
   ['graphinvolution',['GraphInvolution',['../struct_graph_involution.html',1,'']]],
-  ['graphs',['graphs',['../class_not_reflexive.html#a1ae8d22891497ac8786f8c99b8a51714',1,'NotReflexive']]]
+  ['graphs',['graphs',['../class_not_reflective.html#a0a47301e2ff7ff933a40ce96552a18c6',1,'NotReflective']]]
 ];

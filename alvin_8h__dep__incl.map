@@ -1,12 +1,12 @@
-<map id="/media/Data/Rafael/phd/codes/C++/AlVin/alvin.h" name="/media/Data/Rafael/phd/codes/C++/AlVin/alvin.h">
-<area shape="rect" id="node2" href="$rationalinteger__alvin_8h.html" title="/media/Data/Rafael\l/phd/codes/C++/AlVin\l/rationalinteger_alvin.h" alt="" coords="5,235,157,291"/>
-<area shape="rect" id="node4" href="$notreflexive_8h.html" title="/media/Data/Rafael\l/phd/codes/C++/AlVin\l/notreflexive.h" alt="" coords="359,117,510,173"/>
-<area shape="rect" id="node6" href="$infinitensymetries_8h.html" title="/media/Data/Rafael\l/phd/codes/C++/AlVin\l/infinitensymetries.h" alt="" coords="563,117,714,173"/>
-<area shape="rect" id="node10" href="$quadraticinteger__alvin_8h.html" title="/media/Data/Rafael\l/phd/codes/C++/AlVin\l/quadraticinteger_alvin.h" alt="" coords="739,117,901,173"/>
-<area shape="rect" id="node11" href="$rcyclotomic7integer__alvin_8h.html" title="/media/Data/Rafael\l/phd/codes/C++/AlVin\l/rcyclotomic7integer\l_alvin.h" alt="" coords="926,109,1077,180"/>
-<area shape="rect" id="node3" href="$app_8h.html" title="/media/Data/Rafael\l/phd/codes/C++/AlVin/app.h" alt="" coords="417,347,604,388"/>
-<area shape="rect" id="node5" href="$rationalinteger__notreflexive_8h.html" title="/media/Data/Rafael\l/phd/codes/C++/AlVin\l/rationalinteger_notreflexive.h" alt="" coords="181,235,373,291"/>
-<area shape="rect" id="node7" href="$rationalinteger__infinitensymetries_8h.html" title="/media/Data/Rafael\l/phd/codes/C++/AlVin\l/rationalinteger_infinitensymetries.h" alt="" coords="397,235,624,291"/>
-<area shape="rect" id="node8" href="$quadraticinteger__infinitensymetries_8h.html" title="/media/Data/Rafael\l/phd/codes/C++/AlVin\l/quadraticinteger_infinitensymetries.h" alt="" coords="649,235,887,291"/>
-<area shape="rect" id="node9" href="$rcyclotomic7integer__infinitensymetries_8h.html" title="/media/Data/Rafael\l/phd/codes/C++/AlVin\l/rcyclotomic7integer\l_infinitensymetries.h" alt="" coords="911,228,1062,299"/>
+<map id="alvin.h" name="alvin.h">
+<area shape="rect" id="node2" href="$rationalinteger__alvin_8h.html" title="rationalinteger_alvin.h" alt="" coords="5,177,153,203"/>
+<area shape="rect" id="node4" href="$notreflective_8h.html" title="notreflective.h" alt="" coords="391,87,495,114"/>
+<area shape="rect" id="node6" href="$infinitensymetries_8h.html" title="infinitensymetries.h" alt="" coords="564,87,699,114"/>
+<area shape="rect" id="node10" href="$quadraticinteger__alvin_8h.html" title="quadraticinteger_alvin.h" alt="" coords="723,87,881,114"/>
+<area shape="rect" id="node11" href="$rcyclotomic7integer__alvin_8h.html" title="rcyclotomic7integer\l_alvin.h" alt="" coords="905,80,1040,121"/>
+<area shape="rect" id="node3" href="$app_8h.html" title="app.h" alt="" coords="479,259,533,285"/>
+<area shape="rect" id="node5" href="$rationalinteger__notreflective_8h.html" title="rationalinteger_notreflective.h" alt="" coords="178,177,370,203"/>
+<area shape="rect" id="node7" href="$rationalinteger__infinitensymetries_8h.html" title="rationalinteger_infinitensymetries.h" alt="" coords="395,177,617,203"/>
+<area shape="rect" id="node8" href="$quadraticinteger__infinitensymetries_8h.html" title="quadraticinteger_infinitensymetries.h" alt="" coords="641,177,875,203"/>
+<area shape="rect" id="node9" href="$rcyclotomic7integer__infinitensymetries_8h.html" title="rcyclotomic7integer\l_infinitensymetries.h" alt="" coords="899,169,1041,211"/>
 </map>
