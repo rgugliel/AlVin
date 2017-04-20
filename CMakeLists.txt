@@ -14,7 +14,7 @@ add_definitions("-msse3")
 
 set( CMAKE_BUILD_TYPE Release )
 
-add_executable(alvin rationalinteger_invariantsqf.cpp quadraticinteger_alvin.cpp rationalinteger_alvin.cpp app.cpp ../CoxIter/lib/string.cpp alvin.cpp main.cpp ../CoxIter/lib/regexp.cpp )
+add_executable(alvin rationalinteger_invariantsqf.cpp quadraticinteger_alvin.cpp rationalinteger_alvin.cpp app.cpp CoxIter/lib/string.cpp alvin.cpp main.cpp CoxIter/lib/regexp.cpp )
 find_library(GAOL_LIBRARY gaol)
 if( GAOL_LIBRARY )
 	target_sources(alvin PUBLIC "${CMAKE_CURRENT_LIST_DIR}/rcyclotomic7integer_alvin.cpp")
@@ -27,13 +27,13 @@ target_link_libraries(alvin ${PARI_LIBRARY})
 # CoxIter
 
 # CoxIter: Graphs: graphs, products of graphs and iterators
-add_library( coxiter_graphs STATIC ../CoxIter/graphs.product.set.cpp ../CoxIter/graphs.product.cpp ../CoxIter/graphs.list.n.cpp ../CoxIter/graphs.list.iterator.cpp ../CoxIter/graphs.list.cpp ../CoxIter/graph.cpp )
+add_library( coxiter_graphs STATIC CoxIter/graphs.product.set.cpp CoxIter/graphs.product.cpp CoxIter/graphs.list.n.cpp CoxIter/graphs.list.iterator.cpp CoxIter/graphs.list.cpp CoxIter/graph.cpp )
 
 # CoxIter
-add_library( coxiter STATIC ../CoxIter/coxiter.cpp)
+add_library( coxiter STATIC CoxIter/coxiter.cpp)
 target_link_libraries( coxiter coxiter_graphs )
 
-add_library( coxiter_growthrate STATIC ../CoxIter/lib/paripolynomials.cpp ../CoxIter/growthrate.cpp )
+add_library( coxiter_growthrate STATIC CoxIter/lib/paripolynomials.cpp CoxIter/growthrate.cpp )
 target_link_libraries( coxiter_growthrate ${PARI_LIBRARY} )
 target_link_libraries( coxiter coxiter_growthrate )
 
@@ -43,11 +43,11 @@ target_link_libraries( alvin coxiter )
 # alvin
 
 # Maths: polynomials, fractions, varia functions
-add_library( alvin_maths STATIC ../CoxIter/lib/math_tools.cpp ../CoxIter/lib/polynomials.cpp ../CoxIter/lib/numbers/number_template.cpp ../CoxIter/lib/numbers/mpz_rational.cpp )
+add_library( alvin_maths STATIC CoxIter/lib/math_tools.cpp CoxIter/lib/polynomials.cpp CoxIter/lib/numbers/number_template.cpp CoxIter/lib/numbers/mpz_rational.cpp )
 target_link_libraries( alvin alvin_maths )
 
 # Numbers: rationals, quadratic and RC7
-add_library( alvin_numbers STATIC ../CoxIter/lib/math_tools.cpp quadraticinteger.cpp rationalinteger.cpp algebraicinteger.cpp )
+add_library( alvin_numbers STATIC CoxIter/lib/math_tools.cpp quadraticinteger.cpp rationalinteger.cpp algebraicinteger.cpp )
 if( GAOL_LIBRARY )
 	target_sources( alvin_numbers PUBLIC "${CMAKE_CURRENT_LIST_DIR}/rcyclotomic7integer.cpp" )
 endif()

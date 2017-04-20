@@ -1,5 +1,5 @@
 #include "app.h"
-#include "../CoxIter/growthrate.h"
+#include "CoxIter/growthrate.h"
 
 App::App()
 : bCheckNR( false ), 

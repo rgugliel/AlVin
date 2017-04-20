@@ -40,8 +40,8 @@ along with AlVin. If not, see <http://www.gnu.org/licenses/>.
 #include <map>
 #include <memory>
 
-#include "../CoxIter/coxiter.h"
-#include "../CoxIter/lib/math_tools.h"
+#include "CoxIter/coxiter.h"
+#include "CoxIter/lib/math_tools.h"
 
 #include "algebraicinteger.h"
 #include "alvinfractions.h"

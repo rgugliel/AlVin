@@ -45,8 +45,8 @@ along with AlVin. If not, see <http://www.gnu.org/licenses/>.
 #include <iostream>
 #include <iterator>
 
-#include "../CoxIter/lib/math_tools.h"
-#include "../CoxIter/lib/string.h"
+#include "CoxIter/lib/math_tools.h"
+#include "CoxIter/lib/string.h"
 
 using namespace std;
 using namespace MathTools;

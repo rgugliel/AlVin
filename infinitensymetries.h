@@ -32,7 +32,7 @@ along with AlVin. If not, see <http://www.gnu.org/licenses/>.
 #define INFINITENSYMETRIES_H
 
 #include "alvin.h"
-#include "../CoxIter/lib/numbers/rational.h"
+#include "CoxIter/lib/numbers/rational.h"
 
 #include <eigen3/Eigen/Dense>
 #include <igraph/igraph.h>
