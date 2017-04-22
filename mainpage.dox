@@ -50,7 +50,7 @@ On Fedora, type the following commands in a Shell:
 sudo dnf install gcc-c++ cmake graphviz cppunit-devel pcre-devel pari-devel gmp-devel libxml2-devel git
 \endcode
 
-Alvin. With a shell, go to the directory where you want to install %AlVin and type the following: 
+With a shell, go to the directory where you want to install %AlVin and type the following: 
 \code
 git clone --recursive https://github.com/rgugliel/AlVin
 \endcode
