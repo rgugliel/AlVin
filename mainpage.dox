@@ -47,13 +47,12 @@ sudo apt-get install g++ cmake graphviz libpcre3-dev libpari-dev libgmp-dev libx
 
 On Fedora, type the following commands in a Shell:
 \code
-sudo yum install g++ cmake graphviz pcre-devel pari-devel libxml2-devel git
+sudo dnf install gcc-c++ cmake graphviz cppunit-devel pcre-devel pari-devel gmp-devel libxml2-devel git
 \endcode
 
-We can now download CoxIter and Alvin. With a shell, go to the directory where you want to install %AlVin and type the following: 
+Alvin. With a shell, go to the directory where you want to install %AlVin and type the following: 
 \code
-git clone https://github.com/rgugliel/CoxIter
-git clone https://github.com/rgugliel/AlVin
+git clone --recursive https://github.com/rgugliel/AlVin
 \endcode
 
 We also need the following libraries: <a href="http://lipforge.ens-lyon.fr/frs/?group_id=8&release_id=123" target="_blank">crlibm</a>, <a href="https://sourceforge.net/projects/gaol/" target="_blank">GAOL</a>, <a href="http://igraph.org/c/" target="_blank">igraph</a> and <a href="http://eigen.tuxfamily.org/index.php" target="_blank">Eigen</a><br />
@@ -156,10 +155,9 @@ make check
 sudo make install
 \endcode
 
-We can now download %CoxIter and %Alvin. With a shell, go to the directory where you want to install %AlVin and type the following: 
+We can now download %Alvin. With a shell, go to the directory where you want to install %AlVin and type the following: 
 \code
-git clone https://github.com/rgugliel/CoxIter
-git clone https://github.com/rgugliel/AlVin
+git clone --recursive https://github.com/rgugliel/AlVin
 \endcode
 
 We also need the following libraries: <a href="http://igraph.org/c/" target="_blank">igraph</a> and <a href="http://eigen.tuxfamily.org/index.php" target="_blank">Eigen</a><br />
