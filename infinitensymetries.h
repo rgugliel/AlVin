@@ -39,9 +39,6 @@ along with AlVin. If not, see <http://www.gnu.org/licenses/>.
 
 #ifdef _OPENMP
 #include <omp.h>
-#else
-inline unsigned int omp_get_thread_num() { return 0; }
-inline unsigned int omp_get_max_threads() { return 1; }
 #endif
 
 using namespace Eigen;
