@@ -387,7 +387,7 @@ void AlVin::printFoundVector( std::vector< AlgebraicInteger* > aiV, const unsign
 		}
 		else
 		{
-			cout << "vectors = Append[vectors, {";
+			cout << "AppendTo[vectors, {";
 			for( auto it( aiV.begin() ); it != aiV.end(); ++it )
 				cout << ( it == aiV.begin() ? "" : ", " ) << (*it)->to_string( "mathematica" );
 			cout << "}]; (* vector " << iIndex << " *); " << endl;

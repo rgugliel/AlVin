@@ -398,13 +398,13 @@ F[x_, y_] := Sum[x[[i]]*y[[i]]*qform[[i]], {i, 1, Length[x]}];
 S[x_, y_] := F[x, y]/Sqrt[F[x, x]*F[y, y]];
 qform := {-(2), 1, 1, 1, 3};
 vectors := {{0, -1, 1, 0, 0}};
-vectors = Append[vectors, {0, 0, -1, 1, 0}]; (* vector 2 *); 
-vectors = Append[vectors, {0, 0, 0, -1, 0}]; (* vector 3 *); 
-vectors = Append[vectors, {0, 0, 0, 0, -1}]; (* vector 4 *); 
-vectors = Append[vectors, {1, 1, 0, 0, 1}]; (* vector 5 *); 
-vectors = Append[vectors, {1, 2, 0, 0, 0}]; (* vector 6 *); 
-vectors = Append[vectors, {1, 1, 1, 1, 0}]; (* vector 7 *); 
-vectors = Append[vectors, {3, 3, 3, 0, 1}]; (* vector 8 *); 
+AppendTo[vectors, {0, 0, -1, 1, 0}]; (* vector 2 *); 
+AppendTo[vectors, {0, 0, 0, -1, 0}]; (* vector 3 *); 
+AppendTo[vectors, {0, 0, 0, 0, -1}]; (* vector 4 *); 
+AppendTo[vectors, {1, 1, 0, 0, 1}]; (* vector 5 *); 
+AppendTo[vectors, {1, 2, 0, 0, 0}]; (* vector 6 *); 
+AppendTo[vectors, {1, 1, 1, 1, 0}]; (* vector 7 *); 
+AppendTo[vectors, {3, 3, 3, 0, 1}]; (* vector 8 *); 
 grammatrix := Table[S[vectors[[i]], vectors[[j]]], {i, 1, Length[vectors]}, {j, 1, Length[vectors]}];
 Algorithm ended
 
