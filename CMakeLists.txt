@@ -11,6 +11,7 @@ add_definitions("-Wall")
 add_definitions("-Wno-reorder")
 add_definitions("-Wno-unknown-pragmas")
 add_definitions("-msse3")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 set( CMAKE_BUILD_TYPE Release )
 
