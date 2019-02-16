@@ -13,6 +13,12 @@ add_definitions("-Wno-unknown-pragmas")
 add_definitions("-msse3")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
+include(CheckCXXCompilerFlag)
+CHECK_CXX_COMPILER_FLAG("-march=native" COMPILER_SUPPORTS_MARCH_NATIVE)
+if(COMPILER_SUPPORTS_MARCH_NATIVE)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
+endif()
+
 set( CMAKE_BUILD_TYPE Release )
 
 add_executable(alvin rationalinteger_invariantsqf.cpp quadraticinteger_alvin.cpp rationalinteger_alvin.cpp app.cpp CoxIter/lib/string.cpp alvin.cpp main.cpp CoxIter/lib/regexp.cpp )
