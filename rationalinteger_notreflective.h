@@ -23,22 +23,22 @@ along with AlVin. If not, see <http://www.gnu.org/licenses/>.
 /*!
  * \file rationalinteger_notreflective.h
  * \author Rafael Guglielmetti
- * 
+ *
  * \class RationalInteger_NotReflective
- * \brief Try to create systems of equations to show that the rational quadratic form is not reflective
-*/
+ * \brief Try to create systems of equations to show that the rational quadratic
+ * form is not reflective
+ */
 
 #ifndef RATIONALINTEGER_NOTREFLECTIVE_H
 #define RATIONALINTEGER_NOTREFLECTIVE_H
 
 #include "notreflective.h"
 
-class RationalInteger_NotReflective : public NotReflective
-{
-	public:
-		RationalInteger_NotReflective(AlVin* v);
-		
-		void createSystemEquations( NotReflective_Graph nrg );
+class RationalInteger_NotReflective : public NotReflective {
+public:
+  RationalInteger_NotReflective(AlVin *v);
+
+  void createSystemEquations(NotReflective_Graph nrg);
 };
 
 #endif // RATIONALINTEGER_NOTREFLECTIVE_H

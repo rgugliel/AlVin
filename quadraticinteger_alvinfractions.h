@@ -23,35 +23,36 @@ along with AlVin. If not, see <http://www.gnu.org/licenses/>.
 /*!
  * \file quadraticinteger_alvinfractions.h
  * \author Rafael Guglielmetti
- * 
+ *
  * \class QuadraticInteger_VFs
  * \brief Enumeration of fractions
-*/
+ */
 
 #ifndef QUADRATICINTEGER_VFS_H
 #define QUADRATICINTEGER_VFS_H
 
 #include <algorithm>
-#include <vector>
-#include <iostream>
 #include <cmath>
+#include <iostream>
+#include <vector>
 
 using namespace std;
 
 #include "alvinfractions.h"
 #include "quadraticinteger.h"
 
-class QuadraticInteger_VFs : public AlVinFractions
-{
-	private:
-		QuadraticInteger qiAlpha0; ///< First coefficient of the quadratic form
-		QuadraticInteger* qiPossibleNorms2_max;
-	public:
-		QuadraticInteger_VFs( vector< AlgebraicInteger* > aiPossibleNorms2, const QuadraticInteger& qiAlpha0 );
-		~QuadraticInteger_VFs();
-		
-	private:
-		void computeNextAlVinFractions();
+class QuadraticInteger_VFs : public AlVinFractions {
+private:
+  QuadraticInteger qiAlpha0; ///< First coefficient of the quadratic form
+  QuadraticInteger *qiPossibleNorms2_max;
+
+public:
+  QuadraticInteger_VFs(vector<AlgebraicInteger *> aiPossibleNorms2,
+                       const QuadraticInteger &qiAlpha0);
+  ~QuadraticInteger_VFs();
+
+private:
+  void computeNextAlVinFractions();
 };
 
 #endif // QUADRATICINTEGER_VFS_H

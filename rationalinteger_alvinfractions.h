@@ -23,35 +23,34 @@ along with AlVin. If not, see <http://www.gnu.org/licenses/>.
 /*!
  * \file rationalinteger_alvinfractions.h
  * \author Rafael Guglielmetti
- * 
+ *
  * \class RationalInteger_VFs
  * \brief Enumerations of fractions
-*/
+ */
 
 #ifndef RATIONAL_INTEGER_ALVINFRACTIONS_H
 #define RATIONAL_INTEGER_ALVINFRACTIONS_H
 
 #include <algorithm>
-#include <vector>
-#include <iostream>
 #include <cmath>
+#include <iostream>
+#include <vector>
 
 using namespace std;
 
 #include "alvinfractions.h"
 #include "rationalinteger.h"
 
-class RationalInteger_VFs : public AlVinFractions
-{
-	private:
-		unsigned iPossibleNorms2_max;
-		
-	public:
-		RationalInteger_VFs( vector< AlgebraicInteger* > aiPossibleNorms2 );
-		~RationalInteger_VFs();
-		
-	private:
-		void computeNextAlVinFractions();
+class RationalInteger_VFs : public AlVinFractions {
+private:
+  unsigned iPossibleNorms2_max;
+
+public:
+  RationalInteger_VFs(vector<AlgebraicInteger *> aiPossibleNorms2);
+  ~RationalInteger_VFs();
+
+private:
+  void computeNextAlVinFractions();
 };
 
 #endif // RATIONAL_INTEGER_ALVINFRACTIONS_H
