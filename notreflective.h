@@ -23,54 +23,62 @@ along with AlVin. If not, see <http://www.gnu.org/licenses/>.
 /*!
  * \file notreflective.h
  * \author Rafael Guglielmetti
- * 
+ *
  * \class NotReflective
- * \brief Create systems of equations to test the non-reflectivity of a quadratic form defined over Z
-*/
+ * \brief Create systems of equations to test the non-reflectivity of a
+ * quadratic form defined over Z
+ */
 
 #ifndef NOTREFLECTIVE_H
 #define NOTREFLECTIVE_H
 
 #include "alvin.h"
 
-///< \struct NotReflective_Graph notreflective.h "Structure which corresponds to one Euclidean graph which cannot be extended"
-struct NotReflective_Graph
-{
-	vector< short unsigned int > iGraphVertices; ///< Vertices of the graph
-	vector< short unsigned int > iVariablesName; ///< For each vertex, the corresponding variable
-	vector< short unsigned int > iVariablesToCoeff; ///< [ i ] = j means that x_i has the jth coefficient in the quadratic form
-	
-	vector< short unsigned int > iVariablesGreaterThan; ///< [ i ] = j means x_i >= x_j
-	vector< AlgebraicInteger* > aiVariablesCount; ///< Number of time each variable appear (useful for the norm equation)
+///< \struct NotReflective_Graph notreflective.h "Structure which corresponds to
+///< one Euclidean graph which cannot be extended"
+struct NotReflective_Graph {
+  vector<short unsigned int> iGraphVertices; ///< Vertices of the graph
+  vector<short unsigned int>
+      iVariablesName; ///< For each vertex, the corresponding variable
+  vector<short unsigned int>
+      iVariablesToCoeff; ///< [ i ] = j means that x_i has the jth coefficient
+                         ///< in the quadratic form
+
+  vector<short unsigned int>
+      iVariablesGreaterThan; ///< [ i ] = j means x_i >= x_j
+  vector<AlgebraicInteger *>
+      aiVariablesCount; ///< Number of time each variable appear (useful for the
+                        ///< norm equation)
 };
 
-class NotReflective
-{
-	protected:
-		AlVin *alvin;
-		vector< vector< AlgebraicInteger* > > aiVectors;
-		unsigned int iDimension;
-		
-		vector< AlgebraicInteger* > aiQF;
-		vector< AlgebraicInteger* > ai2QF;
-		
-		vector< vector< NotReflective_Graph > > graphs; ///< The first index is for the number of variables, then one for each graph which cannot be extended
-		
-		string strOFormat;
-		string strAlgebraicIntegerType;
-		
-		vector< AlgebraicInteger* > aiPossibleNorm2;
-		
-	public:
-		NotReflective( AlVin *v );
-		virtual ~NotReflective();
-		
-		void Run();
-		
-	private:
-		void prepareGraphsList();
-		void createSystemsEquations();
-		virtual void createSystemEquations( NotReflective_Graph nrg ) = 0;
+class NotReflective {
+protected:
+  AlVin *alvin;
+  vector<vector<AlgebraicInteger *>> aiVectors;
+  unsigned int iDimension;
+
+  vector<AlgebraicInteger *> aiQF;
+  vector<AlgebraicInteger *> ai2QF;
+
+  vector<vector<NotReflective_Graph>>
+      graphs; ///< The first index is for the number of variables, then one for
+              ///< each graph which cannot be extended
+
+  string strOFormat;
+  string strAlgebraicIntegerType;
+
+  vector<AlgebraicInteger *> aiPossibleNorm2;
+
+public:
+  NotReflective(AlVin *v);
+  virtual ~NotReflective();
+
+  void Run();
+
+private:
+  void prepareGraphsList();
+  void createSystemsEquations();
+  virtual void createSystemEquations(NotReflective_Graph nrg) = 0;
 };
 
 #endif // NOTREFLECTIVE_H

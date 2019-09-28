@@ -23,16 +23,18 @@ along with AlVin. If not, see <http://www.gnu.org/licenses/>.
 /*!
  * \file infinitensymetries.h
  * \author Rafael Guglielmetti
- * 
+ *
  * \class InfiniteNSymetries
- * \brief Try to find integral symmetries of the polyhedron which do not have any common fixed point inside the hyperbolic space. If success: the form is not reflective.
-*/
+ * \brief Try to find integral symmetries of the polyhedron which do not have
+ * any common fixed point inside the hyperbolic space. If success: the form is
+ * not reflective.
+ */
 
 #ifndef INFINITENSYMETRIES_H
 #define INFINITENSYMETRIES_H
 
-#include "alvin.h"
 #include "CoxIter/lib/numbers/rational.h"
+#include "alvin.h"
 
 #include <eigen3/Eigen/Dense>
 #include <igraph/igraph.h>
@@ -43,47 +45,55 @@ along with AlVin. If not, see <http://www.gnu.org/licenses/>.
 
 using namespace Eigen;
 
-///< \struct GraphInvolution infinitensymetries.h "One involution corresponding to one integral transformation preserving the polyhedron of H^n"
-struct GraphInvolution
-{
-	vector< unsigned int > iVertices; ///< Vertices of definition
-	vector< unsigned int > iPermutation; ///< Permutation defining the transformation
-	vector< unsigned int > iLinearlyIndependantVertices; ///< Strictly speaking, the indices i (in iVertices!) such that the set vectors[ iVertices[i] ] is linearly independant
-	unsigned int iOrbitCount; ///< Number of invariant subsets (in iVertices)
+///< \struct GraphInvolution infinitensymetries.h "One involution corresponding
+///< to one integral transformation preserving the polyhedron of H^n"
+struct GraphInvolution {
+  vector<unsigned int> iVertices; ///< Vertices of definition
+  vector<unsigned int>
+      iPermutation; ///< Permutation defining the transformation
+  vector<unsigned int>
+      iLinearlyIndependantVertices; ///< Strictly speaking, the indices i (in
+                                    ///< iVertices!) such that the set vectors[
+                                    ///< iVertices[i] ] is linearly independant
+  unsigned int iOrbitCount; ///< Number of invariant subsets (in iVertices)
 };
 
-class InfiniteNSymetries
-{
-	protected:
-		AlVin* alvin;
-		vector< AlgebraicInteger* > aiQF;
-		
-		vector< vector< unsigned int > > iGraphMatrix; ///< 1 if bold, 2 if dotted, weight otherwise
-		vector< vector< unsigned int > > iCoxeterMatrix;
-		
-		unsigned int iVectorsCount; ///< Number of vectors computed
-		unsigned int iDimension; ///< Dimension of the hyperbolic space
-		const unsigned int iVectorSize; ///< iDimension + 1
-		
-		unsigned int iFixedPointsDimension; ///< Actual dimension of the space of fixed points
-		bool bFinished; ///< If true, the form is non-reflective
-		
-		vector< GraphInvolution > usefulInvolutions;
-		
-	public:
-		InfiniteNSymetries( AlVin* alvin );
-		bool Run( const unsigned int& iNRMin, const unsigned int& iNRMax );
-		
-		unsigned int get_iFixedPointsDimension() const;
-		virtual void print_basisFixedPoints( const string& strSpacer = "" ) const = 0;
-		
-		virtual ~InfiniteNSymetries();
-		
-		vector< GraphInvolution > get_usefulInvolutions() const;
-		
-	protected:
-		virtual bool bDottedSameWeight( const unsigned int& v1, const unsigned int& v2, const unsigned int& w1, const unsigned int& w2 ) const = 0;
-		virtual bool FindIntegralSymmetryFromSubgraph( const vector< unsigned int >& iVertices ) = 0;
+class InfiniteNSymetries {
+protected:
+  AlVin *alvin;
+  vector<AlgebraicInteger *> aiQF;
+
+  vector<vector<unsigned int>>
+      iGraphMatrix; ///< 1 if bold, 2 if dotted, weight otherwise
+  vector<vector<unsigned int>> iCoxeterMatrix;
+
+  unsigned int iVectorsCount;     ///< Number of vectors computed
+  unsigned int iDimension;        ///< Dimension of the hyperbolic space
+  const unsigned int iVectorSize; ///< iDimension + 1
+
+  unsigned int
+      iFixedPointsDimension; ///< Actual dimension of the space of fixed points
+  bool bFinished;            ///< If true, the form is non-reflective
+
+  vector<GraphInvolution> usefulInvolutions;
+
+public:
+  InfiniteNSymetries(AlVin *alvin);
+  bool Run(const unsigned int &iNRMin, const unsigned int &iNRMax);
+
+  unsigned int get_iFixedPointsDimension() const;
+  virtual void print_basisFixedPoints(const string &strSpacer = "") const = 0;
+
+  virtual ~InfiniteNSymetries();
+
+  vector<GraphInvolution> get_usefulInvolutions() const;
+
+protected:
+  virtual bool bDottedSameWeight(const unsigned int &v1, const unsigned int &v2,
+                                 const unsigned int &w1,
+                                 const unsigned int &w2) const = 0;
+  virtual bool
+  FindIntegralSymmetryFromSubgraph(const vector<unsigned int> &iVertices) = 0;
 };
 
 #endif // INFINITENSYMETRIES_H

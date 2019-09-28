@@ -23,72 +23,76 @@ along with AlVin. If not, see <http://www.gnu.org/licenses/>.
 /*!
  * \file app.h
  * \author Rafael Guglielmetti
- * 
+ *
  * \class App
  * \brief Main class
-*/
+ */
 
 #ifndef APP_H
 #define APP_H
 
 #include "rationalinteger_alvin.h"
-#include "rationalinteger_notreflective.h"
-#include "rationalinteger_invariantsqf.h"
 #include "rationalinteger_infinitensymetries.h"
+#include "rationalinteger_invariantsqf.h"
+#include "rationalinteger_notreflective.h"
 
 #include "quadraticinteger_alvin.h"
 #include "quadraticinteger_infinitensymetries.h"
 
 #ifdef _RC7AVAILABLE_
-	#include "rcyclotomic7integer_alvin.h"
-	#include "rcyclotomic7integer_infinitensymetries.h"
+#include "rcyclotomic7integer_alvin.h"
+#include "rcyclotomic7integer_infinitensymetries.h"
 #endif
 
+#include <chrono>
 #include <iostream>
 #include <regex>
-#include <chrono>
 
 using namespace std;
 
-class App
-{
-	private:
-		vector< AlgebraicInteger* > aiQF; ///< Coefficients of the quadratic form
-		
-		bool bCheckNR; ///< If true, try to determine if the form is non-reflective (needed: maxv, nrmin, nrmax)
-		unsigned int iNRMin; ///< Minimal number of vertices for the subsets
-		unsigned int iNRMax; ///< Maximal number of vertices for the subsets
-		
-		bool bCheckNREquations; ///< Write the system of equations to check if the form is non-reflective
-		
-		bool bDebug; ///< If true, more information are displayed
-		bool bComputeInvariantsQF; ///< If true, compute the invariants of the qf
-		bool bComputeInvariantsPolyhedron; ///< If true, compute the invariants of the polyhedra
-		int iCreateImage; ///< -1: not specified (i.e. yes if possible and if the number of vectors is <= 25), 0: no, 1: force yes
-				
-		unsigned int iMinVectors; ///< Minimal number of vectors to compute
-		unsigned int iMaxVectors; ///< Maximal number of vectors to compute
-		
-		string strField; ///< Field of definition (rationals, quadratic)
-		unsigned int iFieldSupp; ///< Additional data (for example d if k=Q[ sqrt d ])
-		
-		string strOuputMathematicalFormat; ///< Format for mathematical output (generic, mathematica)
-		
-		bool bPrintHelp; ///< If true, display help and then exit
-		
-	public:
-		App();
-		~App();
-		
-		void readMainParameters( int argc, char **argv );
-		void Run();
-		
-	private:
-		AlVin* instanciateAlVin();
-		NotReflective* instanciateNotReflectiveEquations( AlVin* v );
-		InfiniteNSymetries* instanciateInfiniteNSymetries( AlVin* v );
-		
-		void printHelp() const;
+class App {
+private:
+  vector<AlgebraicInteger *> aiQF; ///< Coefficients of the quadratic form
+
+  bool bCheckNR; ///< If true, try to determine if the form is non-reflective
+                 ///< (needed: maxv, nrmin, nrmax)
+  unsigned int iNRMin; ///< Minimal number of vertices for the subsets
+  unsigned int iNRMax; ///< Maximal number of vertices for the subsets
+
+  bool bCheckNREquations; ///< Write the system of equations to check if the
+                          ///< form is non-reflective
+
+  bool bDebug;               ///< If true, more information are displayed
+  bool bComputeInvariantsQF; ///< If true, compute the invariants of the qf
+  bool bComputeInvariantsPolyhedron; ///< If true, compute the invariants of the
+                                     ///< polyhedra
+  int iCreateImage; ///< -1: not specified (i.e. yes if possible and if the
+                    ///< number of vectors is <= 25), 0: no, 1: force yes
+
+  unsigned int iMinVectors; ///< Minimal number of vectors to compute
+  unsigned int iMaxVectors; ///< Maximal number of vectors to compute
+
+  string strField;         ///< Field of definition (rationals, quadratic)
+  unsigned int iFieldSupp; ///< Additional data (for example d if k=Q[ sqrt d ])
+
+  string strOuputMathematicalFormat; ///< Format for mathematical output
+                                     ///< (generic, mathematica)
+
+  bool bPrintHelp; ///< If true, display help and then exit
+
+public:
+  App();
+  ~App();
+
+  void readMainParameters(int argc, char **argv);
+  void Run();
+
+private:
+  AlVin *instanciateAlVin();
+  NotReflective *instanciateNotReflectiveEquations(AlVin *v);
+  InfiniteNSymetries *instanciateInfiniteNSymetries(AlVin *v);
+
+  void printHelp() const;
 };
 
 #endif // APP_H

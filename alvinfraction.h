@@ -23,37 +23,41 @@ along with AlVin. If not, see <http://www.gnu.org/licenses/>.
 /*!
  * \file alvinfraction.h
  * \author Rafael Guglielmetti
- * 
+ *
  * \class AlVinFraction
  * \brief This class represents one fraction x0^2 / (e,e)
-*/
+ */
 
 #ifndef ALVINFRACTION_H
 #define ALVINFRACTION_H
 
 #include "algebraicinteger.h"
 
-class AlVinFraction
-{
-	public: // For simplicity, variables are public be are meant to be read-only. Careful.
-		AlgebraicInteger* aiX0; ///< x_0
-		AlgebraicInteger* aiNorm2; ///< (e,e)
-		AlgebraicInteger* aiNumerator; ///< When normalized with respect to the biggest possible value for (e,e): x_0^2 / (e,e) = ( x_0^2 * (e_max, e_max)/(e,e) ) / (e_max, e_max)
-		
-	public:
-		AlVinFraction( AlgebraicInteger* aiX0, AlgebraicInteger* aiNorm2, AlgebraicInteger* aiNumerator );
-		~AlVinFraction();
-		
-		bool operator==( AlVinFraction const& ) const;
-		bool operator!=( AlVinFraction const& ) const;
-		
-		friend bool operator<( const AlVinFraction &f1, const AlVinFraction &f2 );
-		friend ostream& operator<<( ostream& , AlVinFraction const & );
+class AlVinFraction {
+public: // For simplicity, variables are public be are meant to be read-only.
+        // Careful.
+  AlgebraicInteger *aiX0;    ///< x_0
+  AlgebraicInteger *aiNorm2; ///< (e,e)
+  AlgebraicInteger
+      *aiNumerator; ///< When normalized with respect to the biggest possible
+                    ///< value for (e,e): x_0^2 / (e,e) = ( x_0^2 * (e_max,
+                    ///< e_max)/(e,e) ) / (e_max, e_max)
+
+public:
+  AlVinFraction(AlgebraicInteger *aiX0, AlgebraicInteger *aiNorm2,
+                AlgebraicInteger *aiNumerator);
+  ~AlVinFraction();
+
+  bool operator==(AlVinFraction const &) const;
+  bool operator!=(AlVinFraction const &) const;
+
+  friend bool operator<(const AlVinFraction &f1, const AlVinFraction &f2);
+  friend ostream &operator<<(ostream &, AlVinFraction const &);
 };
 
-/*!	\fn isLessThanPtrAlVinFraction( const AlVinFraction* a, const AlVinFraction* b )
- * 	\brief Check if *a < *b
-*/
-bool isLessThanPtrAlVinFraction( const AlVinFraction* a, const AlVinFraction* b );
+/*!	\fn isLessThanPtrAlVinFraction( const AlVinFraction* a, const
+ * AlVinFraction* b ) \brief Check if *a < *b
+ */
+bool isLessThanPtrAlVinFraction(const AlVinFraction *a, const AlVinFraction *b);
 
 #endif // ALVINFRACTION_H

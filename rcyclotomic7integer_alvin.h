@@ -23,10 +23,10 @@ along with AlVin. If not, see <http://www.gnu.org/licenses/>.
 /*!
  * \file rcyclotomic7integer_alvin.h
  * \author Rafael Guglielmetti
- * 
+ *
  * \class RCyclotomic7Integer_AlVin
  * \brief AlVin for RC7
-*/
+ */
 
 #ifndef RCYCLOTOMIC7INTEGER_ALVIN_H
 #define RCYCLOTOMIC7INTEGER_ALVIN_H
@@ -35,32 +35,41 @@ along with AlVin. If not, see <http://www.gnu.org/licenses/>.
 #include "rcyclotomic7integer.h"
 #include "rcyclotomic7integer_alvinfractions.h"
 
-class RCyclotomic7Integer_AlVin : public AlVin
-{
-	private:
-		vector< RCyclotomic7Integer > rciQF; ///< Local copy of the coefficients of the quadratic form; used to work faster
-		vector< RCyclotomic7Integer > rci2QF; ///< Coefficients of the quadratic form * 2
-		
-		vector< RCyclotomic7Integer > rciBilinearProducts; ///< To control during findVector that the vector has negative product with the preceding ones
-		vector< RCyclotomic7Integer > rciVectorCurrent; ///< Current working vector
-		vector< vector< RCyclotomic7Integer* > > rciVectors; ///< List of vectors found
-		
-	public:
-		RCyclotomic7Integer_AlVin( const vector< RCyclotomic7Integer >& rciQuadraticFormCoeffs, const string &strOuputMathematicalFormat, const bool& bWriteInfo, const bool& bDebug );
+class RCyclotomic7Integer_AlVin : public AlVin {
+private:
+  vector<RCyclotomic7Integer> rciQF; ///< Local copy of the coefficients of the
+                                     ///< quadratic form; used to work faster
+  vector<RCyclotomic7Integer>
+      rci2QF; ///< Coefficients of the quadratic form * 2
 
-		virtual std::string get_strField() const;
-		virtual bool PreRun();
-		
-	private:
-		void findPossibleNorms2();
-		void findVector( AlgebraicInteger* aiX0, AlgebraicInteger* aiNorm2 );
-		void addVectorChild( const vector< AlgebraicInteger* >& aiVector );
-		virtual int addVector_iFindWeight( AlgebraicInteger* aiNumerator, AlgebraicInteger* aiDenominator );
-		
-		void findVector( RCyclotomic7Integer* rci0, RCyclotomic7Integer* rciNorm2, unsigned int iIndex, RCyclotomic7Integer rciSumComp, RCyclotomic7Integer rciGCDComponents );
-		void addCandidate();
-		
-		virtual void print_initialInformationChild() const;
+  vector<RCyclotomic7Integer>
+      rciBilinearProducts; ///< To control during findVector that the vector has
+                           ///< negative product with the preceding ones
+  vector<RCyclotomic7Integer> rciVectorCurrent;     ///< Current working vector
+  vector<vector<RCyclotomic7Integer *>> rciVectors; ///< List of vectors found
+
+public:
+  RCyclotomic7Integer_AlVin(
+      const vector<RCyclotomic7Integer> &rciQuadraticFormCoeffs,
+      const string &strOuputMathematicalFormat, const bool &bWriteInfo,
+      const bool &bDebug);
+
+  virtual std::string get_strField() const;
+  virtual bool PreRun();
+
+private:
+  void findPossibleNorms2();
+  void findVector(AlgebraicInteger *aiX0, AlgebraicInteger *aiNorm2);
+  void addVectorChild(const vector<AlgebraicInteger *> &aiVector);
+  virtual int addVector_iFindWeight(AlgebraicInteger *aiNumerator,
+                                    AlgebraicInteger *aiDenominator);
+
+  void findVector(RCyclotomic7Integer *rci0, RCyclotomic7Integer *rciNorm2,
+                  unsigned int iIndex, RCyclotomic7Integer rciSumComp,
+                  RCyclotomic7Integer rciGCDComponents);
+  void addCandidate();
+
+  virtual void print_initialInformationChild() const;
 };
 
 #endif // RCYCLOTOMIC7INTEGER_ALVIN_H
