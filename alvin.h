@@ -66,7 +66,7 @@ protected:
 
   vector<unsigned int> iQBlocksSize; ///< Sizes of blocks of coefficients
   vector<unsigned int>
-      iComponentLessThan; ///< The entry [ i ] = j means x_i <= x_j, [ i ] = 0
+      iComponentLessThan; ///< The entry [i]=j means x_i <= x_j, [i] = 0
                           ///< means no information for x_i
 
   vector<vector<AlgebraicInteger *>> aiVectors; ///< The vectors
@@ -74,7 +74,7 @@ protected:
   unsigned int iVectorsCount_second; ///< Number of vectors found (second batch)
 
   vector<vector<AlgebraicInteger *>>
-      aiVectors_candidates; ///< Vectors which are compatiable with the previous
+      aiVectors_candidates; ///< Vectors which are compatible with the previous
 
   vector<vector<unsigned int>> iCoxeterMatrix;
 

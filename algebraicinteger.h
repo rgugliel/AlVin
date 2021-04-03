@@ -94,12 +94,12 @@ public:
    */
   virtual void gcd(const AlgebraicInteger *ai) = 0;
 
-  /*!	\fn isDivisbleBy( const AlgebraicInteger* ai )
+  /*!	\fn isDivisibleBy( const AlgebraicInteger* ai )
    * 	\brief Check whether *this is divisible by the parameter
    * 	\param ai( const AlgebraicInteger* ) Pointer to the divisor
    * 	\return True if *this is divisible by the parameter
    */
-  virtual bool isDivisbleBy(const AlgebraicInteger *ai) const = 0;
+  virtual bool isDivisibleBy(const AlgebraicInteger *ai) const = 0;
 
   /*!	\fn divideBy( const AlgebraicInteger* ai )
    * 	\brief Performs the division of *this by the parameter

@@ -400,7 +400,7 @@ void QuadraticInteger_AlVin::findVector(QuadraticInteger *qi0,
       // crystallographic condition
       qiTemp.set(&qi2QF[iIndex]);
       qiTemp.multiplyBy(&qi);
-      if (!qiTemp.isDivisbleBy(qiNorm2))
+      if (!qiTemp.isDivisibleBy(qiNorm2))
         continue;
 
       qiPartialNorm.set(&qiSquare);

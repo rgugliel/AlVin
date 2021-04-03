@@ -55,7 +55,7 @@ public:
   virtual bool isSquareOfIvertible() const;
 
   virtual void gcd(const AlgebraicInteger *ai);
-  virtual bool isDivisbleBy(const AlgebraicInteger *) const;
+  virtual bool isDivisibleBy(const AlgebraicInteger *) const;
   virtual bool divideByIfDivisible(const AlgebraicInteger *ai);
   virtual void divideBy(const AlgebraicInteger *ai);
   virtual void multiplyBy(const int &n);
