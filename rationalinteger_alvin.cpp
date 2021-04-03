@@ -285,8 +285,7 @@ void RationalInteger_AlVin::findVector(const unsigned int &i0,
     findVector(i0, iNorm2, iIndex + 1, iSumComp, iGCDComponents);
 
   unsigned int iLastCoeff(0);
-  for (unsigned int i(ceilQuotient(iNorm2, 2 * riQF[iIndex])); i <= iMax;
-       i++) {
+  for (unsigned int i(ceilQuotient(iNorm2, 2 * riQF[iIndex])); i <= iMax; i++) {
     if (!(2 * i * riQF[iIndex] % iNorm2)) {
       for (unsigned int j(0); j < iVectorsCount_second; j++) {
         iBilinearProducts[j] +=

@@ -60,7 +60,8 @@ void QuadraticInteger_VFs::computeNextAlVinFractions() {
       // TODO: est ce que y < ymax et x < xmax --> pas de vérifications à faire?
 
       for (y = iYMin; y <= iYMax; y++) {
-        iSqrtY2d = integerSqrt((unsigned long int)(y * y * QuadraticInteger::d));
+        iSqrtY2d =
+            integerSqrt((unsigned long int)(y * y * QuadraticInteger::d));
         iTemp = iSQRTi4MinEpsilon - y - iSqrtY2d - 1;
 
         iXMin = (iTemp % 2) ? iTemp / 2 + 1 : iTemp / 2;
@@ -120,7 +121,7 @@ void QuadraticInteger_VFs::computeNextAlVinFractions() {
 
       for (x = iXMin; x <= iXMax; x++) {
         iTemp = sqrtQuotient((unsigned long int)x * x,
-                              (unsigned long int)QuadraticInteger::d);
+                             (unsigned long int)QuadraticInteger::d);
         iYMin = QuadraticInteger::iSQRT_quotient(
                     qiMinEpsilon, QuadraticInteger(QuadraticInteger::d)) -
                 iTemp;

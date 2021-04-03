@@ -88,7 +88,7 @@ public:
   RationalInteger operator-() const;
 
   RationalInteger operator+(const RationalInteger &) const;
-  RationalInteger operator*(const RationalInteger &)const;
+  RationalInteger operator*(const RationalInteger &) const;
   RationalInteger operator-(const RationalInteger &) const;
 
   bool operator==(const RationalInteger &) const;

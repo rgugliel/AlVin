@@ -193,13 +193,15 @@ array<long int, 2> QuadraticIntegerBig::iPellEquation(const unsigned int &iN) {
     if (iNegative == 0) {
       L1 = 0;
       L2 = integerSqrt(((iN * (iPellMinimalSolution[d][0] - 1)) % (2 * d))
-                     ? (iN * (iPellMinimalSolution[d][0] - 1)) / (2 * d) + 1
-                     : (iN * (iPellMinimalSolution[d][0] - 1)) / (2 * d));
+                           ? (iN * (iPellMinimalSolution[d][0] - 1)) / (2 * d) +
+                                 1
+                           : (iN * (iPellMinimalSolution[d][0] - 1)) / (2 * d));
     } else {
       L1 = integerSqrt(iN / d);
       L2 = integerSqrt(((iN * (iPellMinimalSolution[d][0] + 1)) % (2 * d))
-                     ? (iN * (iPellMinimalSolution[d][0] + 1)) / (2 * d) + 1
-                     : (iN * (iPellMinimalSolution[d][0] + 1)) / (2 * d));
+                           ? (iN * (iPellMinimalSolution[d][0] + 1)) / (2 * d) +
+                                 1
+                           : (iN * (iPellMinimalSolution[d][0] + 1)) / (2 * d));
     }
 
     for (unsigned int y(L1); y <= L2; y++) {
@@ -234,7 +236,8 @@ QuadraticIntegerBig::qiPrimeDecomposition() const {
     throw(string("QuadraticIntegerBig::qiPrimeDecomposition(): Norm too big"));
 
   map<QuadraticIntegerBig, unsigned int> qiDecomp;
-  map<unsigned long, unsigned int> iDecom(primeDecomposition<long unsigned>(iN.get_ui()));
+  map<unsigned long, unsigned int> iDecom(
+      primeDecomposition<long unsigned>(iN.get_ui()));
   unsigned int iPower;
 
   QuadraticIntegerBig qiTemp(*this);
@@ -901,41 +904,41 @@ string QuadraticIntegerBig::get_classname() const {
 
 // ------------------------------------------------------------------------
 // Operators
-QuadraticIntegerBig &QuadraticIntegerBig::
-operator=(const QuadraticIntegerBig &qi) {
+QuadraticIntegerBig &
+QuadraticIntegerBig::operator=(const QuadraticIntegerBig &qi) {
   a = qi.a;
   b = qi.b;
 
   return *this;
 }
 
-QuadraticIntegerBig &QuadraticIntegerBig::
-operator/=(const QuadraticIntegerBig &qi) {
+QuadraticIntegerBig &
+QuadraticIntegerBig::operator/=(const QuadraticIntegerBig &qi) {
   this->divideBy(&qi);
   return *this;
 }
 
-QuadraticIntegerBig &QuadraticIntegerBig::
-operator*=(const QuadraticIntegerBig &qi) {
+QuadraticIntegerBig &
+QuadraticIntegerBig::operator*=(const QuadraticIntegerBig &qi) {
   this->multiplyBy(&qi);
   return *this;
 }
 
-QuadraticIntegerBig QuadraticIntegerBig::
-operator+(const QuadraticIntegerBig &qi) const {
+QuadraticIntegerBig
+QuadraticIntegerBig::operator+(const QuadraticIntegerBig &qi) const {
   return QuadraticIntegerBig(a + qi.a, b + qi.b);
 }
 
-QuadraticIntegerBig QuadraticIntegerBig::
-operator*(const QuadraticIntegerBig &qi) const {
+QuadraticIntegerBig
+QuadraticIntegerBig::operator*(const QuadraticIntegerBig &qi) const {
   QuadraticIntegerBig qiRes(*this);
   qiRes.multiplyBy(&qi);
 
   return qiRes;
 }
 
-QuadraticIntegerBig QuadraticIntegerBig::
-operator-(const QuadraticIntegerBig &qi) const {
+QuadraticIntegerBig
+QuadraticIntegerBig::operator-(const QuadraticIntegerBig &qi) const {
   return QuadraticIntegerBig(a - qi.a, b - qi.b);
 }
 

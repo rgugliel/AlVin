@@ -38,12 +38,13 @@ along with AlVin. If not, see <http://www.gnu.org/licenses/>.
 namespace Eigen {
 template <class> struct NumTraits;
 template <>
-struct NumTraits<Rational<QuadraticIntegerBig>> ///< \struct
-                                                ///< NumTraits<Rational<QuadraticIntegerBig>>
-                                                ///< quadraticinteger_infinitensymetries.h
-                                                ///< "Specialization for Eigen
-                                                ///< matrices to
-                                                ///< QuadraticIntegerBig type"
+struct NumTraits<
+    Rational<QuadraticIntegerBig>> ///< \struct
+                                   ///< NumTraits<Rational<QuadraticIntegerBig>>
+                                   ///< quadraticinteger_infinitensymetries.h
+                                   ///< "Specialization for Eigen
+                                   ///< matrices to
+                                   ///< QuadraticIntegerBig type"
 {
   typedef Rational<QuadraticIntegerBig> Real;
   typedef Rational<QuadraticIntegerBig> NonInteger;
@@ -65,12 +66,12 @@ struct NumTraits<Rational<QuadraticIntegerBig>> ///< \struct
 
 namespace internal {
 template <>
-struct significant_decimals_impl<
-    Rational<QuadraticIntegerBig>> ///< \struct
-                                   ///< significant_decimals_impl<Rational<QuadraticIntegerBig>>
-                                   ///< quadraticinteger_infinitensymetries.h
-                                   ///< "Specialization for Eigen matrices to
-                                   ///< QuadraticIntegerBig type"
+struct significant_decimals_impl<Rational<
+    QuadraticIntegerBig>> ///< \struct
+                          ///< significant_decimals_impl<Rational<QuadraticIntegerBig>>
+                          ///< quadraticinteger_infinitensymetries.h
+                          ///< "Specialization for Eigen matrices to
+                          ///< QuadraticIntegerBig type"
 {
   // Infinite precision when printing
   static inline int run() { return 0; }

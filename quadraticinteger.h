@@ -133,7 +133,7 @@ public:
   QuadraticInteger &operator*=(QuadraticInteger const &qi);
 
   QuadraticInteger operator+(const QuadraticInteger &) const;
-  QuadraticInteger operator*(const QuadraticInteger &)const;
+  QuadraticInteger operator*(const QuadraticInteger &) const;
   QuadraticInteger operator-(const QuadraticInteger &) const;
   QuadraticInteger operator-() const;
 

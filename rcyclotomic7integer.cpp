@@ -887,8 +887,8 @@ RCyclotomic7Integer::rciPrimeDecomposition() const {
   return rciDecomp;
 }
 
-RCyclotomic7Integer &RCyclotomic7Integer::
-operator=(const RCyclotomic7Integer &rci) {
+RCyclotomic7Integer &
+RCyclotomic7Integer::operator=(const RCyclotomic7Integer &rci) {
   iC[0] = rci.iC[0];
   iC[1] = rci.iC[1];
   iC[2] = rci.iC[2];
@@ -896,34 +896,34 @@ operator=(const RCyclotomic7Integer &rci) {
   return *this;
 }
 
-RCyclotomic7Integer &RCyclotomic7Integer::
-operator*=(const RCyclotomic7Integer &rci) {
+RCyclotomic7Integer &
+RCyclotomic7Integer::operator*=(const RCyclotomic7Integer &rci) {
   this->multiplyBy(&rci);
   return *this;
 }
 
-RCyclotomic7Integer &RCyclotomic7Integer::
-operator/=(const RCyclotomic7Integer &rci) {
+RCyclotomic7Integer &
+RCyclotomic7Integer::operator/=(const RCyclotomic7Integer &rci) {
   this->divideBy(&rci);
   return *this;
 }
 
-RCyclotomic7Integer RCyclotomic7Integer::
-operator*(const RCyclotomic7Integer &rci) const {
+RCyclotomic7Integer
+RCyclotomic7Integer::operator*(const RCyclotomic7Integer &rci) const {
   RCyclotomic7Integer res(*this);
   res.multiplyBy(&rci);
 
   return res;
 }
 
-RCyclotomic7Integer RCyclotomic7Integer::
-operator+(const RCyclotomic7Integer &rci) const {
+RCyclotomic7Integer
+RCyclotomic7Integer::operator+(const RCyclotomic7Integer &rci) const {
   return RCyclotomic7Integer(
       {iC[0] + rci.iC[0], iC[1] + rci.iC[1], iC[2] + rci.iC[2]});
 }
 
-RCyclotomic7Integer RCyclotomic7Integer::
-operator-(const RCyclotomic7Integer &rci) const {
+RCyclotomic7Integer
+RCyclotomic7Integer::operator-(const RCyclotomic7Integer &rci) const {
   return RCyclotomic7Integer(
       {iC[0] - rci.iC[0], iC[1] - rci.iC[1], iC[2] - rci.iC[2]});
 }

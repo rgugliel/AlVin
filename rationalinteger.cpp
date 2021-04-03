@@ -23,9 +23,7 @@ void RationalInteger::set(AlgebraicInteger *ai) {
   iVal = ri->iVal;
 }
 
-bool RationalInteger::isInvertible() const {
-  return (iVal == 1 || iVal == -1);
-}
+bool RationalInteger::isInvertible() const { return (iVal == 1 || iVal == -1); }
 
 bool RationalInteger::isSquareOfIvertible() const { return (iVal == 1); }
 

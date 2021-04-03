@@ -122,7 +122,7 @@ public:
   RCyclotomic7Integer &operator*=(RCyclotomic7Integer const &rci);
 
   RCyclotomic7Integer operator+(const RCyclotomic7Integer &) const;
-  RCyclotomic7Integer operator*(const RCyclotomic7Integer &)const;
+  RCyclotomic7Integer operator*(const RCyclotomic7Integer &) const;
   RCyclotomic7Integer operator-(const RCyclotomic7Integer &) const;
   RCyclotomic7Integer operator-() const;
 

@@ -37,12 +37,13 @@ along with AlVin. If not, see <http://www.gnu.org/licenses/>.
 namespace Eigen {
 template <class> struct NumTraits;
 template <>
-struct NumTraits<Rational<RCyclotomic7Integer>> ///< \struct
-                                                ///< NumTraits<Rational<RCyclotomic7Integer>>
-                                                ///< rcyclotomic7integer_infinitensymetries.h
-                                                ///< "Specialization for Eigen
-                                                ///< matrices to
-                                                ///< RCyclotomic7Integer type"
+struct NumTraits<
+    Rational<RCyclotomic7Integer>> ///< \struct
+                                   ///< NumTraits<Rational<RCyclotomic7Integer>>
+                                   ///< rcyclotomic7integer_infinitensymetries.h
+                                   ///< "Specialization for Eigen
+                                   ///< matrices to
+                                   ///< RCyclotomic7Integer type"
 {
   typedef Rational<RCyclotomic7Integer> Real;
   typedef Rational<RCyclotomic7Integer> NonInteger;
@@ -64,12 +65,12 @@ struct NumTraits<Rational<RCyclotomic7Integer>> ///< \struct
 
 namespace internal {
 template <>
-struct significant_decimals_impl<
-    Rational<RCyclotomic7Integer>> ///< \struct
-                                   ///< significant_decimals_impl<Rational<RCyclotomic7Integer>>
-                                   ///< rcyclotomic7integer_infinitensymetries.h
-                                   ///< "Specialization for Eigen matrices to
-                                   ///< RCyclotomic7Integer type"
+struct significant_decimals_impl<Rational<
+    RCyclotomic7Integer>> ///< \struct
+                          ///< significant_decimals_impl<Rational<RCyclotomic7Integer>>
+                          ///< rcyclotomic7integer_infinitensymetries.h
+                          ///< "Specialization for Eigen matrices to
+                          ///< RCyclotomic7Integer type"
 {
   // Infinite precision when printing
   static inline int run() { return 0; }

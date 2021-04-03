@@ -47,8 +47,9 @@ void RCyclotomic7Integer_VFs::computeNextAlVinFractions() {
       // If m' is an integer
       iTemp = -rciE->iC[0].get_si() * iMin;
 
-      iSqrtTemp = integerSqrt<unsigned long int>(iTemp); // rciE & iLastMaximum are positive
-      if (iSqrtTemp * iSqrtTemp == iTemp)  // if iTemp is a square
+      iSqrtTemp = integerSqrt<unsigned long int>(
+          iTemp);                         // rciE & iLastMaximum are positive
+      if (iSqrtTemp * iSqrtTemp == iTemp) // if iTemp is a square
       {
         bIsmprimeLongInt = true;
         imprime = iSqrtTemp;
@@ -57,8 +58,9 @@ void RCyclotomic7Integer_VFs::computeNextAlVinFractions() {
       // If M' is an integer
       iTemp = -rciE->iC[0].get_si() * iLastMaximum;
 
-      iSqrtTemp = integerSqrt<unsigned long int>(iTemp); // rciE & iLastMaximum are positive
-      if (iSqrtTemp * iSqrtTemp == iTemp)  // if iTemp is a square
+      iSqrtTemp = integerSqrt<unsigned long int>(
+          iTemp);                         // rciE & iLastMaximum are positive
+      if (iSqrtTemp * iSqrtTemp == iTemp) // if iTemp is a square
       {
         bIsMprimeLongInt = true;
         iMprime = iSqrtTemp;

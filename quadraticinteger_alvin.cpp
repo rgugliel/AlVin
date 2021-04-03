@@ -5,7 +5,8 @@ QuadraticInteger_AlVin::QuadraticInteger_AlVin(
     const string &strOuputMathematicalFormat, const bool &bWriteInfo,
     const bool &bDebug)
     : AlVin(strOuputMathematicalFormat, bWriteInfo, bDebug),
-      d(QuadraticInteger::d), dISqrt(integerSqrt((unsigned int)QuadraticInteger::d)),
+      d(QuadraticInteger::d),
+      dISqrt(integerSqrt((unsigned int)QuadraticInteger::d)),
       bIsOneMod4(QuadraticInteger::bIsOneMod4) {
   bool bNegativeFound(false);
 
@@ -362,7 +363,7 @@ void QuadraticInteger_AlVin::findVector(QuadraticInteger *qi0,
       }
     } else {
       iTemp = sqrtQuotient((unsigned long int)iFirst * iFirst,
-                            (unsigned long int)d);
+                           (unsigned long int)d);
       iSecMin = -iTemp - 1;
       iSecMax = QuadraticInteger::QuadraticInteger::iSQRT_quotient(
                     qiSumComp, qiDQF[iIndex]) -

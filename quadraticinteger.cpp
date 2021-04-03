@@ -168,7 +168,8 @@ QuadraticInteger::qiPrimeDecomposition() const {
     return map<QuadraticInteger, unsigned int>();
 
   map<QuadraticInteger, unsigned int> qiDecomp;
-  vector<unsigned long> iDecom(primeFactors<unsigned long>(abs(b ? iNorm() : a)));
+  vector<unsigned long> iDecom(
+      primeFactors<unsigned long>(abs(b ? iNorm() : a)));
   unsigned int iPower;
 
   QuadraticInteger qiTemp(*this);
@@ -266,13 +267,15 @@ array<long int, 2> QuadraticInteger::iPellEquation(const unsigned int &iN) {
     if (iNegative == 0) {
       L1 = 0;
       L2 = integerSqrt(((iN * (iPellMinimalSolution[d][0] - 1)) % (2 * d))
-                     ? (iN * (iPellMinimalSolution[d][0] - 1)) / (2 * d) + 1
-                     : (iN * (iPellMinimalSolution[d][0] - 1)) / (2 * d));
+                           ? (iN * (iPellMinimalSolution[d][0] - 1)) / (2 * d) +
+                                 1
+                           : (iN * (iPellMinimalSolution[d][0] - 1)) / (2 * d));
     } else {
       L1 = integerSqrt(iN / d);
       L2 = integerSqrt(((iN * (iPellMinimalSolution[d][0] + 1)) % (2 * d))
-                     ? (iN * (iPellMinimalSolution[d][0] + 1)) / (2 * d) + 1
-                     : (iN * (iPellMinimalSolution[d][0] + 1)) / (2 * d));
+                           ? (iN * (iPellMinimalSolution[d][0] + 1)) / (2 * d) +
+                                 1
+                           : (iN * (iPellMinimalSolution[d][0] + 1)) / (2 * d));
     }
 
     for (unsigned int y(L1); y <= L2; y++) {
@@ -688,7 +691,8 @@ long int QuadraticInteger::iSQRTsup_quotient(const QuadraticInteger &qiNum,
   }
 
   if (y >= 0) {
-    s = sqrtSupQuotient<unsigned long int>(x + sqrtSup<unsigned long int>(y * y * d), z);
+    s = sqrtSupQuotient<unsigned long int>(
+        x + sqrtSup<unsigned long int>(y * y * d), z);
 
     while ((z * (s + 1) * (s + 1) - x) * (z * (s + 1) * (s + 1) - x) <=
            y * y * d)
@@ -730,7 +734,8 @@ long int QuadraticInteger::iSQRT_quotient(const QuadraticInteger &qiNum,
   }
 
   if (y >= 0) {
-    s = sqrtQuotient<unsigned long int>(x + integerSqrt((unsigned long int)y * y * d), z);
+    s = sqrtQuotient<unsigned long int>(
+        x + integerSqrt((unsigned long int)y * y * d), z);
 
     while ((z * (s + 1) * (s + 1) - x) * (z * (s + 1) * (s + 1) - x) <=
            y * y * d)

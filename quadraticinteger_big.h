@@ -140,7 +140,7 @@ public:
   QuadraticIntegerBig &operator*=(QuadraticIntegerBig const &qi);
 
   QuadraticIntegerBig operator+(const QuadraticIntegerBig &) const;
-  QuadraticIntegerBig operator*(const QuadraticIntegerBig &)const;
+  QuadraticIntegerBig operator*(const QuadraticIntegerBig &) const;
   QuadraticIntegerBig operator-(const QuadraticIntegerBig &) const;
   QuadraticIntegerBig operator-() const;
 
