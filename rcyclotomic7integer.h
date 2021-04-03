@@ -74,7 +74,7 @@ public:
   bool bIsAssociateTo(const AlgebraicInteger *ai);
 
   virtual void gcd(const AlgebraicInteger *ai);
-  virtual bool isDivisbleBy(const AlgebraicInteger *ai) const;
+  virtual bool isDivisibleBy(const AlgebraicInteger *ai) const;
   virtual void divideBy(const AlgebraicInteger *ai);
   virtual bool divideByIfDivisible(const AlgebraicInteger *ai);
   virtual void multiplyBy(const AlgebraicInteger *ai);

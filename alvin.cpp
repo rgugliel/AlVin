@@ -51,7 +51,7 @@ void AlVin::initializations() {
       i++;
 
     for (unsigned int j(i + 1); j <= iDimension; j++) {
-      if (aiQF[j]->isDivisbleBy(aiQF[i])) {
+      if (aiQF[j]->isDivisibleBy(aiQF[i])) {
         unique_ptr<AlgebraicInteger> aiTest(aiQF[j]->copy());
         aiTest->divideBy(aiQF[i]);
 
