@@ -60,8 +60,7 @@ void QuadraticInteger_VFs::computeNextAlVinFractions() {
       // TODO: est ce que y < ymax et x < xmax --> pas de vérifications à faire?
 
       for (y = iYMin; y <= iYMax; y++) {
-        iSqrtY2d = iSQRT((unsigned long int)(y * y * QuadraticInteger::d));
-        ;
+        iSqrtY2d = integerSqrt((unsigned long int)(y * y * QuadraticInteger::d));
         iTemp = iSQRTi4MinEpsilon - y - iSqrtY2d - 1;
 
         iXMin = (iTemp % 2) ? iTemp / 2 + 1 : iTemp / 2;
@@ -71,22 +70,22 @@ void QuadraticInteger_VFs::computeNextAlVinFractions() {
           QuadraticInteger qi(QuadraticInteger(x, y)),
               qiSquare(QuadraticInteger(x, y));
 
-          if (qi.bIsLessThan(0) || (x == 0 && y == 0))
+          if (qi.isLessThan(0) || (x == 0 && y == 0))
             continue;
 
           qiSquare.multiplyBy(&qi);
 
-          if (!qiMinEpsilon.bIsLessThan(qiSquare))
+          if (!qiMinEpsilon.isLessThan(qiSquare))
             continue;
 
-          if (!qiSquare.bIsLessOEThan(qiMaxEpsilon))
+          if (!qiSquare.isLessOEThan(qiMaxEpsilon))
             continue;
 
           qiSquare.multiplyBy(-1);
           qiSquare.multiplyBy(&qiAlpha0);
           qiSquare.conjugate();
 
-          if (!qiSquare.bIsLessOEThan(qiConjEpsilon))
+          if (!qiSquare.isLessOEThan(qiConjEpsilon))
             continue;
 
           QuadraticInteger *qiNum(new QuadraticInteger(qi));
@@ -120,7 +119,7 @@ void QuadraticInteger_VFs::computeNextAlVinFractions() {
               2;
 
       for (x = iXMin; x <= iXMax; x++) {
-        iTemp = iSQRTQuotient((unsigned long int)x * x,
+        iTemp = sqrtQuotient((unsigned long int)x * x,
                               (unsigned long int)QuadraticInteger::d);
         iYMin = QuadraticInteger::iSQRT_quotient(
                     qiMinEpsilon, QuadraticInteger(QuadraticInteger::d)) -
@@ -133,22 +132,22 @@ void QuadraticInteger_VFs::computeNextAlVinFractions() {
           QuadraticInteger qi(QuadraticInteger(x, y)),
               qiSquare(QuadraticInteger(x, y));
 
-          if (qi.bIsLessThan(0) || (x == 0 && y == 0))
+          if (qi.isLessThan(0) || (x == 0 && y == 0))
             continue;
 
           qiSquare.multiplyBy(&qi);
 
-          if (!qiMinEpsilon.bIsLessThan(qiSquare))
+          if (!qiMinEpsilon.isLessThan(qiSquare))
             continue;
 
-          if (!qiSquare.bIsLessOEThan(qiMaxEpsilon))
+          if (!qiSquare.isLessOEThan(qiMaxEpsilon))
             continue;
 
           qiSquare.multiplyBy(-1);
           qiSquare.multiplyBy(&qiAlpha0);
           qiSquare.conjugate();
 
-          if (!qiSquare.bIsLessOEThan(qiConjEpsilon))
+          if (!qiSquare.isLessOEThan(qiConjEpsilon))
             continue;
 
           QuadraticInteger *qiNum(new QuadraticInteger(qi));

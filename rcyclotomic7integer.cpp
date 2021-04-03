@@ -158,7 +158,7 @@ bool RCyclotomic7Integer::computePrimeDecomposition(
           break;
 
         vector<unsigned long> iResidualPrimeFactors(
-            iPrimeFactors<unsigned long>(iResidualNorm));
+            primeFactors<unsigned long>(iResidualNorm));
 
         bool bResidualFactorsFactorized(true);
         for (auto iRes : iResidualPrimeFactors) {
@@ -217,7 +217,7 @@ void RCyclotomic7Integer::computePrimesDecomposition_addFactor(
     }
 
     if (i == iListSize) {
-      if (rci.bIsLessThan(0))
+      if (rci.isLessThan(0))
         rci.multiplyBy(-1);
 
       ptrList->push_back(rci);
@@ -348,15 +348,15 @@ std::ostream &RCyclotomic7Integer::print(std::ostream &o) const {
   return o;
 }
 
-bool RCyclotomic7Integer::bIsEqualTo(const int &n) const {
+bool RCyclotomic7Integer::isEqualTo(const int &n) const {
   return (iC[0] == -n && iC[1] == -n && iC[2] == -n);
 }
 
-bool RCyclotomic7Integer::bIsEqualTo(const AlgebraicInteger &ai) const {
+bool RCyclotomic7Integer::isEqualTo(const AlgebraicInteger &ai) const {
   return iC == dynamic_cast<const RCyclotomic7Integer &>(ai).iC;
 }
 
-bool RCyclotomic7Integer::bIsGreaterOEThan(const int &n) const {
+bool RCyclotomic7Integer::isGreaterOEThan(const int &n) const {
   if (iC[0] == -n && iC[1] == -n && iC[2] == -n)
     return true;
 
@@ -374,7 +374,7 @@ bool RCyclotomic7Integer::bIsGreaterOEThan(const int &n) const {
   throw(string("RCyclotomic7Integer::bIsGreaterOEThan : Cannot decide"));
 }
 
-bool RCyclotomic7Integer::bIsGreaterThan(const int &n) const {
+bool RCyclotomic7Integer::isGreaterThan(const int &n) const {
   interval i(interval(gaol_intervalFromMPZclass(iC[0])) * gaol_l1 +
              interval(gaol_intervalFromMPZclass(iC[1])) * gaol_l2 +
              interval(gaol_intervalFromMPZclass(iC[2])) * gaol_l3 -
@@ -389,7 +389,7 @@ bool RCyclotomic7Integer::bIsGreaterThan(const int &n) const {
   throw(string("RCyclotomic7Integer::bIsGreaterThan : Cannot decide"));
 }
 
-bool RCyclotomic7Integer::bIsLessOEThan(const AlgebraicInteger &ai) const {
+bool RCyclotomic7Integer::isLessOEThan(const AlgebraicInteger &ai) const {
   RCyclotomic7Integer rci(dynamic_cast<const RCyclotomic7Integer &>(ai));
 
   if (iC == rci.iC)
@@ -468,10 +468,10 @@ bool RCyclotomic7Integer::bIsLessOEThan(const AlgebraicInteger &ai) const {
 
 bool operator<(const RCyclotomic7Integer &rci1,
                const RCyclotomic7Integer &rci2) {
-  return rci1.bIsLessThan(rci2);
+  return rci1.isLessThan(rci2);
 }
 
-bool RCyclotomic7Integer::bIsLessThan(const AlgebraicInteger &ai) const {
+bool RCyclotomic7Integer::isLessThan(const AlgebraicInteger &ai) const {
   RCyclotomic7Integer rci(dynamic_cast<const RCyclotomic7Integer &>(ai));
 
   interval i(interval(gaol_intervalFromMPZclass(iC[0] - rci.iC[0])) * gaol_l1 +
@@ -487,7 +487,7 @@ bool RCyclotomic7Integer::bIsLessThan(const AlgebraicInteger &ai) const {
   throw(string("RCyclotomic7Integer::bIsLessThan(ai) : Cannot decide"));
 }
 
-bool RCyclotomic7Integer::bIsLessThan(const int &n) const {
+bool RCyclotomic7Integer::isLessThan(const int &n) const {
   interval i(interval(gaol_intervalFromMPZclass(iC[0])) * gaol_l1 +
              interval(gaol_intervalFromMPZclass(iC[1])) * gaol_l2 +
              interval(gaol_intervalFromMPZclass(iC[2])) * gaol_l3 -
@@ -706,7 +706,7 @@ bool RCyclotomic7Integer::bIsAssociateTo(const AlgebraicInteger *ai) {
        iNormb) == 0);
 }
 
-bool RCyclotomic7Integer::bIsDivisbleBy(const AlgebraicInteger *ai) const {
+bool RCyclotomic7Integer::isDivisbleBy(const AlgebraicInteger *ai) const {
   const RCyclotomic7Integer *rci(dynamic_cast<const RCyclotomic7Integer *>(ai));
 
   mpz_class a0(iC[0]), a1(iC[1]), a2(iC[2]);
@@ -733,12 +733,12 @@ bool RCyclotomic7Integer::bIsDivisbleBy(const AlgebraicInteger *ai) const {
 }
 
 void RCyclotomic7Integer::gcd(const AlgebraicInteger *ai) {
-  if (ai->bIsEqualTo(0))
+  if (ai->isEqualTo(0))
     return;
 
   const RCyclotomic7Integer *rci(dynamic_cast<const RCyclotomic7Integer *>(ai));
 
-  if (this->bIsEqualTo(0)) {
+  if (this->isEqualTo(0)) {
     iC[0] = rci->iC[0];
     iC[1] = rci->iC[1];
     iC[2] = rci->iC[2];
@@ -760,9 +760,9 @@ void RCyclotomic7Integer::gcd(const AlgebraicInteger *ai) {
   // Some other trivial cases
   if (iC[0] == rci->iC[0] && iC[1] == rci->iC[1] && iC[2] == rci->iC[2])
     return;
-  else if (rci->bIsDivisbleBy(this))
+  else if (rci->isDivisbleBy(this))
     return;
-  else if (this->bIsDivisbleBy(rci)) {
+  else if (this->isDivisbleBy(rci)) {
     iC[0] = rci->iC[0];
     iC[1] = rci->iC[1];
     iC[2] = rci->iC[2];
@@ -785,7 +785,7 @@ void RCyclotomic7Integer::gcd(const AlgebraicInteger *ai) {
   if (!iGCD.fits_slong_p())
     throw(string("RCyclotomic7Integer: gcd: Component too big"));
 
-  auto iNormPrimesFactors(iPrimeFactors<unsigned long>(abs(iGCD.get_si())));
+  auto iNormPrimesFactors(primeFactors<unsigned long>(abs(iGCD.get_si())));
 
   RCyclotomic7Integer rci1(*this), rci2(*rci);
   iC[0] = -1;
@@ -806,8 +806,8 @@ void RCyclotomic7Integer::gcd(const AlgebraicInteger *ai) {
   }
 }
 
-bool RCyclotomic7Integer::bIsSquareOfIvertible() const {
-  if (!bIsGreaterOEThan(0))
+bool RCyclotomic7Integer::isSquareOfIvertible() const {
+  if (!isGreaterOEThan(0))
     return false;
 
   mpz_class uNorm(this->iNorm());
@@ -819,12 +819,12 @@ bool RCyclotomic7Integer::bIsSquareOfIvertible() const {
   // TODO
 }
 
-bool RCyclotomic7Integer::bIsInvertible() const {
+bool RCyclotomic7Integer::isInvertible() const {
   return (abs(this->iNorm()) == 1);
 }
 
 vector<RCyclotomic7Integer> RCyclotomic7Integer::rciPrimeFactors() const {
-  if ((iC[0] == 0 && iC[1] == 0 && iC[2] == 0) || bIsInvertible())
+  if ((iC[0] == 0 && iC[1] == 0 && iC[2] == 0) || isInvertible())
     return vector<RCyclotomic7Integer>(0);
 
   vector<RCyclotomic7Integer> rciPrimesFactors;
@@ -833,7 +833,7 @@ vector<RCyclotomic7Integer> RCyclotomic7Integer::rciPrimeFactors() const {
   if (!mpz_Norm.fits_slong_p())
     throw(string("RCyclotomic7Integer: rciPrimeFactors: Component too big"));
 
-  auto iNormPrimesFactors(iPrimeFactors<unsigned long>(abs(mpz_Norm.get_si())));
+  auto iNormPrimesFactors(primeFactors<unsigned long>(abs(mpz_Norm.get_si())));
 
   for (auto iNPF : iNormPrimesFactors) {
     if (iNPF > iPrimesDecomposition_max)
@@ -842,7 +842,7 @@ vector<RCyclotomic7Integer> RCyclotomic7Integer::rciPrimeFactors() const {
     auto rciTemp(iPrimesDecomposition[iNPF]);
 
     for (auto rciF : rciTemp) {
-      if (bIsDivisbleBy(
+      if (isDivisbleBy(
               &rciF)) // rciF divides either *this or the conjugate of *this
         rciPrimesFactors.push_back(rciF);
     }
@@ -853,7 +853,7 @@ vector<RCyclotomic7Integer> RCyclotomic7Integer::rciPrimeFactors() const {
 
 map<RCyclotomic7Integer, unsigned int>
 RCyclotomic7Integer::rciPrimeDecomposition() const {
-  if ((iC[0] == 0 && iC[1] == 0 && iC[2] == 0) || bIsInvertible())
+  if ((iC[0] == 0 && iC[1] == 0 && iC[2] == 0) || isInvertible())
     return map<RCyclotomic7Integer, unsigned int>();
 
   map<RCyclotomic7Integer, unsigned int> rciDecomp;
@@ -864,7 +864,7 @@ RCyclotomic7Integer::rciPrimeDecomposition() const {
     throw(string(
         "RCyclotomic7Integer: rciPrimeDecomposition: Component too big"));
 
-  auto iNormPrimesFactors(iPrimeFactors<unsigned long>(abs(mpz_Norm.get_si())));
+  auto iNormPrimesFactors(primeFactors<unsigned long>(abs(mpz_Norm.get_si())));
   RCyclotomic7Integer rciTemp(*this);
 
   for (auto iNPF : iNormPrimesFactors) {
@@ -933,7 +933,7 @@ RCyclotomic7Integer RCyclotomic7Integer::operator-() const {
 }
 
 bool RCyclotomic7Integer::operator>(const RCyclotomic7Integer &rci) const {
-  return !bIsLessOEThan(rci);
+  return !isLessOEThan(rci);
 }
 
 bool RCyclotomic7Integer::operator==(const long int &n) const {

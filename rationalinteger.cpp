@@ -23,11 +23,11 @@ void RationalInteger::set(AlgebraicInteger *ai) {
   iVal = ri->iVal;
 }
 
-bool RationalInteger::bIsInvertible() const {
+bool RationalInteger::isInvertible() const {
   return (iVal == 1 || iVal == -1);
 }
 
-bool RationalInteger::bIsSquareOfIvertible() const { return (iVal == 1); }
+bool RationalInteger::isSquareOfIvertible() const { return (iVal == 1); }
 
 void RationalInteger::gcd(const AlgebraicInteger *ai) {
   const RationalInteger *ri(dynamic_cast<const RationalInteger *>(ai));
@@ -84,29 +84,29 @@ bool operator<(const RationalInteger &i1, const RationalInteger &i2) {
   return (i1.iVal < i2.iVal);
 }
 
-bool RationalInteger::bIsLessThan(const AlgebraicInteger &ai) const {
+bool RationalInteger::isLessThan(const AlgebraicInteger &ai) const {
   return (iVal < dynamic_cast<const RationalInteger &>(ai).iVal);
 }
 
-bool RationalInteger::bIsLessOEThan(const AlgebraicInteger &ai) const {
+bool RationalInteger::isLessOEThan(const AlgebraicInteger &ai) const {
   return (iVal <= dynamic_cast<const RationalInteger &>(ai).iVal);
 }
 
-bool RationalInteger::bIsLessThan(const int &n) const { return (iVal < n); }
+bool RationalInteger::isLessThan(const int &n) const { return (iVal < n); }
 
-bool RationalInteger::bIsGreaterThan(const int &n) const { return (iVal > n); }
+bool RationalInteger::isGreaterThan(const int &n) const { return (iVal > n); }
 
-bool RationalInteger::bIsGreaterOEThan(const int &n) const {
+bool RationalInteger::isGreaterOEThan(const int &n) const {
   return (iVal >= n);
 }
 
-bool RationalInteger::bIsEqualTo(const AlgebraicInteger &ai) const {
+bool RationalInteger::isEqualTo(const AlgebraicInteger &ai) const {
   return (iVal == dynamic_cast<const RationalInteger &>(ai).iVal);
 }
 
-bool RationalInteger::bIsEqualTo(const int &n) const { return (iVal == n); }
+bool RationalInteger::isEqualTo(const int &n) const { return (iVal == n); }
 
-bool RationalInteger::bIsDivisbleBy(const AlgebraicInteger *ai) const {
+bool RationalInteger::isDivisbleBy(const AlgebraicInteger *ai) const {
   return !(iVal % dynamic_cast<const RationalInteger *>(ai)->iVal);
 }
 
@@ -199,9 +199,9 @@ bool RationalInteger::operator==(const RationalInteger &ri) const {
 }
 
 bool RationalInteger::operator>(const RationalInteger &ri) const {
-  return !bIsLessOEThan(ri);
+  return !isLessOEThan(ri);
 }
 
 bool RationalInteger::operator<(const RationalInteger &ri) const {
-  return bIsLessThan(ri);
+  return isLessThan(ri);
 }

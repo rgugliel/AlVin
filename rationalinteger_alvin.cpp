@@ -258,34 +258,34 @@ void RationalInteger_AlVin::findVector(const unsigned int &i0,
     b /= iGCD;
     c /= iGCD;
 
-    if (!(c % 3) && (c % 9) && iJacobiSymbol(-a * b, 3) == -1)
+    if (!(c % 3) && (c % 9) && jacobiSymbol(-a * b, 3) == -1)
       return;
 
-    if (!(c % 5) && (c % 25) && iJacobiSymbol(-a * b, 5) == -1)
+    if (!(c % 5) && (c % 25) && jacobiSymbol(-a * b, 5) == -1)
       return;
 
-    if (!(c % 7) && (c % 49) && iJacobiSymbol(-a * b, 7) == -1)
+    if (!(c % 7) && (c % 49) && jacobiSymbol(-a * b, 7) == -1)
       return;
 
-    if (!(c % 11) && (c % 121) && iJacobiSymbol(-a * b, 11) == -1)
+    if (!(c % 11) && (c % 121) && jacobiSymbol(-a * b, 11) == -1)
       return;
 
-    if (!(c % 13) && (c % 169) && iJacobiSymbol(-a * b, 13) == -1)
+    if (!(c % 13) && (c % 169) && jacobiSymbol(-a * b, 13) == -1)
       return;
   }
 
   unsigned int iMax(
       iComponentLessThan[iIndex]
           ? min((unsigned int)iVectorCurrent[iComponentLessThan[iIndex]],
-                iSQRT(iSumComp) / iSQRT(riQF[iIndex]))
-          : iSQRT(iSumComp) / iSQRT(riQF[iIndex]));
+                integerSqrt(iSumComp) / integerSqrt(riQF[iIndex]))
+          : integerSqrt(iSumComp) / integerSqrt(riQF[iIndex]));
 
   iVectorCurrent[iIndex] = 0;
   if (iIndex < iDimension)
     findVector(i0, iNorm2, iIndex + 1, iSumComp, iGCDComponents);
 
   unsigned int iLastCoeff(0);
-  for (unsigned int i(iCeilQuotient(iNorm2, 2 * riQF[iIndex])); i <= iMax;
+  for (unsigned int i(ceilQuotient(iNorm2, 2 * riQF[iIndex])); i <= iMax;
        i++) {
     if (!(2 * i * riQF[iIndex] % iNorm2)) {
       for (unsigned int j(0); j < iVectorsCount_second; j++) {

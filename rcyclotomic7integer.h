@@ -69,12 +69,12 @@ public:
 
   virtual void removeSquareFactors();
 
-  virtual bool bIsSquareOfIvertible() const;
-  virtual bool bIsInvertible() const;
+  virtual bool isSquareOfIvertible() const;
+  virtual bool isInvertible() const;
   bool bIsAssociateTo(const AlgebraicInteger *ai);
 
   virtual void gcd(const AlgebraicInteger *ai);
-  virtual bool bIsDivisbleBy(const AlgebraicInteger *ai) const;
+  virtual bool isDivisbleBy(const AlgebraicInteger *ai) const;
   virtual void divideBy(const AlgebraicInteger *ai);
   virtual bool divideByIfDivisible(const AlgebraicInteger *ai);
   virtual void multiplyBy(const AlgebraicInteger *ai);
@@ -83,13 +83,13 @@ public:
   virtual void substract(const AlgebraicInteger *ai);
   virtual void add(const AlgebraicInteger *ai);
 
-  virtual bool bIsEqualTo(const int &n) const;
-  virtual bool bIsEqualTo(const AlgebraicInteger &ai) const;
-  virtual bool bIsGreaterOEThan(const int &n) const;
-  virtual bool bIsGreaterThan(const int &n) const;
-  virtual bool bIsLessOEThan(const AlgebraicInteger &ai) const;
-  virtual bool bIsLessThan(const AlgebraicInteger &ai) const;
-  virtual bool bIsLessThan(const int &n) const;
+  virtual bool isEqualTo(const int &n) const;
+  virtual bool isEqualTo(const AlgebraicInteger &ai) const;
+  virtual bool isGreaterOEThan(const int &n) const;
+  virtual bool isGreaterThan(const int &n) const;
+  virtual bool isLessOEThan(const AlgebraicInteger &ai) const;
+  virtual bool isLessThan(const AlgebraicInteger &ai) const;
+  virtual bool isLessThan(const int &n) const;
 
   ostream &print(ostream &) const;
   virtual std::string get_classname() const;

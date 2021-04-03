@@ -459,8 +459,8 @@ void App::Run() {
     } else {
       if (bComputeInvariantsPolyhedron) {
         CoxIter *ci(v->get_ptrCI());
-        ci->set_strOuputMathematicalFormat(strOuputMathematicalFormat);
-        ci->bEulerCharacteristicFVector();
+        ci->set_ouputMathematicalFormat(strOuputMathematicalFormat);
+        ci->computeEulerCharacteristicFVector();
 
         unsigned int iDimension(v->get_iDimension());
 
@@ -487,14 +487,14 @@ void App::Run() {
 
         // ----------------------------------------------
         // f-vector
-        vector<unsigned int> iFVector(ci->get_iFVector());
+        vector<unsigned int> iFVector(ci->get_fVector());
         cout << "f-vector: (";
         for (unsigned int i(0); i <= iDimension; i++)
           cout << (i ? ", " : "") << iFVector[i];
         cout << ")" << endl;
 
         cout << "Number of vertices at infinity: "
-             << ci->get_iVerticesAtInfinityCount() << endl;
+             << ci->get_verticesAtInfinityCount() << endl;
 
         // ---------------------------------------------
         // Number of faces with x vertices
@@ -529,17 +529,17 @@ void App::Run() {
 
         GrowthRate gr;
         GrowthRate_Result grr(
-            gr.grrComputations(ci->get_iGrowthSeries_denominator()));
-        if (grr.bComputed && ci->get_bGrowthSeriesReduced()) {
-          cout << "\nGrowth rate: " << grr.strGrowthRate << endl;
+            gr.grrComputations(ci->get_growthSeries_denominator()));
+        if (grr.isComputed && ci->get_isGrowthSeriesReduced()) {
+          cout << "\nGrowth rate: " << grr.growthRate << endl;
           cout << "\tPerron number: "
-               << (grr.iPerron < 0 ? "?" : (grr.iPerron > 0 ? "yes" : "no"))
+               << (grr.perron < 0 ? "?" : (grr.perron > 0 ? "yes" : "no"))
                << endl;
           cout << "\tPisot number: "
-               << (grr.iPisot < 0 ? "?" : (grr.iPisot > 0 ? "yes" : "no"))
+               << (grr.pisot < 0 ? "?" : (grr.pisot > 0 ? "yes" : "no"))
                << endl;
           cout << "\tSalem number: "
-               << (grr.iSalem < 0 ? "?" : (grr.iSalem > 0 ? "yes" : "no"))
+               << (grr.salem < 0 ? "?" : (grr.salem > 0 ? "yes" : "no"))
                << endl;
         }
       }

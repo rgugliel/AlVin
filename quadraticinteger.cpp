@@ -141,17 +141,17 @@ int QuadraticInteger::iValuation(const QuadraticInteger &qi) {
 }
 
 vector<QuadraticInteger> QuadraticInteger::qiPrimeFactors() const {
-  if ((a == 0 && b == 0) || bIsInvertible())
+  if ((a == 0 && b == 0) || isInvertible())
     return vector<QuadraticInteger>(0);
 
   vector<QuadraticInteger> qiPrimesFactors;
-  auto iNormPrimesFactors(iPrimeFactors((unsigned long)abs(b ? iNorm() : a)));
+  auto iNormPrimesFactors(primeFactors((unsigned long)abs(b ? iNorm() : a)));
 
   for (auto iNPF : iNormPrimesFactors) {
     auto qiTemp(QuadraticInteger::qiFactorsRationalPrime(iNPF));
 
     for (auto qiF : qiTemp) {
-      if (bIsDivisbleBy(
+      if (isDivisbleBy(
               &qiF)) // qiF divides either *this or the conjugate of *this
         qiPrimesFactors.push_back(qiF);
     }
@@ -164,12 +164,11 @@ std::map<QuadraticInteger, unsigned int>
 QuadraticInteger::qiPrimeDecomposition() const {
   // TODO: mettre en cache?
 
-  if ((a == 0 && b == 0) || bIsInvertible())
+  if ((a == 0 && b == 0) || isInvertible())
     return map<QuadraticInteger, unsigned int>();
 
   map<QuadraticInteger, unsigned int> qiDecomp;
-  vector<unsigned long> iDecom(
-      iPrimeFactors<unsigned long>(abs(b ? iNorm() : a)));
+  vector<unsigned long> iDecom(primeFactors<unsigned long>(abs(b ? iNorm() : a)));
   unsigned int iPower;
 
   QuadraticInteger qiTemp(*this);
@@ -197,7 +196,7 @@ QuadraticInteger::qiFactorsRationalPrime(const unsigned int &iPrime,
     throw(string("d must be specified"));
 
   if (iPrime % 2 && d % iPrime) {
-    if (iJacobiSymbol(d, iPrime) == -1)
+    if (jacobiSymbol(d, iPrime) == -1)
       return vector<QuadraticInteger>({QuadraticInteger(iPrime)});
 
     if (bIsOneMod4) {
@@ -266,12 +265,12 @@ array<long int, 2> QuadraticInteger::iPellEquation(const unsigned int &iN) {
     // TODO: regarder si iSQRTsup
     if (iNegative == 0) {
       L1 = 0;
-      L2 = iSQRT(((iN * (iPellMinimalSolution[d][0] - 1)) % (2 * d))
+      L2 = integerSqrt(((iN * (iPellMinimalSolution[d][0] - 1)) % (2 * d))
                      ? (iN * (iPellMinimalSolution[d][0] - 1)) / (2 * d) + 1
                      : (iN * (iPellMinimalSolution[d][0] - 1)) / (2 * d));
     } else {
-      L1 = iSQRT(iN / d);
-      L2 = iSQRT(((iN * (iPellMinimalSolution[d][0] + 1)) % (2 * d))
+      L1 = integerSqrt(iN / d);
+      L2 = integerSqrt(((iN * (iPellMinimalSolution[d][0] + 1)) % (2 * d))
                      ? (iN * (iPellMinimalSolution[d][0] + 1)) / (2 * d) + 1
                      : (iN * (iPellMinimalSolution[d][0] + 1)) / (2 * d));
     }
@@ -281,7 +280,7 @@ array<long int, 2> QuadraticInteger::iPellEquation(const unsigned int &iN) {
 
       if (iXTemp >= 0) // if it is a square
       {
-        iSqrt = iSQRT((unsigned long int)iXTemp);
+        iSqrt = integerSqrt((unsigned long int)iXTemp);
 
         if (iSqrt * iSqrt == iXTemp)
           return array<long int, 2>({iSqrt, y});
@@ -300,17 +299,17 @@ double QuadraticInteger::to_double() const {
     return (a + b * sqrt(d));
 }
 
-bool QuadraticInteger::bIsEqualTo(const int &n) const {
+bool QuadraticInteger::isEqualTo(const int &n) const {
   return (a == n && b == 0);
 }
 
-bool QuadraticInteger::bIsEqualTo(const AlgebraicInteger &ai) const {
+bool QuadraticInteger::isEqualTo(const AlgebraicInteger &ai) const {
   QuadraticInteger qi(dynamic_cast<const QuadraticInteger &>(ai));
 
   return (a == qi.a && b == qi.b);
 }
 
-bool QuadraticInteger::bIsGreaterThan(const int &n) const {
+bool QuadraticInteger::isGreaterThan(const int &n) const {
   long int aTemp(bIsOneMod4 ? (2 * (n - a) - b) : (n - a));
   long int bTemp(-b);
 
@@ -344,15 +343,15 @@ bool QuadraticInteger::bIsGreaterThan(const long int &n) const {
   }
 }
 
-bool QuadraticInteger::bIsGreaterOEThan(const int &n) const {
-  return ((b == 0 && a == n) || bIsGreaterThan(n));
+bool QuadraticInteger::isGreaterOEThan(const int &n) const {
+  return ((b == 0 && a == n) || isGreaterThan(n));
 }
 
 bool operator<(const QuadraticInteger &qi1, const QuadraticInteger &qi2) {
-  return qi1.bIsLessThan(qi2);
+  return qi1.isLessThan(qi2);
 }
 
-bool QuadraticInteger::bIsLessThan(const AlgebraicInteger &ai) const {
+bool QuadraticInteger::isLessThan(const AlgebraicInteger &ai) const {
   long int x(dynamic_cast<const QuadraticInteger &>(ai).a);
   long int y(dynamic_cast<const QuadraticInteger &>(ai).b);
 
@@ -372,7 +371,7 @@ bool QuadraticInteger::bIsLessThan(const AlgebraicInteger &ai) const {
   }
 }
 
-bool QuadraticInteger::bIsLessOEThan(const AlgebraicInteger &ai) const {
+bool QuadraticInteger::isLessOEThan(const AlgebraicInteger &ai) const {
   long int x(dynamic_cast<const QuadraticInteger &>(ai).a);
   long int y(dynamic_cast<const QuadraticInteger &>(ai).b);
 
@@ -395,7 +394,7 @@ bool QuadraticInteger::bIsLessOEThan(const AlgebraicInteger &ai) const {
   }
 }
 
-bool QuadraticInteger::bIsLessThan(const int &n) const {
+bool QuadraticInteger::isLessThan(const int &n) const {
   long int aTemp(bIsOneMod4 ? (2 * (a - n) + b) : a - n);
 
   if (aTemp < 0) {
@@ -527,7 +526,7 @@ void QuadraticInteger::divideBy(const AlgebraicInteger *ai) {
   }
 }
 
-bool QuadraticInteger::bIsDivisbleBy(const AlgebraicInteger *ai) const {
+bool QuadraticInteger::isDivisbleBy(const AlgebraicInteger *ai) const {
   const QuadraticInteger *qi(dynamic_cast<const QuadraticInteger *>(ai));
 
   long int iNorm2(qi->iNorm());
@@ -549,7 +548,7 @@ bool QuadraticInteger::bIsDivisbleBy(const AlgebraicInteger *ai) const {
 
 bool QuadraticInteger::bIsAssociateTo(QuadraticInteger qi2) {
   if (qi2.divideByIfDivisible(this)) {
-    if (qi2.bIsInvertible())
+    if (qi2.isInvertible())
       return true;
   }
 
@@ -561,10 +560,10 @@ void QuadraticInteger::gcd(const AlgebraicInteger *ai) {
 
   // -----------------------------------------
   // If one of the two is zero
-  if (ai->bIsEqualTo(0))
+  if (ai->isEqualTo(0))
     return;
 
-  if (this->bIsEqualTo(0)) {
+  if (this->isEqualTo(0)) {
     const QuadraticInteger *qi(dynamic_cast<const QuadraticInteger *>(ai));
     a = qi->a;
     b = qi->b;
@@ -584,9 +583,9 @@ void QuadraticInteger::gcd(const AlgebraicInteger *ai) {
   // Some other trivial cases
   if (a == qi->a && b == qi->b)
     return;
-  else if (qi->bIsDivisbleBy(this))
+  else if (qi->isDivisbleBy(this))
     return;
-  else if (this->bIsDivisbleBy(qi)) {
+  else if (this->isDivisbleBy(qi)) {
     a = qi->a;
     b = qi->b;
     return;
@@ -614,14 +613,14 @@ void QuadraticInteger::gcd(const AlgebraicInteger *ai) {
   }
 }
 
-bool QuadraticInteger::bIsSquareOfIvertible() const {
-  if (this->bIsInvertible()) {
+bool QuadraticInteger::isSquareOfIvertible() const {
+  if (this->isInvertible()) {
     QuadraticInteger qiUnit(QuadraticInteger::iFundamentalUnits[5][0],
                             QuadraticInteger::iFundamentalUnits[5][1]);
     QuadraticInteger qiTemp(*this);
     unsigned int iPower(0);
 
-    while (!qiTemp.bIsEqualTo(1)) {
+    while (!qiTemp.isEqualTo(1)) {
       qiTemp.divideBy(&qiUnit);
       iPower++;
     }
@@ -631,7 +630,7 @@ bool QuadraticInteger::bIsSquareOfIvertible() const {
   return false;
 }
 
-bool QuadraticInteger::bIsInvertible() const {
+bool QuadraticInteger::isInvertible() const {
   long int iNorm(this->iNorm());
   return (iNorm == 1 || iNorm == -1);
 }
@@ -689,15 +688,14 @@ long int QuadraticInteger::iSQRTsup_quotient(const QuadraticInteger &qiNum,
   }
 
   if (y >= 0) {
-    s = iSQRTsupQuotient<unsigned long int>(
-        x + iSQRTsup<unsigned long int>(y * y * d), z);
+    s = sqrtSupQuotient<unsigned long int>(x + sqrtSup<unsigned long int>(y * y * d), z);
 
     while ((z * (s + 1) * (s + 1) - x) * (z * (s + 1) * (s + 1) - x) <=
            y * y * d)
       s--;
   } else {
-    long int is(iSQRT((unsigned long int)y * y * d));
-    s = iSQRTsupQuotient<unsigned long int>(x - is, z);
+    long int is(integerSqrt((unsigned long int)y * y * d));
+    s = sqrtSupQuotient<unsigned long int>(x - is, z);
 
     long int iTemp(x - (s - 1) * (s - 1) * z);
 
@@ -732,15 +730,14 @@ long int QuadraticInteger::iSQRT_quotient(const QuadraticInteger &qiNum,
   }
 
   if (y >= 0) {
-    s = iSQRTQuotient<unsigned long int>(
-        x + iSQRT((unsigned long int)y * y * d), z);
+    s = sqrtQuotient<unsigned long int>(x + integerSqrt((unsigned long int)y * y * d), z);
 
     while ((z * (s + 1) * (s + 1) - x) * (z * (s + 1) * (s + 1) - x) <=
            y * y * d)
       s++;
   } else {
-    long int is(iSQRT((unsigned long int)y * y * d));
-    s = iSQRTsupQuotient<unsigned long int>(x - is, z);
+    long int is(integerSqrt((unsigned long int)y * y * d));
+    s = sqrtSupQuotient<unsigned long int>(x - is, z);
 
     long int iTemp(z * s * s - x);
 
@@ -948,5 +945,5 @@ QuadraticInteger QuadraticInteger::operator-() const {
 }
 
 bool QuadraticInteger::operator>(const QuadraticInteger &ri) {
-  return !bIsLessOEThan(ri);
+  return !isLessOEThan(ri);
 }

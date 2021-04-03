@@ -86,7 +86,7 @@ find_package( OpenMP )
 if( OPENMP_FOUND )
 	set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}" )
 	set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}" )
-	
+
 	add_definitions("-fopenmp")
 	add_definitions("-lomp")
 	add_definitions(-D_COMPILE_WITH_OPENMP_)
@@ -106,13 +106,13 @@ target_link_libraries(alvin ${GMP_LIBRARYXX})
 
 if( GAOL_LIBRARY )
 	target_link_libraries(alvin ${GAOL_LIBRARY})
-	
+
 	find_library(CRLIBM_LIBRARY crlibm)
 	target_link_libraries(alvin ${CRLIBM_LIBRARY})
 
 	find_library(GDTOA_LIBRARY gdtoa)
 	target_link_libraries(alvin ${GDTOA_LIBRARY})
-	
+
 	add_definitions(-D_RC7AVAILABLE_)
 endif()
 
