@@ -759,7 +759,7 @@ AlgebraicInteger *QuadraticInteger::copy() const {
   return new QuadraticInteger(*this);
 }
 
-AlgebraicInteger *QuadraticInteger::aiCopyToInteger(const int &n) const {
+AlgebraicInteger *QuadraticInteger::copyToInteger(const int &n) const {
   return new QuadraticInteger(n);
 }
 

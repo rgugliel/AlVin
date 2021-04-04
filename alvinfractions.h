@@ -44,10 +44,10 @@ using namespace std;
 
 class AlVinFractions {
 protected:
-  vector<AlgebraicInteger *> aiPossibleNorms2; ///< Possible values for (e,e)
-  AlgebraicInteger *aiPossibleNorms2_max;
+  vector<AlgebraicInteger *> possibleNorms2; ///< Possible values for (e,e)
+  AlgebraicInteger *possibleNorms2Max;
 
-  vector<AlVinFraction *> alvinfractions;
+  vector<AlVinFraction *> alvinFractions;
   vector<AlVinFraction *>::const_iterator
       alvinfractions_it; ///< Iterator to the next element to be returned
 

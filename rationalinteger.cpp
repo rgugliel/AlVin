@@ -8,7 +8,7 @@ RationalInteger::RationalInteger(long int iVal) : iVal(iVal) {}
 
 RationalInteger::RationalInteger(const RationalInteger &ri) : iVal(ri.iVal) {}
 
-AlgebraicInteger *RationalInteger::aiCopyToInteger(const int &n) const {
+AlgebraicInteger *RationalInteger::copyToInteger(const int &n) const {
   return new RationalInteger(n);
 }
 

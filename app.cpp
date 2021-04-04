@@ -337,12 +337,12 @@ InfiniteNSymetries *App::instanciateInfiniteNSymetries(AlVin *v) {
   if (!iMaxVectors)
     throw(string("Option -nr mut be used with -maxv"));
 
-  if (iMaxVectors < v->get_iDimension())
+  if (iMaxVectors < v->get_dimension())
     throw(string(
         "The number of vectors should be at least equal to the dimension"));
 
-  iMaxVectors = max(iNRMax, v->get_iDimension() + 1);
-  iNRMin = max(iNRMin, v->get_iDimension() + 1);
+  iMaxVectors = max(iNRMax, v->get_dimension() + 1);
+  iNRMin = max(iNRMin, v->get_dimension() + 1);
   iNRMax = min(iMaxVectors, iNRMax);
 
   if (strField == "rationals") {
@@ -462,7 +462,7 @@ void App::Run() {
         ci->set_ouputMathematicalFormat(strOuputMathematicalFormat);
         ci->computeEulerCharacteristicFVector();
 
-        unsigned int iDimension(v->get_iDimension());
+        unsigned int iDimension(v->get_dimension());
 
         cout << "\n---------------------------------\nInformation about the "
                 "polyhedron:\n---------------------------------"

@@ -32,7 +32,7 @@ void RCyclotomic7Integer_VFs::computeNextAlVinFractions() {
   interval gaol_b, gaol_a;
 
   // We generate fractions f such that: iMin < f <= iLastMaximum
-  for (auto aiE : aiPossibleNorms2) {
+  for (auto aiE : possibleNorms2) {
     // We write the numerator: a * l1 + b * l2 + c * l3
     RCyclotomic7Integer *rciE(dynamic_cast<RCyclotomic7Integer *>(aiE));
 
@@ -204,8 +204,8 @@ void RCyclotomic7Integer_VFs::computeNextAlVinFractions() {
           AlVinFraction *vf =
               new AlVinFraction(new RCyclotomic7Integer(rci),
                                 new RCyclotomic7Integer(*rciE), rciNum);
-          alvinfractions.insert(lower_bound(alvinfractions.begin(),
-                                            alvinfractions.end(), vf,
+          alvinFractions.insert(lower_bound(alvinFractions.begin(),
+                                            alvinFractions.end(), vf,
                                             isLessThanPtrAlVinFraction),
                                 vf);
         }
@@ -213,5 +213,5 @@ void RCyclotomic7Integer_VFs::computeNextAlVinFractions() {
     }
   }
 
-  alvinfractions_it = alvinfractions.begin();
+  alvinfractions_it = alvinFractions.begin();
 }

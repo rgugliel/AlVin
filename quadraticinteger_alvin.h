@@ -87,8 +87,8 @@ private:
 
   void addCandidate();
   virtual void addVectorChild(const vector<AlgebraicInteger *> &aiVector);
-  virtual int addVector_iFindWeight(AlgebraicInteger *aiNumerator,
-                                    AlgebraicInteger *aiDenominator);
+  virtual int addVector_findWeight(AlgebraicInteger *aiNumerator,
+                                   AlgebraicInteger *aiDenominator);
 };
 
 #endif // QUADRATICINTEGER_ALVIN_H

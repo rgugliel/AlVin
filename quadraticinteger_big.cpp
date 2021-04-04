@@ -810,7 +810,7 @@ AlgebraicInteger *QuadraticIntegerBig::copy() const {
   return new QuadraticIntegerBig(*this);
 }
 
-AlgebraicInteger *QuadraticIntegerBig::aiCopyToInteger(const int &n) const {
+AlgebraicInteger *QuadraticIntegerBig::copyToInteger(const int &n) const {
   return new QuadraticIntegerBig(n);
 }
 

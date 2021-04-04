@@ -5,7 +5,7 @@ RCyclotomic7Integer_InfiniteNSymetries::RCyclotomic7Integer_InfiniteNSymetries(
     : InfiniteNSymetries(alvin) {
   unsigned int i, j;
 
-  auto aiVectors(alvin->get_aiVectors());
+  auto aiVectors(alvin->get_vectors());
 
   riVectorsProducts = vector<vector<RCyclotomic7Integer>>(
       iVectorsCount, vector<RCyclotomic7Integer>(iVectorsCount, 0));
@@ -37,7 +37,7 @@ RCyclotomic7Integer_InfiniteNSymetries::RCyclotomic7Integer_InfiniteNSymetries(
   // Products
   for (i = 0; i < iVectorsCount; i++) {
     AlgebraicInteger *aiNorm(
-        alvin->aiBilinearProduct(aiVectors[i], aiVectors[i]));
+        alvin->bilinearProduct(aiVectors[i], aiVectors[i]));
     riVectorsProducts[i][i] = *dynamic_cast<RCyclotomic7Integer *>(aiNorm);
 
     mpz_class iT(riVectorsProducts[i][i].floor());
@@ -51,7 +51,7 @@ RCyclotomic7Integer_InfiniteNSymetries::RCyclotomic7Integer_InfiniteNSymetries(
 
     for (j = i + 1; j < iVectorsCount; j++) {
       AlgebraicInteger *aiProd(
-          alvin->aiBilinearProduct(aiVectors[i], aiVectors[j]));
+          alvin->bilinearProduct(aiVectors[i], aiVectors[j]));
       riVectorsProducts[i][j] = riVectorsProducts[j][i] =
           *dynamic_cast<RCyclotomic7Integer *>(aiProd);
       delete aiProd;
@@ -67,11 +67,11 @@ RCyclotomic7Integer_InfiniteNSymetries::RCyclotomic7Integer_InfiniteNSymetries(
       if (iGraphMatrix[i][j] == 2) // dotted
       {
         AlgebraicInteger *aiNum(
-            alvin->aiBilinearProduct(aiVectors[i], aiVectors[j]));
+            alvin->bilinearProduct(aiVectors[i], aiVectors[j]));
         AlgebraicInteger *aiNorm1(
-            alvin->aiBilinearProduct(aiVectors[i], aiVectors[i]));
+            alvin->bilinearProduct(aiVectors[i], aiVectors[i]));
         AlgebraicInteger *aiNorm2(
-            alvin->aiBilinearProduct(aiVectors[j], aiVectors[j]));
+            alvin->bilinearProduct(aiVectors[j], aiVectors[j]));
 
         aiNum->multiplyBy(aiNum);
         aiNorm1->multiplyBy(aiNorm2);

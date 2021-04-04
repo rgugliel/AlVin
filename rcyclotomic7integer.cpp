@@ -967,7 +967,7 @@ AlgebraicInteger *RCyclotomic7Integer::copy() const {
   return new RCyclotomic7Integer(*this);
 }
 
-AlgebraicInteger *RCyclotomic7Integer::aiCopyToInteger(const int &n) const {
+AlgebraicInteger *RCyclotomic7Integer::copyToInteger(const int &n) const {
   return new RCyclotomic7Integer(n);
 }
 

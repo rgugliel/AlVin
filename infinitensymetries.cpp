@@ -1,11 +1,10 @@
 #include "infinitensymetries.h"
 
 InfiniteNSymetries::InfiniteNSymetries(AlVin *alvin)
-    : alvin(alvin), iDimension(alvin->get_iDimension()),
-      iVectorSize(alvin->get_iDimension() + 1),
-      iCoxeterMatrix(alvin->get_iCoxeterMatrix()), bFinished(false),
-      aiQF(alvin->get_aiQF()),
-      iFixedPointsDimension(alvin->get_iDimension() + 1) {
+    : alvin(alvin), iDimension(alvin->get_dimension()),
+      iVectorSize(alvin->get_dimension() + 1),
+      iCoxeterMatrix(alvin->get_coxeterMatrix()), bFinished(false),
+      aiQF(alvin->get_qf()), iFixedPointsDimension(alvin->get_dimension() + 1) {
   iVectorsCount = iCoxeterMatrix.size();
   iGraphMatrix = vector<vector<unsigned int>>(
       iVectorsCount, vector<unsigned int>(iVectorsCount, 0));

@@ -66,7 +66,7 @@ public:
   virtual ~QuadraticInteger();
 
   AlgebraicInteger *copy() const;
-  AlgebraicInteger *aiCopyToInteger(const int &n) const;
+  AlgebraicInteger *copyToInteger(const int &n) const;
   virtual void set(const int &n);
   virtual void set(AlgebraicInteger *ai);
 

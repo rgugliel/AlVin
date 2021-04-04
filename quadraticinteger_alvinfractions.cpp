@@ -1,11 +1,10 @@
 #include "quadraticinteger_alvinfractions.h"
 
 QuadraticInteger_VFs::QuadraticInteger_VFs(
-    vector<AlgebraicInteger *> aiPossibleNorms2,
-    const QuadraticInteger &qiAlpha0)
-    : qiAlpha0(qiAlpha0), AlVinFractions(aiPossibleNorms2),
-      qiPossibleNorms2_max(dynamic_cast<QuadraticInteger *>(
-          aiPossibleNorms2[aiPossibleNorms2.size() - 1])) {
+    vector<AlgebraicInteger *> possibleNorms2, const QuadraticInteger &alpha0)
+    : alpha0(alpha0), AlVinFractions(possibleNorms2),
+      possibleNorms2Max(dynamic_cast<QuadraticInteger *>(
+          possibleNorms2[possibleNorms2.size() - 1])) {
   iBatchSize = 1;
 }
 
@@ -18,7 +17,7 @@ void QuadraticInteger_VFs::computeNextAlVinFractions() {
   iLastMaximum += min(iSizeTemp, (unsigned int)1000000);
 
   // We generate fractions f such that: iMin < f <= iLastMaximum
-  for (auto aiE : aiPossibleNorms2) {
+  for (auto aiE : possibleNorms2) {
     QuadraticInteger *qiE(dynamic_cast<QuadraticInteger *>(aiE));
     long int y, iYMax, iYMin, x, iXMin, iXMax, iSqrtEp, iTemp, iSqrtY2d;
 
@@ -32,7 +31,7 @@ void QuadraticInteger_VFs::computeNextAlVinFractions() {
       // iSqrtEp = isqrt( \bar epsilon / ( -d * \bar \alpha_0 ) )
       QuadraticInteger qiTemp(*qiE);
       qiTemp.conjugate();
-      QuadraticInteger qiDen(qiAlpha0);
+      QuadraticInteger qiDen(alpha0);
       qiDen.conjugate();
       qiDen.multiplyBy(-QuadraticInteger::d);
       iSqrtEp = QuadraticInteger::iSQRT_quotient(qiTemp, qiDen);
@@ -83,7 +82,7 @@ void QuadraticInteger_VFs::computeNextAlVinFractions() {
             continue;
 
           qiSquare.multiplyBy(-1);
-          qiSquare.multiplyBy(&qiAlpha0);
+          qiSquare.multiplyBy(&alpha0);
           qiSquare.conjugate();
 
           if (!qiSquare.isLessOEThan(qiConjEpsilon))
@@ -91,19 +90,19 @@ void QuadraticInteger_VFs::computeNextAlVinFractions() {
 
           QuadraticInteger *qiNum(new QuadraticInteger(qi));
           qiNum->multiplyBy(&qi);
-          qiNum->multiplyBy(qiPossibleNorms2_max);
+          qiNum->multiplyBy(possibleNorms2Max);
           qiNum->divideBy(qiE);
 
           AlVinFraction *vf = new AlVinFraction(
               new QuadraticInteger(qi), new QuadraticInteger(*qiE), qiNum);
-          alvinfractions.insert(lower_bound(alvinfractions.begin(),
-                                            alvinfractions.end(), vf,
+          alvinFractions.insert(lower_bound(alvinFractions.begin(),
+                                            alvinFractions.end(), vf,
                                             isLessThanPtrAlVinFraction),
                                 vf);
         }
       }
     } else {
-      QuadraticInteger qiMinConjAlpha0(qiAlpha0);
+      QuadraticInteger qiMinConjAlpha0(alpha0);
       qiMinConjAlpha0.conjugate();
       qiMinConjAlpha0.multiplyBy(-1);
 
@@ -145,7 +144,7 @@ void QuadraticInteger_VFs::computeNextAlVinFractions() {
             continue;
 
           qiSquare.multiplyBy(-1);
-          qiSquare.multiplyBy(&qiAlpha0);
+          qiSquare.multiplyBy(&alpha0);
           qiSquare.conjugate();
 
           if (!qiSquare.isLessOEThan(qiConjEpsilon))
@@ -153,13 +152,13 @@ void QuadraticInteger_VFs::computeNextAlVinFractions() {
 
           QuadraticInteger *qiNum(new QuadraticInteger(qi));
           qiNum->multiplyBy(&qi);
-          qiNum->multiplyBy(qiPossibleNorms2_max);
+          qiNum->multiplyBy(possibleNorms2Max);
           qiNum->divideBy(qiE);
 
           AlVinFraction *vf = new AlVinFraction(
               new QuadraticInteger(qi), new QuadraticInteger(*qiE), qiNum);
-          alvinfractions.insert(lower_bound(alvinfractions.begin(),
-                                            alvinfractions.end(), vf,
+          alvinFractions.insert(lower_bound(alvinFractions.begin(),
+                                            alvinFractions.end(), vf,
                                             isLessThanPtrAlVinFraction),
                                 vf);
         }
@@ -167,5 +166,5 @@ void QuadraticInteger_VFs::computeNextAlVinFractions() {
     }
   }
 
-  alvinfractions_it = alvinfractions.begin();
+  alvinfractions_it = alvinFractions.begin();
 }

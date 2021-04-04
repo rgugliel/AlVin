@@ -35,7 +35,7 @@ RCyclotomic7Integer_AlVin::RCyclotomic7Integer_AlVin(
         if (rciTemp.isGreaterThan(0))
           throw(string("Quadratic form is not admissible"));
 
-        aiQF.insert(aiQF.begin(), rci);
+        qf.insert(qf.begin(), rci);
 
         bNegativeFound = true;
       } else
@@ -53,8 +53,8 @@ RCyclotomic7Integer_AlVin::RCyclotomic7Integer_AlVin(
       if (rciTemp.isLessThan(0))
         throw(string("Quadratic form is not admissible"));
 
-      aiQF.insert(
-          lower_bound(aiQF.begin() + (bNegativeFound ? 1 : 0), aiQF.end(), rci),
+      qf.insert(
+          lower_bound(qf.begin() + (bNegativeFound ? 1 : 0), qf.end(), rci),
           rci);
     }
   }
@@ -65,13 +65,13 @@ RCyclotomic7Integer_AlVin::RCyclotomic7Integer_AlVin(
   // -------------------------------------------------
   // global work
   initializations();
-  rciVectorCurrent = vector<RCyclotomic7Integer>(iDimension + 1, 0);
+  rciVectorCurrent = vector<RCyclotomic7Integer>(dimension + 1, 0);
 
   // -------------------------------------------------
   // local copy of the quadratic form (to avoid dynamic_cast)
   RCyclotomic7Integer rci2(2);
-  for (unsigned int i(0); i <= iDimension; i++) {
-    RCyclotomic7Integer *rci(dynamic_cast<RCyclotomic7Integer *>(aiQF[i]));
+  for (unsigned int i(0); i <= dimension; i++) {
+    RCyclotomic7Integer *rci(dynamic_cast<RCyclotomic7Integer *>(qf[i]));
     rciQF.push_back(RCyclotomic7Integer(*rci));
 
     rci2QF.push_back(RCyclotomic7Integer(*rci));
@@ -95,7 +95,7 @@ void RCyclotomic7Integer_AlVin::findVector(AlgebraicInteger *aiX0,
 
   // -----------------------------------------------------
   // Preliminary work
-  rciBilinearProducts = vector<RCyclotomic7Integer>(iVectorsCount_second, 0);
+  rciBilinearProducts = vector<RCyclotomic7Integer>(vectorsCountSecond, 0);
 
   // initial value of iSumComp
   RCyclotomic7Integer rciSumComp(*rciNorm2);
@@ -105,12 +105,12 @@ void RCyclotomic7Integer_AlVin::findVector(AlgebraicInteger *aiX0,
   rciSumComp.add(&rciTemp);
 
   // initial value of qiBilinearProducts
-  for (unsigned int i(0); i < iVectorsCount_second; i++) {
+  for (unsigned int i(0); i < vectorsCountSecond; i++) {
     // = - rci[0] * k0 * rciVectors[i + iDimension][0]
     rciBilinearProducts[i].set(&rciQF[0]);
     rciBilinearProducts[i].multiplyBy(-1);
     rciBilinearProducts[i].multiplyBy(rci0);
-    rciBilinearProducts[i].multiplyBy(rciVectors[i + iDimension][0]);
+    rciBilinearProducts[i].multiplyBy(rciVectors[i + dimension][0]);
   }
 
   rciVectorCurrent[0].set(rci0);
@@ -148,7 +148,7 @@ void RCyclotomic7Integer_AlVin::findVector(
   if (rciSumComp.iC[0] == 0 && rciSumComp.iC[1] == 0 &&
       rciSumComp.iC[2] == 0) // We have a candidate
   {
-    for (; iIndex <= iDimension; iIndex++)
+    for (; iIndex <= dimension; iIndex++)
       rciVectorCurrent[iIndex] = 0;
 
     if (rciGCDComponents.isInvertible())
@@ -354,21 +354,21 @@ void RCyclotomic7Integer_AlVin::findVector(
 
         // ------------------------------------------------------
         // If k_j should be less or equal than k_{j-1}
-        if (iComponentLessThan[iIndex] &&
-            !rci.isLessOEThan(rciVectorCurrent[iComponentLessThan[iIndex]]))
+        if (componentLessThan[iIndex] &&
+            !rci.isLessOEThan(rciVectorCurrent[componentLessThan[iIndex]]))
           continue;
 
         // ------------------------------------------------------
         // Is the vector admissible?
         bAdmissible = true;
 
-        for (j = 0; j < iVectorsCount_second; j++) {
+        for (j = 0; j < vectorsCountSecond; j++) {
           // rciTemp = rciQF[iIndex] * ( rci - rciLastComponent ) * rciVectors[j
           // + iDimension][iIndex]
           rciTemp.set(&rci);
           rciTemp.substract(&rciLastComponent);
           rciTemp.multiplyBy(&rciQF[iIndex]);
-          rciTemp.multiplyBy(rciVectors[j + iDimension][iIndex]);
+          rciTemp.multiplyBy(rciVectors[j + dimension][iIndex]);
           rciBilinearProducts[j].add(&rciTemp);
 
           // TODO: garder en mémoire la valeur max?
@@ -385,7 +385,7 @@ void RCyclotomic7Integer_AlVin::findVector(
 
         rciVectorCurrent[iIndex] = rci;
 
-        if (iIndex == iDimension && rciSumComp.isEqualTo(rciPartialNorm)) {
+        if (iIndex == dimension && rciSumComp.isEqualTo(rciPartialNorm)) {
           rciGCDComponents.gcd(&rci);
           if (rciGCDComponents.isInvertible())
             addCandidate();
@@ -394,7 +394,7 @@ void RCyclotomic7Integer_AlVin::findVector(
           break;
         }
 
-        if (iIndex < iDimension) {
+        if (iIndex < dimension) {
           RCyclotomic7Integer rciSumSub(rciSumComp);
           rciSumSub.substract(&rciPartialNorm);
 
@@ -407,9 +407,9 @@ void RCyclotomic7Integer_AlVin::findVector(
     }
   }
 
-  for (unsigned int i(0); i < iVectorsCount_second; i++) {
+  for (unsigned int i(0); i < vectorsCountSecond; i++) {
     rciTemp.set(&rciQF[iIndex]);
-    rciTemp.multiplyBy(rciVectors[i + iDimension][iIndex]);
+    rciTemp.multiplyBy(rciVectors[i + dimension][iIndex]);
     rciTemp.multiplyBy(&rciLastComponent);
     rciBilinearProducts[i].substract(&rciTemp);
   }
@@ -421,10 +421,10 @@ void RCyclotomic7Integer_AlVin::addCandidate() {
   for (auto i : rciVectorCurrent)
     aiV.push_back(new RCyclotomic7Integer(i));
 
-  aiVectors_candidates.push_back(aiV);
+  candidateVectors.push_back(aiV);
 }
 
-int RCyclotomic7Integer_AlVin::addVector_iFindWeight(
+int RCyclotomic7Integer_AlVin::addVector_findWeight(
     AlgebraicInteger *aiNumerator, AlgebraicInteger *aiDenominator) {
   RCyclotomic7Integer *rciNumerator(
       dynamic_cast<RCyclotomic7Integer *>(aiNumerator));
@@ -447,7 +447,7 @@ void RCyclotomic7Integer_AlVin::findPossibleNorms2() {
   // ----------------------------------------------------------
   // Compute for ever coefficient a of the quadratic form the prime numbers
   // which divide a
-  for (unsigned int i(0); i <= iDimension; i++) {
+  for (unsigned int i(0); i <= dimension; i++) {
     vector<RCyclotomic7Integer> rciTemp(rciQF[i].rciPrimeFactors());
     rciFactors.insert(rciFactors.end(), rciTemp.begin(), rciTemp.end());
   }

@@ -7,7 +7,7 @@ QuadraticInteger_InfiniteNSymetries::QuadraticInteger_InfiniteNSymetries(
 
   QuadraticIntegerBig::set_d(QuadraticInteger::d);
 
-  auto aiVectors(alvin->get_aiVectors());
+  auto aiVectors(alvin->get_vectors());
 
   riVectorsProducts = vector<vector<QuadraticIntegerBig>>(
       iVectorsCount, vector<QuadraticIntegerBig>(iVectorsCount, 0));
@@ -39,7 +39,7 @@ QuadraticInteger_InfiniteNSymetries::QuadraticInteger_InfiniteNSymetries(
   // Products
   for (i = 0; i < iVectorsCount; i++) {
     AlgebraicInteger *aiNorm(
-        alvin->aiBilinearProduct(aiVectors[i], aiVectors[i]));
+        alvin->bilinearProduct(aiVectors[i], aiVectors[i]));
     riVectorsProducts[i][i] = *dynamic_cast<QuadraticInteger *>(aiNorm);
 
     mpz_class iT(riVectorsProducts[i][i].floor());
@@ -53,7 +53,7 @@ QuadraticInteger_InfiniteNSymetries::QuadraticInteger_InfiniteNSymetries(
 
     for (j = i + 1; j < iVectorsCount; j++) {
       AlgebraicInteger *aiProd(
-          alvin->aiBilinearProduct(aiVectors[i], aiVectors[j]));
+          alvin->bilinearProduct(aiVectors[i], aiVectors[j]));
       riVectorsProducts[i][j] = riVectorsProducts[j][i] =
           *dynamic_cast<QuadraticInteger *>(aiProd);
       delete aiProd;
@@ -69,11 +69,11 @@ QuadraticInteger_InfiniteNSymetries::QuadraticInteger_InfiniteNSymetries(
       if (iGraphMatrix[i][j] == 2) // dotted
       {
         AlgebraicInteger *aiNum(
-            alvin->aiBilinearProduct(aiVectors[i], aiVectors[j]));
+            alvin->bilinearProduct(aiVectors[i], aiVectors[j]));
         AlgebraicInteger *aiNorm1(
-            alvin->aiBilinearProduct(aiVectors[i], aiVectors[i]));
+            alvin->bilinearProduct(aiVectors[i], aiVectors[i]));
         AlgebraicInteger *aiNorm2(
-            alvin->aiBilinearProduct(aiVectors[j], aiVectors[j]));
+            alvin->bilinearProduct(aiVectors[j], aiVectors[j]));
 
         aiNum->multiplyBy(aiNum);
         aiNorm1->multiplyBy(aiNorm2);

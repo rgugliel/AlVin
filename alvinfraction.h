@@ -36,12 +36,12 @@ along with AlVin. If not, see <http://www.gnu.org/licenses/>.
 class AlVinFraction {
 public: // For simplicity, variables are public be are meant to be read-only.
         // Careful.
-  AlgebraicInteger *aiX0;    ///< x_0
-  AlgebraicInteger *aiNorm2; ///< (e,e)
+  AlgebraicInteger *aiX0;  ///< x_0
+  AlgebraicInteger *norm2; ///< (e,e)
   AlgebraicInteger
-      *aiNumerator; ///< When normalized with respect to the biggest possible
-                    ///< value for (e,e): x_0^2 / (e,e) = ( x_0^2 * (e_max,
-                    ///< e_max)/(e,e) ) / (e_max, e_max)
+      *numerator; ///< When normalized with respect to the biggest possible
+                  ///< value for (e,e): x_0^2 / (e,e) = ( x_0^2 * (e_max,
+                  ///< e_max)/(e,e) ) / (e_max, e_max)
 
 public:
   AlVinFraction(AlgebraicInteger *aiX0, AlgebraicInteger *aiNorm2,

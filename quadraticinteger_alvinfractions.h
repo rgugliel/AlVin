@@ -43,8 +43,8 @@ using namespace std;
 
 class QuadraticInteger_VFs : public AlVinFractions {
 private:
-  QuadraticInteger qiAlpha0; ///< First coefficient of the quadratic form
-  QuadraticInteger *qiPossibleNorms2_max;
+  QuadraticInteger alpha0; ///< First coefficient of the quadratic form
+  QuadraticInteger *possibleNorms2Max;
 
 public:
   QuadraticInteger_VFs(vector<AlgebraicInteger *> aiPossibleNorms2,

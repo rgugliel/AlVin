@@ -17,7 +17,7 @@ void RationalInteger_VFs::computeNextAlVinFractions() {
 
   // We generate fractions f such that: iMin < f <= iLastMaximum
 
-  for (auto aiE : aiPossibleNorms2) {
+  for (auto aiE : possibleNorms2) {
     unsigned int iE(dynamic_cast<RationalInteger *>(aiE)->get_iValue());
 
     // ceil( isqrt(x) ) = isqrt(x - 1) + 1
@@ -35,12 +35,12 @@ void RationalInteger_VFs::computeNextAlVinFractions() {
           new AlVinFraction(new RationalInteger(iXMin), new RationalInteger(iE),
                             new RationalInteger(iNumerator));
 
-      alvinfractions.insert(lower_bound(alvinfractions.begin(),
-                                        alvinfractions.end(), vf,
+      alvinFractions.insert(lower_bound(alvinFractions.begin(),
+                                        alvinFractions.end(), vf,
                                         isLessThanPtrAlVinFraction),
                             vf);
     }
   }
 
-  alvinfractions_it = alvinfractions.begin();
+  alvinfractions_it = alvinFractions.begin();
 }

@@ -61,8 +61,8 @@ private:
   void findPossibleNorms2();
   void findVector(AlgebraicInteger *aiX0, AlgebraicInteger *aiNorm2);
   void addVectorChild(const vector<AlgebraicInteger *> &aiVector);
-  virtual int addVector_iFindWeight(AlgebraicInteger *aiNumerator,
-                                    AlgebraicInteger *aiDenominator);
+  virtual int addVector_findWeight(AlgebraicInteger *aiNumerator,
+                                   AlgebraicInteger *aiDenominator);
 
   void findVector(RCyclotomic7Integer *rci0, RCyclotomic7Integer *rciNorm2,
                   unsigned int iIndex, RCyclotomic7Integer rciSumComp,

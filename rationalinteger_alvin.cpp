@@ -13,7 +13,7 @@ RationalInteger_AlVin::RationalInteger_AlVin(
     if (i < 0 && !bNegativeFound) {
       RationalInteger *ri(new RationalInteger(-i));
 
-      aiQF.insert(aiQF.begin(), ri);
+      qf.insert(qf.begin(), ri);
 
       bNegativeFound = true;
     } else if (i < 0)
@@ -21,9 +21,8 @@ RationalInteger_AlVin::RationalInteger_AlVin(
     else if (i > 0) {
       RationalInteger *ri(new RationalInteger(i));
 
-      aiQF.insert(
-          lower_bound(aiQF.begin() + (bNegativeFound ? 1 : 0), aiQF.end(), ri),
-          ri);
+      qf.insert(
+          lower_bound(qf.begin() + (bNegativeFound ? 1 : 0), qf.end(), ri), ri);
     }
   }
 
@@ -33,28 +32,28 @@ RationalInteger_AlVin::RationalInteger_AlVin(
   // -------------------------------------------------
   // global work
   initializations();
-  iVectorCurrent = vector<int>(iDimension + 1, 0);
+  iVectorCurrent = vector<int>(dimension + 1, 0);
 
   // -------------------------------------------------
   // local copy of the quadratic form (computations performs faster without the
   // class-interface RationalInteger)
-  for (auto i : aiQF) {
+  for (auto i : qf) {
     RationalInteger *ri(dynamic_cast<RationalInteger *>(i));
     riQF.push_back(ri->get_iValue());
   }
 
   bLastTwoCoefficientsQFAre1Mod4 =
-      riQF[iDimension - 1] % 4 == 1 && riQF[iDimension] % 4 == 1;
+      riQF[dimension - 1] % 4 == 1 && riQF[dimension] % 4 == 1;
 
   // -------------------------------------------------
   // GCDs
-  iGCDs = vector<unsigned int>(iDimension + 1, 0);
+  iGCDs = vector<unsigned int>(dimension + 1, 0);
 
-  iGCDs[iDimension - 1] = ugcd(riQF[iDimension - 1], riQF[iDimension]);
-  if (iGCDs[iDimension - 1] == 1)
-    iGCDs[iDimension - 1] = 0;
+  iGCDs[dimension - 1] = ugcd(riQF[dimension - 1], riQF[dimension]);
+  if (iGCDs[dimension - 1] == 1)
+    iGCDs[dimension - 1] = 0;
 
-  for (unsigned int i(iDimension - 2); i > 0; i--) {
+  for (unsigned int i(dimension - 2); i > 0; i--) {
     iGCDs[i] = ugcd(riQF[i], iGCDs[i + 1]);
     if (iGCDs[i] == 1) {
       iGCDs[i] = 0;
@@ -83,7 +82,7 @@ void RationalInteger_AlVin::findPossibleNorms2() {
   // ----------------------------------------------------------
   // Compute for ever coefficient a of the quadratic form the prime numbers
   // which divide a
-  for (unsigned int i(0); i <= iDimension; i++) {
+  for (unsigned int i(0); i <= dimension; i++) {
     unsigned int iDivisor(3), n(riQF[i]);
     if (n == 1)
       continue;
@@ -151,7 +150,7 @@ void RationalInteger_AlVin::findPossibleNorms2() {
 
 void RationalInteger_AlVin::findVector(AlgebraicInteger *aiX0,
                                        AlgebraicInteger *aiNorm2) {
-  iBilinearProducts = vector<int>(iVectorsCount_second, 0);
+  iBilinearProducts = vector<int>(vectorsCountSecond, 0);
 
   findVector(dynamic_cast<RationalInteger *>(aiX0)->iVal,
              dynamic_cast<RationalInteger *>(aiNorm2)->iVal);
@@ -163,7 +162,7 @@ bool RationalInteger_AlVin::bCandidatePreserveEvenLattice(
 
   long int iSumCoordinates(iVectorCurrent[0]);
   unsigned int i;
-  for (i = 1; i <= iDimension; i++)
+  for (i = 1; i <= dimension; i++)
     iSumCoordinates += iVectorCurrent[i];
 
   if (iSumCoordinates % 4 == 0)
@@ -175,7 +174,7 @@ bool RationalInteger_AlVin::bCandidatePreserveEvenLattice(
       (riQF[0] * iVectorCurrent[0] + riQF[1] * iVectorCurrent[1]) % 2)
     return false;
 
-  for (i = 1; i <= iDimension; i++) {
+  for (i = 1; i <= dimension; i++) {
     if (iSumCoordinates *
         (-riQF[0] * iVectorCurrent[0] + riQF[i] * iVectorCurrent[i]) % 2)
       return false;
@@ -191,7 +190,7 @@ void RationalInteger_AlVin::addCandidate() {
   for (auto i : iVectorCurrent)
     aiV.push_back(new RationalInteger(i));
 
-  aiVectors_candidates.push_back(aiV);
+  candidateVectors.push_back(aiV);
 }
 
 void RationalInteger_AlVin::addVectorChild(
@@ -203,7 +202,7 @@ void RationalInteger_AlVin::addVectorChild(
   iVectors.push_back(iV);
 }
 
-int RationalInteger_AlVin::addVector_iFindWeight(
+int RationalInteger_AlVin::addVector_findWeight(
     AlgebraicInteger *aiNumerator, AlgebraicInteger *aiDenominator) {
   return -2;
 }
@@ -218,15 +217,15 @@ void RationalInteger_AlVin::findVector(const unsigned int &i0,
     iVectorCurrent[0] = i0;
     iGCDComponents = i0;
 
-    for (unsigned int i(0); i < iVectorsCount_second; i++)
-      iBilinearProducts[i] = -riQF[0] * i0 * iVectors[i + iDimension][0];
+    for (unsigned int i(0); i < vectorsCountSecond; i++)
+      iBilinearProducts[i] = -riQF[0] * i0 * iVectors[i + dimension][0];
   } else if (iGCDs[iIndex] &&
              iSumComp % iGCDs[iIndex]) // equation a * x + b * y = z has a
                                        // solution only if gcd(a, b) | z
     return;
 
   if (!iSumComp) {
-    for (; iIndex <= iDimension; iIndex++)
+    for (; iIndex <= dimension; iIndex++)
       iVectorCurrent[iIndex] = 0;
 
     if (iGCDComponents == 1)
@@ -235,12 +234,12 @@ void RationalInteger_AlVin::findVector(const unsigned int &i0,
     return;
   }
 
-  if (iIndex == iDimension - 1) {
+  if (iIndex == dimension - 1) {
     if (bLastTwoCoefficientsQFAre1Mod4 &&
         iSumComp % 4 == 3) // Sum of two squares cannot be 3 mod 4
       return;
 
-    unsigned int a(riQF[iIndex]), b(riQF[iDimension]), c(iSumComp);
+    unsigned int a(riQF[iIndex]), b(riQF[dimension]), c(iSumComp);
 
     if (iGCDs[iIndex]) {
       a /= iGCDs[iIndex];
@@ -275,28 +274,28 @@ void RationalInteger_AlVin::findVector(const unsigned int &i0,
   }
 
   unsigned int iMax(
-      iComponentLessThan[iIndex]
-          ? min((unsigned int)iVectorCurrent[iComponentLessThan[iIndex]],
+      componentLessThan[iIndex]
+          ? min((unsigned int)iVectorCurrent[componentLessThan[iIndex]],
                 integerSqrt(iSumComp) / integerSqrt(riQF[iIndex]))
           : integerSqrt(iSumComp) / integerSqrt(riQF[iIndex]));
 
   iVectorCurrent[iIndex] = 0;
-  if (iIndex < iDimension)
+  if (iIndex < dimension)
     findVector(i0, iNorm2, iIndex + 1, iSumComp, iGCDComponents);
 
   unsigned int iLastCoeff(0);
   for (unsigned int i(ceilQuotient(iNorm2, 2 * riQF[iIndex])); i <= iMax; i++) {
     if (!(2 * i * riQF[iIndex] % iNorm2)) {
-      for (unsigned int j(0); j < iVectorsCount_second; j++) {
+      for (unsigned int j(0); j < vectorsCountSecond; j++) {
         iBilinearProducts[j] +=
-            riQF[iIndex] * (i - iLastCoeff) * iVectors[j + iDimension][iIndex];
+            riQF[iIndex] * (i - iLastCoeff) * iVectors[j + dimension][iIndex];
 
         if (iBilinearProducts[j] > 0) // iVectorCurrent is not admissible
         {
           // we restore the value of iBilinearProducts
-          for (unsigned int k(0); k < iVectorsCount_second; k++)
+          for (unsigned int k(0); k < vectorsCountSecond; k++)
             iBilinearProducts[k] -= riQF[iIndex] *
-                                    iVectors[k + iDimension][iIndex] *
+                                    iVectors[k + dimension][iIndex] *
                                     (k <= j ? i : iLastCoeff);
 
           return;
@@ -306,18 +305,18 @@ void RationalInteger_AlVin::findVector(const unsigned int &i0,
       iVectorCurrent[iIndex] = i;
       iLastCoeff = i;
 
-      if (iIndex == iDimension && riQF[iIndex] * i * i == iSumComp) {
+      if (iIndex == dimension && riQF[iIndex] * i * i == iSumComp) {
         if (ugcd(i, iGCDComponents) == 1)
           addCandidate();
 
-        for (unsigned int i(0); i < iVectorsCount_second; i++)
+        for (unsigned int i(0); i < vectorsCountSecond; i++)
           iBilinearProducts[i] -=
-              riQF[iIndex] * iLastCoeff * iVectors[i + iDimension][iIndex];
+              riQF[iIndex] * iLastCoeff * iVectors[i + dimension][iIndex];
 
         return;
       }
 
-      if (iIndex < iDimension) {
+      if (iIndex < dimension) {
         if (riQF[iIndex] * i * i <= iSumComp)
           findVector(i0, iNorm2, iIndex + 1, iSumComp - riQF[iIndex] * i * i,
                      ugcd(iGCDComponents, i));
@@ -325,9 +324,9 @@ void RationalInteger_AlVin::findVector(const unsigned int &i0,
     }
   }
 
-  for (unsigned int i(0); i < iVectorsCount_second; i++)
+  for (unsigned int i(0); i < vectorsCountSecond; i++)
     iBilinearProducts[i] -=
-        riQF[iIndex] * iLastCoeff * iVectors[i + iDimension][iIndex];
+        riQF[iIndex] * iLastCoeff * iVectors[i + dimension][iIndex];
 }
 
 string RationalInteger_AlVin::get_strField() const { return string("Q"); }

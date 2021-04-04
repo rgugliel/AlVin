@@ -48,8 +48,8 @@ void RationalInteger_NotReflective::createSystemEquations(
     // other equations
     vector<AlgebraicInteger *> aiNumberVariablesCount;
     for (unsigned int i(0); i < iVariablesCount; i++)
-      aiNumberVariablesCount.push_back(aiQF[0]->aiCopyToInteger(0));
-    AlgebraicInteger *aiTemp(aiQF[0]->aiCopyToInteger(0));
+      aiNumberVariablesCount.push_back(aiQF[0]->copyToInteger(0));
+    AlgebraicInteger *aiTemp(aiQF[0]->copyToInteger(0));
 
     for (vector<short unsigned int>::const_iterator it(
              upper_bound(nrg.iGraphVertices.begin(), nrg.iGraphVertices.end(),

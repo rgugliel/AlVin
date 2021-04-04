@@ -5,7 +5,7 @@ RationalInteger_InfiniteNSymetries::RationalInteger_InfiniteNSymetries(
     : InfiniteNSymetries(alvin) {
   unsigned int i, j;
 
-  auto aiVectors(alvin->get_aiVectors());
+  auto aiVectors(alvin->get_vectors());
 
   riVectorsProducts = vector<vector<RationalInteger>>(
       iVectorsCount, vector<RationalInteger>(iVectorsCount, 0));
@@ -36,13 +36,13 @@ RationalInteger_InfiniteNSymetries::RationalInteger_InfiniteNSymetries(
   // Products
   for (i = 0; i < iVectorsCount; i++) {
     AlgebraicInteger *aiNorm(
-        alvin->aiBilinearProduct(aiVectors[i], aiVectors[i]));
+        alvin->bilinearProduct(aiVectors[i], aiVectors[i]));
     riVectorsProducts[i][i] = *dynamic_cast<RationalInteger *>(aiNorm);
     delete aiNorm;
 
     for (j = i + 1; j < iVectorsCount; j++) {
       AlgebraicInteger *aiProd(
-          alvin->aiBilinearProduct(aiVectors[i], aiVectors[j]));
+          alvin->bilinearProduct(aiVectors[i], aiVectors[j]));
       riVectorsProducts[i][j] = riVectorsProducts[j][i] =
           *dynamic_cast<RationalInteger *>(aiProd);
       delete aiProd;
@@ -58,11 +58,11 @@ RationalInteger_InfiniteNSymetries::RationalInteger_InfiniteNSymetries(
       if (iGraphMatrix[i][j] == 2) // dotted
       {
         AlgebraicInteger *aiNum(
-            alvin->aiBilinearProduct(aiVectors[i], aiVectors[j]));
+            alvin->bilinearProduct(aiVectors[i], aiVectors[j]));
         AlgebraicInteger *aiNorm1(
-            alvin->aiBilinearProduct(aiVectors[i], aiVectors[i]));
+            alvin->bilinearProduct(aiVectors[i], aiVectors[i]));
         AlgebraicInteger *aiNorm2(
-            alvin->aiBilinearProduct(aiVectors[j], aiVectors[j]));
+            alvin->bilinearProduct(aiVectors[j], aiVectors[j]));
 
         aiNum->multiplyBy(aiNum);
         aiNorm1->multiplyBy(aiNorm2);

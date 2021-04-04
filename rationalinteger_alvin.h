@@ -87,8 +87,8 @@ private:
   bool bCandidatePreserveEvenLattice(const unsigned int &iNorm2) const;
 
   virtual void addVectorChild(const vector<AlgebraicInteger *> &aiVector);
-  virtual int addVector_iFindWeight(AlgebraicInteger *aiNumerator,
-                                    AlgebraicInteger *aiDenominator);
+  virtual int addVector_findWeight(AlgebraicInteger *aiNumerator,
+                                   AlgebraicInteger *aiDenominator);
 };
 
 #endif // RATIONAL_INTEGER_ALVIN_H

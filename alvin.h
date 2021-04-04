@@ -51,8 +51,8 @@ using namespace MathTools;
 
 class AlVin {
 protected:
-  vector<AlgebraicInteger *> aiQF;
-  unsigned int iDimension; ///< Dimension of the space
+  vector<AlgebraicInteger *> qf;
+  unsigned int dimension; ///< Dimension of the space
 
   bool bComputeInvariantsPolyhedron; ///< If yes, we compute the invariants of
                                      ///< the final polyhedron
@@ -66,22 +66,21 @@ protected:
 
   vector<unsigned int> iQBlocksSize; ///< Sizes of blocks of coefficients
   vector<unsigned int>
-      iComponentLessThan; ///< The entry [i]=j means x_i <= x_j, [i] = 0
-                          ///< means no information for x_i
+      componentLessThan; ///< The entry [i]=j means x_i <= x_j, [i] = 0
+                         ///< means no information for x_i
 
-  vector<vector<AlgebraicInteger *>> aiVectors; ///< The vectors
-  unsigned int iVectorsCount;                   ///< Number of vectors found
-  unsigned int iVectorsCount_second; ///< Number of vectors found (second batch)
+  vector<vector<AlgebraicInteger *>> vectors; ///< The vectors
+  unsigned int vectorsCount;                  ///< Number of vectors found
+  unsigned int vectorsCountSecond; ///< Number of vectors found (second batch)
 
   vector<vector<AlgebraicInteger *>>
-      aiVectors_candidates; ///< Vectors which are compatible with the previous
+      candidateVectors; ///< Vectors which are compatible with the previous
 
-  vector<vector<unsigned int>> iCoxeterMatrix;
+  vector<vector<unsigned int>> coxeterMatrix;
 
   vector<AlgebraicInteger *>
-      iBilinearProducts; ///< To control during findVector_simple that the
-                         ///< vector has negative product with the preceding
-                         ///< ones
+      bilinearProducts; ///< To control during findVector_simple that the vector
+                        ///< has negative product with the preceding ones
 
   AlVinFractions *vf;
 
@@ -117,15 +116,15 @@ public:
    * this->iVectorsCount == iMaxVectors \param bLastCheckFV(bool): If false,
    * does not check the finiteness for the final polyhedron (useful for debug)
    */
-  bool Run(unsigned int iMinVectors = 0, unsigned int iMaxVectors = 0,
+  bool Run(unsigned int minVectors = 0, unsigned int maxVectors = 0,
            bool bLastCheckFV = true);
 
-  /*!	\fn AlgebraicInteger* aiBilinearProduct( const vector< AlgebraicInteger*
+  /*!	\fn AlgebraicInteger* bilinearProduct( const vector< AlgebraicInteger*
    * >& v1, const vector< AlgebraicInteger* >& v2 ) \brief Compute the product
    * between two vectors
    */
-  AlgebraicInteger *aiBilinearProduct(const vector<AlgebraicInteger *> &v1,
-                                      const vector<AlgebraicInteger *> &v2);
+  AlgebraicInteger *bilinearProduct(const vector<AlgebraicInteger *> &v1,
+                                    const vector<AlgebraicInteger *> &v2);
 
   /*!	\fn print_iQF
    * 	\brief Print the quadratic form
@@ -137,15 +136,15 @@ public:
    */
   void print_vectors() const;
 
-  /*!	\fn get_iCoxeterMatrix
+  /*!	\fn get_coxeterMatrix
    * 	\brief Return the Coxeter matrix
    */
-  vector<vector<unsigned int>> get_iCoxeterMatrix() const;
+  vector<vector<unsigned int>> get_coxeterMatrix() const;
 
   /*!	\fn get_iDimension
    * 	\brief Return n, the dimension
    */
-  unsigned int get_iDimension() const;
+  unsigned int get_dimension() const;
 
   /*!	\fn get_strFinalInformation
    * 	\brief Return some information stored during the computations
@@ -175,32 +174,32 @@ public:
    */
   string get_strAlgebraicIntegerType() const;
 
-  /*!	\fn get_aiVectors
+  /*!	\fn get_vectors
    * 	\brief Return the list of found vectors
    */
-  vector<vector<AlgebraicInteger *>> get_aiVectors() const;
+  vector<vector<AlgebraicInteger *>> get_vectors() const;
 
-  /*!	\fn get_iVectorsCount
+  /*!	\fn get_vectorsCount
    * 	\brief Return the number of found vectors
    */
-  unsigned int get_iVectorsCount() const;
+  unsigned int get_vectorsCount() const;
 
-  /*!	\fn get_aiQF
+  /*!	\fn get_qf
    * 	\brief Return the quadratic form
    */
-  vector<AlgebraicInteger *> get_aiQF() const;
+  vector<AlgebraicInteger *> get_qf() const;
 
-  /*!	\fn get_aiPossibleNorm2
+  /*!	\fn get_possibleNorm2
    * 	\brief Return the list of possible values for (e,e), where e is a root
    * of the quadratic lattice
    */
-  vector<AlgebraicInteger *> get_aiPossibleNorm2() const;
+  vector<AlgebraicInteger *> get_possibleNorm2() const;
 
-  /*!	\fn get_ptraiPossibleNorm2
+  /*!	\fn get_ptrPossibleNorm2
    * 	\brief Return a pointer to the list of possible values for (e,e), where
    * e is a root of the quadratic lattice
    */
-  const vector<AlgebraicInteger *> *get_ptraiPossibleNorm2() const;
+  const vector<AlgebraicInteger *> *get_ptrPossibleNorm2() const;
 
   /*!	\fn get_ptrCI
    * 	\brief Return a pointer to the the last CoxIter object
@@ -236,8 +235,8 @@ private:
   void findFirstVectors();
 
   void addVector(const vector<AlgebraicInteger *> &aiVect);
-  virtual int addVector_iFindWeight(AlgebraicInteger *aiNumerator,
-                                    AlgebraicInteger *aiDenominator) = 0;
+  virtual int addVector_findWeight(AlgebraicInteger *aiNumerator,
+                                   AlgebraicInteger *aiDenominator) = 0;
 
   void printFoundVector(vector<AlgebraicInteger *> aiV,
                         const unsigned int &iIndex,
@@ -247,25 +246,25 @@ private:
 };
 
 inline AlgebraicInteger *
-AlVin::aiBilinearProduct(const vector<AlgebraicInteger *> &v1,
-                         const vector<AlgebraicInteger *> &v2) {
-  AlgebraicInteger *aiProduct(aiQF[0]->copy());
-  AlgebraicInteger *aiTemp(aiQF[0]->copy());
+AlVin::bilinearProduct(const vector<AlgebraicInteger *> &v1,
+                       const vector<AlgebraicInteger *> &v2) {
+  AlgebraicInteger *product(qf[0]->copy());
+  AlgebraicInteger *temp(qf[0]->copy());
 
-  aiProduct->opp();
-  aiProduct->multiplyBy(v1[0]);
-  aiProduct->multiplyBy(v2[0]);
+  product->opp();
+  product->multiplyBy(v1[0]);
+  product->multiplyBy(v2[0]);
 
-  for (unsigned int j(1); j <= iDimension; j++) {
-    aiTemp->set(aiQF[j]);
-    aiTemp->multiplyBy(v1[j]);
-    aiTemp->multiplyBy(v2[j]);
-    aiProduct->add(aiTemp);
+  for (unsigned int j(1); j <= dimension; j++) {
+    temp->set(qf[j]);
+    temp->multiplyBy(v1[j]);
+    temp->multiplyBy(v2[j]);
+    product->add(temp);
   }
 
-  delete aiTemp;
+  delete temp;
 
-  return aiProduct;
+  return product;
 }
 
 #endif // ALVIN_H

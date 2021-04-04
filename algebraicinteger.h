@@ -44,13 +44,13 @@ class AlgebraicInteger {
 public:
   virtual ~AlgebraicInteger();
 
-  /*!	\fn aiCopyToInteger
+  /*!	\fn copyToInteger
    * 	\brief Create an algebraic integer from an integer
    *
    * 	\param n( const int ): Integer
    * 	\return Pointer to the algebraic integer created
    */
-  virtual AlgebraicInteger *aiCopyToInteger(const int &n) const = 0;
+  virtual AlgebraicInteger *copyToInteger(const int &n) const = 0;
 
   /*!	\fn copy
    * 	\brief Create a copy of an algebraic integer

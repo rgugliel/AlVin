@@ -3,17 +3,17 @@
 AlVin::AlVin(const string &strOuputMathematicalFormat, const bool &bWriteInfo,
              const bool &bDebug)
     : bComputeInvariantsPolyhedron(false), bWriteInfo(bWriteInfo),
-      bDebug(bDebug), iCreateImage(-1), iVectorsCount_second(0), vf(nullptr),
+      bDebug(bDebug), iCreateImage(-1), vectorsCountSecond(0), vf(nullptr),
       ptrCI(nullptr), strOuputMathematicalFormat(strOuputMathematicalFormat) {}
 
 AlVin::~AlVin() {
-  for (auto i : aiQF)
+  for (auto i : qf)
     delete i;
 
-  for (auto i : iBilinearProducts)
+  for (auto i : bilinearProducts)
     delete i;
 
-  for (auto v : aiVectors) {
+  for (auto v : vectors) {
     for (auto i : v)
       delete i;
   }
@@ -21,7 +21,7 @@ AlVin::~AlVin() {
   if (vf != nullptr)
     delete vf;
 
-  for (auto i : aiVectors_candidates) {
+  for (auto i : candidateVectors) {
     for (auto j : i)
       delete j;
   }
@@ -31,29 +31,29 @@ AlVin::~AlVin() {
 }
 
 void AlVin::initializations() {
-  if (aiQF.size() < 3)
+  if (qf.size() < 3)
     throw(string("Quadratic form has not enough coefficients"));
 
   ptrCI = nullptr;
-  iBilinearProducts.clear();
-  iDimension = aiQF.size() - 1;
+  bilinearProducts.clear();
+  dimension = qf.size() - 1;
 
-  for (auto i : aiQF)
+  for (auto i : qf)
     i->removeSquareFactors();
 
-  sort(aiQF.begin() + 1, aiQF.end(), isLessThanPtrAlgebraicInteger);
+  sort(qf.begin() + 1, qf.end(), isLessThanPtrAlgebraicInteger);
 
   // ------------------------------------------------
   // Test: quotients of the positive elements of the QF should not be the square
   // of an invertible element
-  for (unsigned int i(1); i <= iDimension; i++) {
-    while (i < iDimension && *aiQF[i + 1] == *aiQF[i])
+  for (unsigned int i(1); i <= dimension; i++) {
+    while (i < dimension && *qf[i + 1] == *qf[i])
       i++;
 
-    for (unsigned int j(i + 1); j <= iDimension; j++) {
-      if (aiQF[j]->isDivisibleBy(aiQF[i])) {
-        unique_ptr<AlgebraicInteger> aiTest(aiQF[j]->copy());
-        aiTest->divideBy(aiQF[i]);
+    for (unsigned int j(i + 1); j <= dimension; j++) {
+      if (qf[j]->isDivisibleBy(qf[i])) {
+        unique_ptr<AlgebraicInteger> aiTest(qf[j]->copy());
+        aiTest->divideBy(qf[i]);
 
         if (aiTest->isSquareOfIvertible() && get_strField() == "RC7") {
           cout << "Check that " << *aiTest
@@ -67,9 +67,9 @@ void AlVin::initializations() {
 
   // ------------------------------------------------
   // Test: GCD
-  unique_ptr<AlgebraicInteger> igcd(aiQF[0]->copy());
-  for (unsigned int i(1); i <= iDimension; i++)
-    igcd->gcd(aiQF[i]);
+  unique_ptr<AlgebraicInteger> igcd(qf[0]->copy());
+  for (unsigned int i(1); i <= dimension; i++)
+    igcd->gcd(qf[i]);
 
   if (!igcd->isInvertible())
     throw(
@@ -77,28 +77,28 @@ void AlVin::initializations() {
 
   // ------------------------------------------------
   // Other stuff
-  strAlgebraicIntegerType = aiQF[0]->get_classname();
+  strAlgebraicIntegerType = qf[0]->get_classname();
 
   findFirstVectors();
 }
 
 void AlVin::findFirstVectors() {
-  iVectorsCount = iDimension;
-  iVectorsCount_second = 0;
+  vectorsCount = dimension;
+  vectorsCountSecond = 0;
 
   // ------------------------------------------------
   // We count the multiplicity of the coefficients
   unsigned int iCount(1);
 
-  unique_ptr<AlgebraicInteger> aiLastCoeff(aiQF[1]->copy());
+  unique_ptr<AlgebraicInteger> aiLastCoeff(qf[1]->copy());
 
-  for (unsigned i(2); i <= iDimension; i++) {
-    if (*aiQF[i] != *aiLastCoeff) {
+  for (unsigned i(2); i <= dimension; i++) {
+    if (*qf[i] != *aiLastCoeff) {
       iQBlocksSize.push_back(iCount);
       iCount = 0;
     }
 
-    aiLastCoeff->set(aiQF[i]);
+    aiLastCoeff->set(qf[i]);
     iCount++;
   }
 
@@ -106,19 +106,19 @@ void AlVin::findFirstVectors() {
 
   // ------------------------------------------------
   // Vectors and gram matrix
-  iCoxeterMatrix = vector<vector<unsigned int>>(
-      iDimension, vector<unsigned int>(iDimension, 2));
-  iComponentLessThan = vector<unsigned int>(iDimension + 1, 0);
+  coxeterMatrix = vector<vector<unsigned int>>(
+      dimension, vector<unsigned int>(dimension, 2));
+  componentLessThan = vector<unsigned int>(dimension + 1, 0);
 
   unsigned int iVectorIndex(1), i;
   for (auto iBlockSize : iQBlocksSize) {
     for (i = 1; i <= iBlockSize; i++) {
       vector<AlgebraicInteger *> aiV;
-      for (unsigned int j(0); j <= iDimension; j++)
-        aiV.push_back(aiQF[0]->aiCopyToInteger(0));
+      for (unsigned int j(0); j <= dimension; j++)
+        aiV.push_back(qf[0]->copyToInteger(0));
 
       if (i >= 2)
-        iComponentLessThan[iVectorIndex] = iVectorIndex - 1;
+        componentLessThan[iVectorIndex] = iVectorIndex - 1;
 
       if (i == iBlockSize)
         aiV[iVectorIndex]->set(-1);
@@ -126,12 +126,12 @@ void AlVin::findFirstVectors() {
         aiV[iVectorIndex]->set(-1);
         aiV[iVectorIndex + 1]->set(1);
 
-        iCoxeterMatrix[iVectorIndex - 1][iVectorIndex] =
-            iCoxeterMatrix[iVectorIndex][iVectorIndex - 1] =
+        coxeterMatrix[iVectorIndex - 1][iVectorIndex] =
+            coxeterMatrix[iVectorIndex][iVectorIndex - 1] =
                 i < iBlockSize - 1 ? 3 : 4;
       }
 
-      aiVectors.push_back(aiV);
+      vectors.push_back(aiV);
       addVectorChild(aiV);
 
       iVectorIndex++;
@@ -146,19 +146,19 @@ bool AlVin::Run(unsigned int iMinVectors, unsigned int iMaxVectors,
 
   unsigned int iCandidatesCount, i, j;
 
-  while ((!iMaxVectors || iVectorsCount < iMaxVectors)) {
+  while ((!iMaxVectors || vectorsCount < iMaxVectors)) {
     vector<AlVinFraction *> vfs(vf->getNextAlVinFraction());
     for (auto frac : vfs)
-      findVector(frac->aiX0, frac->aiNorm2);
+      findVector(frac->aiX0, frac->norm2);
 
     // ------------------------------------------------
     // Are the candidates compatible between themselves
-    iCandidatesCount = aiVectors_candidates.size();
+    iCandidatesCount = candidateVectors.size();
 
     for (i = 0; i < iCandidatesCount; i++) {
       for (j = i + 1; j < iCandidatesCount; j++) {
-        unique_ptr<AlgebraicInteger> aiProd(aiBilinearProduct(
-            aiVectors_candidates[i], aiVectors_candidates[j]));
+        unique_ptr<AlgebraicInteger> aiProd(
+            bilinearProduct(candidateVectors[i], candidateVectors[j]));
 
         if (aiProd->isGreaterThan(0)) // This should not happen
           throw(string("AlVin::Run: Incompatible candidates"));
@@ -168,29 +168,29 @@ bool AlVin::Run(unsigned int iMinVectors, unsigned int iMaxVectors,
     // ------------------------------------------------
     // Adding the vectors
     for (i = 0;
-         i < iCandidatesCount && (!iMaxVectors || iVectorsCount < iMaxVectors);
+         i < iCandidatesCount && (!iMaxVectors || vectorsCount < iMaxVectors);
          i++) {
       if (bWriteInfo) {
-        printFoundVector(aiVectors_candidates[i], iVectorsCount + 1, false);
+        printFoundVector(candidateVectors[i], vectorsCount + 1, false);
       }
 
       try {
-        addVector(aiVectors_candidates[i]);
-        addVectorChild(aiVectors_candidates[i]);
+        addVector(candidateVectors[i]);
+        addVectorChild(candidateVectors[i]);
       } catch (string &strE) {
-        aiVectors_candidates[i].clear();
+        candidateVectors[i].clear();
         throw(strE);
       }
 
       // So that we don't try do free the memory (will be done via aiVectors)
-      aiVectors_candidates[i].clear();
+      candidateVectors[i].clear();
 
       // --------------------------------------------------
       // Test volume
-      if (iMinVectors && iVectorsCount < iMinVectors)
+      if (iMinVectors && vectorsCount < iMinVectors)
         continue; // No covolume test
 
-      ptrCI = new CoxIter(iCoxeterMatrix, iDimension);
+      ptrCI = new CoxIter(coxeterMatrix, dimension);
       ptrCI->set_checkCofiniteness(true);
 
       if (!ptrCI->canBeFiniteCovolume()) {
@@ -199,7 +199,7 @@ bool AlVin::Run(unsigned int iMinVectors, unsigned int iMaxVectors,
         continue;
       }
 
-      if ((iVectorsCount == iMaxVectors && !bLastCheckFV) ||
+      if ((vectorsCount == iMaxVectors && !bLastCheckFV) ||
           ptrCI->checkCovolumeFiniteness() == 1) {
         if (bWriteInfo) {
           print_finallInformation();
@@ -207,10 +207,10 @@ bool AlVin::Run(unsigned int iMinVectors, unsigned int iMaxVectors,
           cout << "Algorithm ended\n" << endl;
         }
 
-        string strFilename(to_string(iDimension) + "-");
-        for (j = 0; j <= iDimension; j++)
+        string strFilename(to_string(dimension) + "-");
+        for (j = 0; j <= dimension; j++)
           strFilename +=
-              aiQF[j]->to_string("filename") + (j < iDimension ? "," : "");
+              qf[j]->to_string("filename") + (j < dimension ? "," : "");
 
         if (!ptrCI->writeGraph("output/" + strFilename) ||
             !ptrCI->writeGraphToDraw("output/" + strFilename))
@@ -223,7 +223,7 @@ bool AlVin::Run(unsigned int iMinVectors, unsigned int iMaxVectors,
 
           if (bWriteInfo) {
             if (iCreateImage == 1 ||
-                (iCreateImage == -1 && iVectorsCount <= 25)) {
+                (iCreateImage == -1 && vectorsCount <= 25)) {
               FILE *fin;
               string strCmd("dot -Tjpg -ooutput/" + strFilename +
                             ".jpg  output/" + strFilename + ".graphviz");
@@ -247,20 +247,20 @@ bool AlVin::Run(unsigned int iMinVectors, unsigned int iMaxVectors,
       }
     }
 
-    aiVectors_candidates.clear();
+    candidateVectors.clear();
   }
 
-  CoxIter ci(iCoxeterMatrix, iDimension);
+  CoxIter ci(coxeterMatrix, dimension);
 
-  string strFilename("nt-" + to_string(iDimension) + "-");
-  for (j = 0; j <= iDimension; j++)
-    strFilename += aiQF[j]->to_string() + (j < iDimension ? "," : "");
+  string strFilename("nt-" + to_string(dimension) + "-");
+  for (j = 0; j <= dimension; j++)
+    strFilename += qf[j]->to_string() + (j < dimension ? "," : "");
 
   ci.writeGraph("output/" + strFilename);
   ci.writeGraphToDraw("output/" + strFilename);
 
   if (bWriteInfo) {
-    if (iCreateImage == 1 || (iCreateImage == -1 && iVectorsCount <= 25)) {
+    if (iCreateImage == 1 || (iCreateImage == -1 && vectorsCount <= 25)) {
       FILE *fin;
       string strCmd("dot -Tjpg -ooutput/" + strFilename + ".jpg output/" +
                     strFilename + ".graphviz");
@@ -280,68 +280,67 @@ bool AlVin::Run(unsigned int iMinVectors, unsigned int iMaxVectors,
 void AlVin::addVector(const vector<AlgebraicInteger *> &iVect) {
   int iWeight;
 
-  AlgebraicInteger *aiNorm(aiBilinearProduct(iVect, iVect));
+  AlgebraicInteger *aiNorm(bilinearProduct(iVect, iVect));
 
-  iCoxeterMatrix.push_back(vector<unsigned int>(iVectorsCount + 1, 2));
+  coxeterMatrix.push_back(vector<unsigned int>(vectorsCount + 1, 2));
 
-  aiVectors.push_back(iVect);
-  for (unsigned int i(0); i < iVectorsCount; i++) {
-    AlgebraicInteger *aiProd(aiBilinearProduct(aiVectors[i], iVect));
+  vectors.push_back(iVect);
+  for (unsigned int i(0); i < vectorsCount; i++) {
+    AlgebraicInteger *aiProd(bilinearProduct(vectors[i], iVect));
 
     iWeight = -2;
 
     if (aiProd->isEqualTo(0))
       iWeight = 2;
     else {
-      AlgebraicInteger *aiNumerator(aiProd->copy());
-      aiNumerator->multiplyBy(aiProd);
+      AlgebraicInteger *numerator(aiProd->copy());
+      numerator->multiplyBy(aiProd);
 
-      AlgebraicInteger *aiDenominator(
-          aiBilinearProduct(aiVectors[i], aiVectors[i]));
-      aiDenominator->multiplyBy(aiNorm);
+      AlgebraicInteger *denominator(bilinearProduct(vectors[i], vectors[i]));
+      denominator->multiplyBy(aiNorm);
 
-      if (aiDenominator->isLessThan(*aiNumerator))
+      if (denominator->isLessThan(*numerator))
         iWeight = 1; // Dotted edge
       else {
-        AlgebraicInteger *aiGCD(aiNumerator->copy());
-        aiGCD->gcd(aiDenominator);
+        AlgebraicInteger *gcd(numerator->copy());
+        gcd->gcd(denominator);
 
-        aiNumerator->divideBy(aiGCD);
-        aiDenominator->divideBy(aiGCD);
-        delete aiGCD;
+        numerator->divideBy(gcd);
+        denominator->divideBy(gcd);
+        delete gcd;
 
-        if (aiNumerator->isEqualTo(1)) {
-          if (aiDenominator->isEqualTo(4))
+        if (numerator->isEqualTo(1)) {
+          if (denominator->isEqualTo(4))
             iWeight = 3;
-          else if (aiDenominator->isEqualTo(2))
+          else if (denominator->isEqualTo(2))
             iWeight = 4;
-          else if (aiDenominator->isEqualTo(1))
+          else if (denominator->isEqualTo(1))
             iWeight = 0; // Infty
-        } else if (aiNumerator->isEqualTo(3)) {
-          if (aiDenominator->isEqualTo(4))
+        } else if (numerator->isEqualTo(3)) {
+          if (denominator->isEqualTo(4))
             iWeight = 6;
         }
 
         if (iWeight == -2)
-          iWeight = addVector_iFindWeight(aiNumerator, aiDenominator);
+          iWeight = addVector_findWeight(numerator, denominator);
       }
 
       if (iWeight == -2)
         throw(string("Unknown weight betweens vectors " + to_string(i + 1) +
-                     " and " + to_string(iVectorsCount + 1)));
+                     " and " + to_string(vectorsCount + 1)));
 
-      delete aiDenominator;
-      delete aiNumerator;
+      delete denominator;
+      delete numerator;
     }
 
     delete aiProd;
 
-    iCoxeterMatrix[i].push_back(iWeight);
-    iCoxeterMatrix[iVectorsCount][i] = iWeight;
+    coxeterMatrix[i].push_back(iWeight);
+    coxeterMatrix[vectorsCount][i] = iWeight;
   }
 
-  iVectorsCount++;
-  iVectorsCount_second++;
+  vectorsCount++;
+  vectorsCountSecond++;
 
   delete aiNorm;
 }
@@ -387,9 +386,9 @@ void AlVin::printFoundVector(std::vector<AlgebraicInteger *> aiV,
 }
 
 void AlVin::print_iQF() const {
-  cout << "Quadratic form (" << iDimension << ",1): ";
-  for (auto it(aiQF.begin()); it != aiQF.end(); it++) {
-    if (it == aiQF.begin()) {
+  cout << "Quadratic form (" << dimension << ",1): ";
+  for (auto it(qf.begin()); it != qf.end(); it++) {
+    if (it == qf.begin()) {
       unique_ptr<AlgebraicInteger> ptr((*it)->copy());
       ptr->opp();
       cout << *ptr;
@@ -408,9 +407,9 @@ void AlVin::print_initialInformation() const {
 
   if (bDebug) {
     cout << "Conditions on the coefficients: \n";
-    for (unsigned int i(1); i <= iDimension; i++) {
-      if (iComponentLessThan[i])
-        cout << "\tx" << i << " <= x" << iComponentLessThan[i] << endl;
+    for (unsigned int i(1); i <= dimension; i++) {
+      if (componentLessThan[i])
+        cout << "\tx" << i << " <= x" << componentLessThan[i] << endl;
     }
     cout << endl;
 
@@ -432,14 +431,14 @@ void AlVin::print_initialInformation() const {
             "Length[x]}];\nS[x_, y_] := F[x, y]/Sqrt[F[x, x]*F[y, y]];"
          << endl;
     cout << "qform := {";
-    for (unsigned int i(0); i <= iDimension; i++)
-      cout << (i ? ", " : "-(") << aiQF[i]->to_string("mathematica")
+    for (unsigned int i(0); i <= dimension; i++)
+      cout << (i ? ", " : "-(") << qf[i]->to_string("mathematica")
            << (i ? "" : ")");
     cout << "};" << endl;
   } else if (strOuputMathematicalFormat == "pari") {
     cout << "qform = matdiagonal([";
-    for (unsigned int i(0); i <= iDimension; i++)
-      cout << (i ? ", " : "-(") << aiQF[i]->to_string("pari") << (i ? "" : ")");
+    for (unsigned int i(0); i <= dimension; i++)
+      cout << (i ? ", " : "-(") << qf[i]->to_string("pari") << (i ? "" : ")");
     cout << "]);" << endl;
 
     cout << "S = (x,y) -> qfeval(qform,x,y)/sqrt( qfeval(qform,x) * "
@@ -448,8 +447,8 @@ void AlVin::print_initialInformation() const {
   } else
     cout << "Vectors: " << endl;
 
-  for (unsigned int i(0); i < iVectorsCount; i++)
-    printFoundVector(aiVectors[i], i + 1, i == 0);
+  for (unsigned int i(0); i < vectorsCount; i++)
+    printFoundVector(vectors[i], i + 1, i == 0);
 }
 
 void AlVin::print_finallInformation() const {
@@ -459,7 +458,7 @@ void AlVin::print_finallInformation() const {
             "Length[vectors]}, {j, 1, Length[vectors]}];"
          << endl;
   } else if (strOuputMathematicalFormat == "pari") {
-    cout << "grammatrix = matrix( " << iVectorsCount << "," << iVectorsCount
+    cout << "grammatrix = matrix( " << vectorsCount << "," << vectorsCount
          << ", i, j, S(vectors[i,], vectors[j,]) );" << endl;
   }
 }
@@ -467,19 +466,19 @@ void AlVin::print_finallInformation() const {
 void AlVin::print_vectors() const {
   cout << "Vectors found: " << endl;
 
-  for (unsigned int i(0); i < iVectorsCount; i++) {
+  for (unsigned int i(0); i < vectorsCount; i++) {
     cout << "\te_" << (i + 1) << " = {";
-    for (unsigned int j(0); j <= iDimension; j++)
-      cout << (j ? "," : "") << *aiVectors[i][j];
+    for (unsigned int j(0); j <= dimension; j++)
+      cout << (j ? "," : "") << *vectors[i][j];
     cout << "}" << endl;
   }
 }
 
-vector<vector<unsigned int>> AlVin::get_iCoxeterMatrix() const {
-  return iCoxeterMatrix;
+vector<vector<unsigned int>> AlVin::get_coxeterMatrix() const {
+  return coxeterMatrix;
 }
 
-unsigned int AlVin::get_iDimension() const { return iDimension; }
+unsigned int AlVin::get_dimension() const { return dimension; }
 
 CoxIter *AlVin::get_ptrCI() const { return ptrCI; }
 
@@ -487,9 +486,9 @@ string AlVin::get_strCoxeterMatrix() const {
   string strCox;
 
   for (vector<vector<unsigned int>>::const_iterator itRow(
-           iCoxeterMatrix.begin());
-       itRow != iCoxeterMatrix.end(); ++itRow) {
-    if (itRow != iCoxeterMatrix.begin())
+           coxeterMatrix.begin());
+       itRow != coxeterMatrix.end(); ++itRow) {
+    if (itRow != coxeterMatrix.begin())
       strCox += "\n";
 
     for (vector<unsigned int>::const_iterator itCol(itRow->begin());
@@ -503,8 +502,8 @@ string AlVin::get_strCoxeterMatrix() const {
 string AlVin::get_strQF(const string &strSeparator) const {
   string strQF;
 
-  for (auto it(aiQF.begin()); it != aiQF.end(); it++) {
-    if (it == aiQF.begin()) {
+  for (auto it(qf.begin()); it != qf.end(); it++) {
+    if (it == qf.begin()) {
       unique_ptr<AlgebraicInteger> ptr((*it)->copy());
       ptr->opp();
       strQF = ptr->to_string();
@@ -519,19 +518,19 @@ string AlVin::get_strAlgebraicIntegerType() const {
   return strAlgebraicIntegerType;
 }
 
-vector<std::vector<AlgebraicInteger *>> AlVin::get_aiVectors() const {
-  return aiVectors;
+vector<std::vector<AlgebraicInteger *>> AlVin::get_vectors() const {
+  return vectors;
 }
 
-unsigned int AlVin::get_iVectorsCount() const { return iVectorsCount; }
+unsigned int AlVin::get_vectorsCount() const { return vectorsCount; }
 
-vector<AlgebraicInteger *> AlVin::get_aiQF() const { return aiQF; }
+vector<AlgebraicInteger *> AlVin::get_qf() const { return qf; }
 
-std::vector<AlgebraicInteger *> AlVin::get_aiPossibleNorm2() const {
+std::vector<AlgebraicInteger *> AlVin::get_possibleNorm2() const {
   return vf->get_aiPossibleNorm2();
 }
 
-const std::vector<AlgebraicInteger *> *AlVin::get_ptraiPossibleNorm2() const {
+const std::vector<AlgebraicInteger *> *AlVin::get_ptrPossibleNorm2() const {
   return vf->get_ptraiPossibleNorm2();
 }
 

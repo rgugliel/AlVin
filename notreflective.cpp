@@ -1,11 +1,11 @@
 #include "notreflective.h"
 
 NotReflective::NotReflective(AlVin *v)
-    : alvin(v), iDimension(v->get_iDimension()), aiQF(v->get_aiQF()),
-      aiVectors(v->get_aiVectors()), strOFormat("mathematica"),
+    : alvin(v), iDimension(v->get_dimension()), aiQF(v->get_qf()),
+      aiVectors(v->get_vectors()), strOFormat("mathematica"),
       strAlgebraicIntegerType(v->get_strAlgebraicIntegerType()),
-      aiPossibleNorm2(v->get_aiPossibleNorm2()) {
-  AlgebraicInteger *ai2(aiQF[0]->aiCopyToInteger(2));
+      aiPossibleNorm2(v->get_possibleNorm2()) {
+  AlgebraicInteger *ai2(aiQF[0]->copyToInteger(2));
   for (unsigned int i(0); i <= iDimension; i++) {
     ai2QF.push_back(aiQF[i]->copy());
     ai2QF[i]->multiplyBy(ai2);
@@ -30,7 +30,7 @@ void NotReflective::Run() {
 
 void NotReflective::prepareGraphsList() {
   // We get the euclidean graphs which cannot be extended
-  CoxIter ci(alvin->get_iCoxeterMatrix(), iDimension);
+  CoxIter ci(alvin->get_coxeterMatrix(), iDimension);
   vector<vector<short unsigned int>> iGraphsNotExtendable(
       ci.canBeFiniteCovolume_complete());
 
@@ -82,7 +82,7 @@ void NotReflective::prepareGraphsList() {
     vector<short unsigned int> iVariablesToCoeff(iVariablesCount, 0);
 
     for (unsigned int i(0); i < iVariablesCount; i++)
-      aiVariableCount.push_back(aiQF[0]->aiCopyToInteger(0));
+      aiVariableCount.push_back(aiQF[0]->copyToInteger(0));
 
     for (unsigned int i(0); i <= iDimension; i++) {
       if (iVariablesName[i]) {

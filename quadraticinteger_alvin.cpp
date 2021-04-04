@@ -26,7 +26,7 @@ QuadraticInteger_AlVin::QuadraticInteger_AlVin(
         if (qiTemp.isGreaterThan(0))
           throw(string("Quadratic form is not admissible"));
 
-        aiQF.insert(aiQF.begin(), qi);
+        qf.insert(qf.begin(), qi);
 
         bNegativeFound = true;
       } else
@@ -39,9 +39,8 @@ QuadraticInteger_AlVin::QuadraticInteger_AlVin(
       if (qiTemp.isLessThan(0))
         throw(string("Quadratic form is not admissible"));
 
-      aiQF.insert(
-          lower_bound(aiQF.begin() + (bNegativeFound ? 1 : 0), aiQF.end(), qi),
-          qi);
+      qf.insert(
+          lower_bound(qf.begin() + (bNegativeFound ? 1 : 0), qf.end(), qi), qi);
     }
   }
 
@@ -51,11 +50,11 @@ QuadraticInteger_AlVin::QuadraticInteger_AlVin(
   // -------------------------------------------------
   // global work
   initializations();
-  qiVectorCurrent = vector<QuadraticInteger>(iDimension + 1, 0);
+  qiVectorCurrent = vector<QuadraticInteger>(dimension + 1, 0);
 
   // -------------------------------------------------
   // local copy of the quadratic form (to avoid dynamic_cast)
-  for (auto i : aiQF) {
+  for (auto i : qf) {
     QuadraticInteger *qi(dynamic_cast<QuadraticInteger *>(i));
     qiQF.push_back(QuadraticInteger(*qi));
   }
@@ -71,14 +70,14 @@ QuadraticInteger_AlVin::QuadraticInteger_AlVin(
 }
 
 void QuadraticInteger_AlVin::findPossibleNorms2() {
-  vector<AlgebraicInteger *> aiPossibleNorms2(
+  vector<AlgebraicInteger *> possibleNorms2(
       {new QuadraticInteger(1)});     ///< Possible values for (e,e)
   vector<QuadraticInteger> qiFactors; ///< Prime numbers and fundamental unit
 
   // ----------------------------------------------------------
   // Compute for ever coefficient a of the quadratic form the prime numbers
   // which divide a
-  for (unsigned int i(0); i <= iDimension; i++) {
+  for (unsigned int i(0); i <= dimension; i++) {
     vector<QuadraticInteger> qiTemp(qiQF[i].qiPrimeFactors());
     qiFactors.insert(qiFactors.end(), qiTemp.begin(), qiTemp.end());
   }
@@ -131,18 +130,18 @@ void QuadraticInteger_AlVin::findPossibleNorms2() {
     qiProduct->conjugate();
 
     // yes, we keep it
-    aiPossibleNorms2.push_back(qiProduct);
+    possibleNorms2.push_back(qiProduct);
   }
 
   // removing duplicates
-  sort(aiPossibleNorms2.begin(), aiPossibleNorms2.end(),
+  sort(possibleNorms2.begin(), possibleNorms2.end(),
        isLessThanPtrAlgebraicInteger);
-  aiPossibleNorms2 = vector<AlgebraicInteger *>(
-      aiPossibleNorms2.begin(),
-      unique(aiPossibleNorms2.begin(), aiPossibleNorms2.end(),
+  possibleNorms2 = vector<AlgebraicInteger *>(
+      possibleNorms2.begin(),
+      unique(possibleNorms2.begin(), possibleNorms2.end(),
              isEqualToPtrAlgebraicInteger));
 
-  vf = new QuadraticInteger_VFs(aiPossibleNorms2, qiQF[0]);
+  vf = new QuadraticInteger_VFs(possibleNorms2, qiQF[0]);
 }
 
 bool QuadraticInteger_AlVin::PreRun() {
@@ -152,7 +151,7 @@ bool QuadraticInteger_AlVin::PreRun() {
   qiDQF.clear();
   qiDQFConj.clear();
   qi2QF.clear();
-  for (unsigned int i(0); i <= iDimension; i++) {
+  for (unsigned int i(0); i <= dimension; i++) {
     qiDQF.push_back(QuadraticInteger(qiQF[i]));
     qiDQF[i].multiplyBy(d);
 
@@ -175,79 +174,79 @@ void QuadraticInteger_AlVin::addVectorChild(
   qiVectors.push_back(qiV);
 }
 
-int QuadraticInteger_AlVin::addVector_iFindWeight(
-    AlgebraicInteger *aiNumerator, AlgebraicInteger *aiDenominator) {
+int QuadraticInteger_AlVin::addVector_findWeight(
+    AlgebraicInteger *numerator, AlgebraicInteger *denominator) {
   // -------------------------------------------
   // multiply both elements by the conjugate
-  AlgebraicInteger *aiTemp(aiDenominator->copy());
-  dynamic_cast<QuadraticInteger *>(aiTemp)->conjugate();
+  AlgebraicInteger *temp(denominator->copy());
+  dynamic_cast<QuadraticInteger *>(temp)->conjugate();
 
-  aiDenominator->multiplyBy(aiTemp);
-  aiNumerator->multiplyBy(aiTemp);
+  denominator->multiplyBy(temp);
+  numerator->multiplyBy(temp);
 
-  delete aiTemp;
+  delete temp;
 
   // -------------------------------------------
   // simplification
-  AlgebraicInteger *aiGCD(aiNumerator->copy());
-  aiGCD->gcd(aiDenominator);
+  AlgebraicInteger *gcd(numerator->copy());
+  gcd->gcd(denominator);
 
-  aiNumerator->divideBy(aiGCD);
-  aiDenominator->divideBy(aiGCD);
+  numerator->divideBy(gcd);
+  denominator->divideBy(gcd);
 
-  if (aiNumerator->isLessThan(-1)) {
-    aiNumerator->multiplyBy(-1);
-    aiDenominator->multiplyBy(-1);
+  if (numerator->isLessThan(-1)) {
+    numerator->multiplyBy(-1);
+    denominator->multiplyBy(-1);
   }
 
   // -------------------------------------------
   // Proper tests
-  if (aiNumerator->isEqualTo(1)) {
+  if (numerator->isEqualTo(1)) {
     if (QuadraticInteger::d == 2 &&
-        aiDenominator->isEqualTo(QuadraticInteger(4, -2)))
+        denominator->isEqualTo(QuadraticInteger(4, -2)))
       return 8;
     else if (QuadraticInteger::d == 5 &&
-             aiDenominator->isEqualTo(QuadraticInteger(8, -4)))
+             denominator->isEqualTo(QuadraticInteger(8, -4)))
       return 5;
 
-    if (aiDenominator->isEqualTo(4))
+    if (denominator->isEqualTo(4))
       return 3;
-    else if (aiDenominator->isEqualTo(2))
+    else if (denominator->isEqualTo(2))
       return 4;
   }
 
   if (QuadraticInteger::d == 2) {
-    if ((aiNumerator->isEqualTo(QuadraticInteger(1, 1)) &&
-         aiDenominator->isEqualTo(QuadraticInteger(0, 2))))
+    if ((numerator->isEqualTo(QuadraticInteger(1, 1)) &&
+         denominator->isEqualTo(QuadraticInteger(0, 2))))
       return 8;
   } else if (QuadraticInteger::d == 3) {
-    if (aiNumerator->isEqualTo(QuadraticInteger(7, -4)) &&
-        aiDenominator->isEqualTo(QuadraticInteger(28, -16)))
+    if (numerator->isEqualTo(QuadraticInteger(7, -4)) &&
+        denominator->isEqualTo(QuadraticInteger(28, -16)))
       return 3;
-    else if (aiNumerator->isEqualTo(QuadraticInteger(2, -1)) &&
-             aiDenominator->isEqualTo(QuadraticInteger(4, -2)))
+    else if (numerator->isEqualTo(QuadraticInteger(2, -1)) &&
+             denominator->isEqualTo(QuadraticInteger(4, -2)))
       return 4;
-    else if ((aiNumerator->isEqualTo(QuadraticInteger(2, -1)) &&
-              aiDenominator->isEqualTo(QuadraticInteger(28, -16))) ||
-             (aiNumerator->isEqualTo(1) &&
-              aiDenominator->isEqualTo(QuadraticInteger(8, -4))))
+    else if ((numerator->isEqualTo(QuadraticInteger(2, -1)) &&
+              denominator->isEqualTo(QuadraticInteger(28, -16))) ||
+             (numerator->isEqualTo(1) &&
+              denominator->isEqualTo(QuadraticInteger(8, -4))))
       return 12;
   } else if (QuadraticInteger::d == 5) {
-    if (aiNumerator->isEqualTo(QuadraticInteger(1, 1)) &&
-        aiDenominator->isEqualTo(4))
+    if (numerator->isEqualTo(QuadraticInteger(1, 1)) &&
+        denominator->isEqualTo(4))
       return 5;
-    else if (aiNumerator->isEqualTo(QuadraticInteger(5, 5)) &&
-             aiDenominator->isEqualTo(QuadraticInteger(8, 4)))
+    else if (numerator->isEqualTo(QuadraticInteger(5, 5)) &&
+             denominator->isEqualTo(QuadraticInteger(8, 4)))
       return 10;
-    else if (aiNumerator->isEqualTo(QuadraticInteger(2, 1)) &&
-             aiDenominator->isEqualTo(4))
+    else if (numerator->isEqualTo(QuadraticInteger(2, 1)) &&
+             denominator->isEqualTo(4))
       return 10;
   } else if (QuadraticInteger::d == 7) {
-    if (aiNumerator->isEqualTo(QuadraticInteger(127, -48)) &&
-        aiDenominator->isEqualTo(QuadraticInteger(508, -192)))
+    if (numerator->isEqualTo(QuadraticInteger(127, -48)) &&
+        denominator->isEqualTo(QuadraticInteger(508, -192)))
       return 3;
-    else if (aiNumerator->isEqualTo(QuadraticInteger(8, -3)) &&
-             aiDenominator->isEqualTo(QuadraticInteger(16, -6)))
+    else if (numerator->isEqualTo(QuadraticInteger(8, -3)) &&
+             denominator->isEqualTo(QuadraticInteger(16, -6)))
       return 4;
   }
 
@@ -261,7 +260,7 @@ void QuadraticInteger_AlVin::findVector(AlgebraicInteger *aiX0,
 
   // -----------------------------------------------------
   // Preliminary work
-  qiBilinearProducts = vector<QuadraticInteger>(iVectorsCount_second, 0);
+  qiBilinearProducts = vector<QuadraticInteger>(vectorsCountSecond, 0);
 
   // initial value of iSumComp
   QuadraticInteger qiSumComp(*qiNorm2);
@@ -271,12 +270,12 @@ void QuadraticInteger_AlVin::findVector(AlgebraicInteger *aiX0,
   qiSumComp.add(&qiTemp);
 
   // initial value of qiBilinearProducts
-  for (unsigned int i(0); i < iVectorsCount_second; i++) {
+  for (unsigned int i(0); i < vectorsCountSecond; i++) {
     // = - qi[0] * k0 * qiVectors[i + iDimension][0]
     qiBilinearProducts[i].set(&qiQF[0]);
     qiBilinearProducts[i].multiplyBy(-1);
     qiBilinearProducts[i].multiplyBy(qi0);
-    qiBilinearProducts[i].multiplyBy(qiVectors[i + iDimension][0]);
+    qiBilinearProducts[i].multiplyBy(qiVectors[i + dimension][0]);
   }
 
   qiVectorCurrent[0].set(qi0);
@@ -292,7 +291,7 @@ void QuadraticInteger_AlVin::findVector(QuadraticInteger *qi0,
                                         QuadraticInteger qiGCDComponents) {
   if (qiSumComp.a == 0 && qiSumComp.b == 0) // We have a candidate
   {
-    for (; iIndex <= iDimension; iIndex++)
+    for (; iIndex <= dimension; iIndex++)
       qiVectorCurrent[iIndex] = 0;
 
     if (qiGCDComponents.isInvertible())
@@ -344,18 +343,18 @@ void QuadraticInteger_AlVin::findVector(QuadraticInteger *qi0,
       iSecMax = QuadraticInteger::iSQRT_quotient(qiSumComp, qiQF[iIndex]) + 1 -
                 ((iTemp % 2) ? iTemp / 2 + 1 : iTemp / 2);
 
-      if (iComponentLessThan[iIndex]) // k_iIndex <= k_(iIndex-1) ?
+      if (componentLessThan[iIndex]) // k_iIndex <= k_(iIndex-1) ?
       {
-        iTemp2 = qiVectorCurrent[iComponentLessThan[iIndex]].b - iFirst;
+        iTemp2 = qiVectorCurrent[componentLessThan[iIndex]].b - iFirst;
         if (iTemp2 >= 0)
           iTemp =
-              qiVectorCurrent[iComponentLessThan[iIndex]].a +
+              qiVectorCurrent[componentLessThan[iIndex]].a +
               (iTemp2 + sqrtSup<unsigned long int>(d * iTemp2 * iTemp2)) / 2;
         else {
           iTemp2 = abs(iTemp2);
           iTemp2 += integerSqrt<unsigned long int>(iTemp2 * iTemp2 * d);
 
-          iTemp = qiVectorCurrent[iComponentLessThan[iIndex]].a -
+          iTemp = qiVectorCurrent[componentLessThan[iIndex]].a -
                   ((iTemp2 % 2) ? iTemp2 / 2 + 1 : iTemp2 / 2);
         }
 
@@ -369,16 +368,16 @@ void QuadraticInteger_AlVin::findVector(QuadraticInteger *qi0,
                     qiSumComp, qiDQF[iIndex]) -
                 iTemp;
 
-      if (iComponentLessThan[iIndex]) // k_iIndex <= k_(iIndex-1) ?
+      if (componentLessThan[iIndex]) // k_iIndex <= k_(iIndex-1) ?
       {
-        iTemp2 = qiVectorCurrent[iComponentLessThan[iIndex]].a - iFirst;
+        iTemp2 = qiVectorCurrent[componentLessThan[iIndex]].a - iFirst;
 
         if (iTemp2 >= 0)
           iTemp = sqrtQuotient<unsigned long int>(iTemp2 * iTemp2, d) +
-                  qiVectorCurrent[iComponentLessThan[iIndex]].b;
+                  qiVectorCurrent[componentLessThan[iIndex]].b;
         else
           iTemp = -sqrtSupQuotient<unsigned long int>(iTemp2 * iTemp2, d) +
-                  qiVectorCurrent[iComponentLessThan[iIndex]].b;
+                  qiVectorCurrent[componentLessThan[iIndex]].b;
 
         iSecMax = min(iSecMax, iTemp);
       }
@@ -421,21 +420,21 @@ void QuadraticInteger_AlVin::findVector(QuadraticInteger *qi0,
 
       // TODO: incorporer la valeur MAX pour les composantes suite à
       // qiBilinearProducts
-      if (iComponentLessThan[iIndex] &&
-          !qi.isLessOEThan(qiVectorCurrent[iComponentLessThan[iIndex]]))
+      if (componentLessThan[iIndex] &&
+          !qi.isLessOEThan(qiVectorCurrent[componentLessThan[iIndex]]))
         continue;
 
       // ------------------------------------------------------
       // Is the vector admissible?
       bAdmissible = true;
 
-      for (j = 0; j < iVectorsCount_second; j++) {
+      for (j = 0; j < vectorsCountSecond; j++) {
         // qiTemp = qiQF[iIndex] * ( qi - qiLastComponent ) * qiVectors[j +
         // iDimension][iIndex]
         qiTemp.set(&qi);
         qiTemp.substract(&qiLastComponent);
         qiTemp.multiplyBy(&qiQF[iIndex]);
-        qiTemp.multiplyBy(qiVectors[j + iDimension][iIndex]);
+        qiTemp.multiplyBy(qiVectors[j + dimension][iIndex]);
         qiBilinearProducts[j].add(&qiTemp);
 
         // TODO: garder en mémoire la valeur max?
@@ -459,7 +458,7 @@ void QuadraticInteger_AlVin::findVector(QuadraticInteger *qi0,
 
       qiVectorCurrent[iIndex] = qi;
 
-      if (iIndex == iDimension && qiSumComp.isEqualTo(qiPartialNorm)) {
+      if (iIndex == dimension && qiSumComp.isEqualTo(qiPartialNorm)) {
         qiGCDComponents.gcd(&qi);
         if (qiGCDComponents.isInvertible())
           addCandidate();
@@ -468,7 +467,7 @@ void QuadraticInteger_AlVin::findVector(QuadraticInteger *qi0,
         break;
       }
 
-      if (iIndex < iDimension) {
+      if (iIndex < dimension) {
         QuadraticInteger qiSumSub(qiSumComp);
         qiSumSub.substract(&qiPartialNorm);
 
@@ -480,9 +479,9 @@ void QuadraticInteger_AlVin::findVector(QuadraticInteger *qi0,
     }
   }
 
-  for (unsigned int i(0); i < iVectorsCount_second; i++) {
+  for (unsigned int i(0); i < vectorsCountSecond; i++) {
     qiTemp.set(&qiQF[iIndex]);
-    qiTemp.multiplyBy(qiVectors[i + iDimension][iIndex]);
+    qiTemp.multiplyBy(qiVectors[i + dimension][iIndex]);
     qiTemp.multiplyBy(&qiLastComponent);
     qiBilinearProducts[i].substract(&qiTemp);
   }
@@ -493,7 +492,7 @@ void QuadraticInteger_AlVin::addCandidate() {
   for (auto i : qiVectorCurrent)
     aiV.push_back(new QuadraticInteger(i));
 
-  aiVectors_candidates.push_back(aiV);
+  candidateVectors.push_back(aiV);
 }
 
 string QuadraticInteger_AlVin::get_strField() const {

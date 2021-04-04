@@ -65,7 +65,7 @@ public:
   virtual void set(AlgebraicInteger *ai);
   virtual void set(const int &n);
   AlgebraicInteger *copy() const;
-  AlgebraicInteger *aiCopyToInteger(const int &n) const;
+  AlgebraicInteger *copyToInteger(const int &n) const;
 
   virtual void removeSquareFactors();
 
