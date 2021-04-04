@@ -39,10 +39,8 @@ along with AlVin. If not, see <http://www.gnu.org/licenses/>.
 #include "quadraticinteger_alvin.h"
 #include "quadraticinteger_infinitensymetries.h"
 
-#ifdef _RC7AVAILABLE_
 #include "rcyclotomic7integer_alvin.h"
 #include "rcyclotomic7integer_infinitensymetries.h"
-#endif
 
 #include <chrono>
 #include <iostream>

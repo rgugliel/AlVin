@@ -376,6 +376,49 @@ void App::Run() {
     NotReflective *nrEquations(nullptr);
     InfiniteNSymetries *ins(nullptr);
 
+    auto r01 = RCyclotomic7Integer({1, 1, 1});
+    auto r12 = RCyclotomic7Integer({3, 1, 2});
+    auto r20 = RCyclotomic7Integer({2, 0, 1});
+    auto r21 = RCyclotomic7Integer({2, 0, 1});
+
+    auto a21 = RCyclotomic7Integer({0, 0, -1});
+
+    auto a30 = RCyclotomic7Integer({0, -1, -2});
+    auto a31 = RCyclotomic7Integer({0, 0, -1});
+    auto a32 = RCyclotomic7Integer({1, 0, 0});
+    const vector<AlgebraicInteger*> a3 = {&a30, &a31, &a32};
+
+    auto r30 = RCyclotomic7Integer({-3, -1, -3});
+    auto r31 = RCyclotomic7Integer(0);
+    auto r32 = RCyclotomic7Integer({-4, -1, -3});
+    const vector<AlgebraicInteger*> r3 = {&r30, &r31, &r32};
+
+    auto qCoeff = RCyclotomic7Integer({-2, -5, -7});
+    auto qRNormStrange = RCyclotomic7Integer({-3, -2, -2});
+
+    auto display = [](AlVin *v, const vector<AlgebraicInteger*> vec){
+      auto prod = dynamic_cast<RCyclotomic7Integer*>(v->aiBilinearProduct(vec, vec));
+      auto factors = prod->rciPrimeDecomposition();
+
+      cout << "\n";
+      cout << "Norm^2: " << *prod << endl;
+      cout << "Invertible: " << prod->isInvertible() << endl;
+      cout << "Prime factors: " << factors.size() << endl;
+
+      for(const auto& f: factors)
+        cout << "\t" << f.first << " -> " << f.second << endl;
+
+      cout << *vec[0] << "/" << *prod << endl;
+
+      delete prod;
+    };
+
+    cout << "Coeff #prime: " << qCoeff.rciPrimeDecomposition().size() << endl;
+    cout << "Related: " << qCoeff.isDivisibleBy(&qRNormStrange) << endl;
+
+    display(v, a3);
+    display(v, r3);
+
     chrono::time_point<std::chrono::system_clock> timeStart(
         chrono::system_clock::now());
     if (!v->Run(iMinVectors, iMaxVectors)) {

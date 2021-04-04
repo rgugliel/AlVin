@@ -113,7 +113,11 @@ if( GAOL_LIBRARY )
 	find_library(GDTOA_LIBRARY gdtoa)
 	target_link_libraries(alvin ${GDTOA_LIBRARY})
 
+	message("RC7 is there")
+
 	add_definitions(-D_RC7AVAILABLE_)
+else()
+	message("No RC7")
 endif()
 
 # ------------------------------------------------------------------
