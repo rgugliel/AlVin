@@ -47,8 +47,8 @@ private:
   QuadraticInteger *possibleNorms2Max;
 
 public:
-  QuadraticInteger_VFs(vector<AlgebraicInteger *> aiPossibleNorms2,
-                       const QuadraticInteger &qiAlpha0);
+  QuadraticInteger_VFs(vector<AlgebraicInteger *> possibleNorms2,
+                       const QuadraticInteger &alpha0);
   ~QuadraticInteger_VFs();
 
 private:

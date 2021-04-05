@@ -49,7 +49,7 @@ private:
   RCyclotomic7Integer *rciPossibleNorms2_max;
 
 public:
-  RCyclotomic7Integer_VFs(vector<AlgebraicInteger *> aiPossibleNorms2,
+  RCyclotomic7Integer_VFs(vector<AlgebraicInteger *> possibleNorms2,
                           const RCyclotomic7Integer &rciAlpha0);
   ~RCyclotomic7Integer_VFs();
 

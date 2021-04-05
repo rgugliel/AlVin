@@ -52,7 +52,7 @@ using namespace std;
 
 class App {
 private:
-  vector<AlgebraicInteger *> aiQF; ///< Coefficients of the quadratic form
+  vector<AlgebraicInteger *> qf; ///< Coefficients of the quadratic form
 
   bool bCheckNR; ///< If true, try to determine if the form is non-reflective
                  ///< (needed: maxv, nrmin, nrmax)

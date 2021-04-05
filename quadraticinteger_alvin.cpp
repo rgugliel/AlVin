@@ -166,10 +166,10 @@ bool QuadraticInteger_AlVin::PreRun() {
 }
 
 void QuadraticInteger_AlVin::addVectorChild(
-    const std::vector<AlgebraicInteger *> &aiVector) {
+    const std::vector<AlgebraicInteger *> &v) {
   vector<QuadraticInteger *> qiV;
-  for (auto ai : aiVector)
-    qiV.push_back(dynamic_cast<QuadraticInteger *>(ai));
+  for (const auto &c : v)
+    qiV.push_back(dynamic_cast<QuadraticInteger *>(c));
 
   qiVectors.push_back(qiV);
 }
@@ -253,10 +253,10 @@ int QuadraticInteger_AlVin::addVector_findWeight(
   return -2;
 }
 
-void QuadraticInteger_AlVin::findVector(AlgebraicInteger *aiX0,
-                                        AlgebraicInteger *aiNorm2) {
-  QuadraticInteger *qi0(dynamic_cast<QuadraticInteger *>(aiX0));
-  QuadraticInteger *qiNorm2(dynamic_cast<QuadraticInteger *>(aiNorm2));
+void QuadraticInteger_AlVin::findVector(AlgebraicInteger *x0,
+                                        AlgebraicInteger *norm2) {
+  QuadraticInteger *qi0(dynamic_cast<QuadraticInteger *>(x0));
+  QuadraticInteger *qiNorm2(dynamic_cast<QuadraticInteger *>(norm2));
 
   // -----------------------------------------------------
   // Preliminary work
@@ -280,8 +280,7 @@ void QuadraticInteger_AlVin::findVector(AlgebraicInteger *aiX0,
 
   qiVectorCurrent[0].set(qi0);
 
-  findVector(qi0, dynamic_cast<QuadraticInteger *>(aiNorm2), 1, qiSumComp,
-             *qi0);
+  findVector(qi0, dynamic_cast<QuadraticInteger *>(norm2), 1, qiSumComp, *qi0);
 }
 
 void QuadraticInteger_AlVin::findVector(QuadraticInteger *qi0,
@@ -488,11 +487,11 @@ void QuadraticInteger_AlVin::findVector(QuadraticInteger *qi0,
 }
 
 void QuadraticInteger_AlVin::addCandidate() {
-  vector<AlgebraicInteger *> aiV;
-  for (auto i : qiVectorCurrent)
-    aiV.push_back(new QuadraticInteger(i));
+  vector<AlgebraicInteger *> v;
+  for (const auto &i : qiVectorCurrent)
+    v.push_back(new QuadraticInteger(i));
 
-  candidateVectors.push_back(aiV);
+  candidateVectors.push_back(v);
 }
 
 string QuadraticInteger_AlVin::get_strField() const {

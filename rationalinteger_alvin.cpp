@@ -32,7 +32,7 @@ RationalInteger_AlVin::RationalInteger_AlVin(
   // -------------------------------------------------
   // global work
   initializations();
-  iVectorCurrent = vector<int>(dimension + 1, 0);
+  vectorCurrent = vector<int>(dimension + 1, 0);
 
   // -------------------------------------------------
   // local copy of the quadratic form (computations performs faster without the
@@ -74,10 +74,10 @@ RationalInteger_AlVin::RationalInteger_AlVin(
 bool RationalInteger_AlVin::PreRun() { return true; }
 
 void RationalInteger_AlVin::findPossibleNorms2() {
-  vector<AlgebraicInteger *> aiPossibleNorms2(
+  vector<AlgebraicInteger *> possibleNorms2(
       {new RationalInteger(1)}); ///< Possible values for (e,e)
 
-  vector<unsigned int> iPrimeNumbers;
+  vector<unsigned int> primeNumbers;
 
   // ----------------------------------------------------------
   // Compute for ever coefficient a of the quadratic form the prime numbers
@@ -88,7 +88,7 @@ void RationalInteger_AlVin::findPossibleNorms2() {
       continue;
 
     if (!(n % 2)) {
-      iPrimeNumbers.push_back(2);
+      primeNumbers.push_back(2);
       do {
         n /= 2;
       } while (!(n % 2));
@@ -96,7 +96,7 @@ void RationalInteger_AlVin::findPossibleNorms2() {
 
     while (n > 1) {
       if (!(n % iDivisor)) {
-        iPrimeNumbers.push_back(iDivisor);
+        primeNumbers.push_back(iDivisor);
         do {
           n /= iDivisor;
         } while (!(n % iDivisor));
@@ -106,64 +106,63 @@ void RationalInteger_AlVin::findPossibleNorms2() {
     }
   }
 
-  sort(iPrimeNumbers.begin(), iPrimeNumbers.end());
-  iPrimeNumbers =
-      vector<unsigned int>(iPrimeNumbers.begin(),
-                           unique(iPrimeNumbers.begin(), iPrimeNumbers.end()));
+  sort(primeNumbers.begin(), primeNumbers.end());
+  primeNumbers = vector<unsigned int>(
+      primeNumbers.begin(), unique(primeNumbers.begin(), primeNumbers.end()));
 
-  iPrimeNumbers.push_back(2);
+  primeNumbers.push_back(2);
 
-  unsigned int iPrimeNumbersCount(iPrimeNumbers.size());
-  if (iPrimeNumbersCount > 8)
+  unsigned int primeNumbersCount(primeNumbers.size());
+  if (primeNumbersCount > 8)
     throw(string("Number of values for (e,e) is too big"));
 
   // ----------------------------------------------------------
   // Powers of two
   vector<unsigned int> pow2({1});
-  for (unsigned int i(1); i < iPrimeNumbersCount; i++)
+  for (unsigned int i(1); i < primeNumbersCount; i++)
     pow2[i] = pow2[i - 1] * 2;
 
   // ----------------------------------------------------------
   // Compute the products of prime numbers
-  unsigned int iMax(pow(2, iPrimeNumbers.size()) - 1), j, iProduct;
+  unsigned int iMax(pow(2, primeNumbers.size()) - 1), j, iProduct;
 
   for (unsigned int i = 1; i <= iMax; i++) {
     iProduct = 1;
-    for (j = 0; j < iPrimeNumbersCount; j++) {
+    for (j = 0; j < primeNumbersCount; j++) {
       if (i & pow2[j])
-        iProduct *= iPrimeNumbers[j];
+        iProduct *= primeNumbers[j];
     }
 
-    aiPossibleNorms2.push_back(new RationalInteger(iProduct));
+    possibleNorms2.push_back(new RationalInteger(iProduct));
   }
 
-  sort(aiPossibleNorms2.begin(), aiPossibleNorms2.end(),
+  sort(possibleNorms2.begin(), possibleNorms2.end(),
        isLessThanPtrAlgebraicInteger);
 
-  aiPossibleNorms2 = vector<AlgebraicInteger *>(
-      aiPossibleNorms2.begin(),
-      unique(aiPossibleNorms2.begin(), aiPossibleNorms2.end(),
+  possibleNorms2 = vector<AlgebraicInteger *>(
+      possibleNorms2.begin(),
+      unique(possibleNorms2.begin(), possibleNorms2.end(),
              isEqualToPtrAlgebraicInteger));
 
-  vf = new RationalInteger_VFs(aiPossibleNorms2);
+  vf = new RationalInteger_VFs(possibleNorms2);
 }
 
-void RationalInteger_AlVin::findVector(AlgebraicInteger *aiX0,
-                                       AlgebraicInteger *aiNorm2) {
-  iBilinearProducts = vector<int>(vectorsCountSecond, 0);
+void RationalInteger_AlVin::findVector(AlgebraicInteger *x0,
+                                       AlgebraicInteger *norm2) {
+  bilinearProducts = vector<int>(vectorsCountSecond, 0);
 
-  findVector(dynamic_cast<RationalInteger *>(aiX0)->iVal,
-             dynamic_cast<RationalInteger *>(aiNorm2)->iVal);
+  findVector(dynamic_cast<RationalInteger *>(x0)->val,
+             dynamic_cast<RationalInteger *>(norm2)->val);
 }
 
 bool RationalInteger_AlVin::bCandidatePreserveEvenLattice(
-    const unsigned int &iNorm2) const {
-  cout << "bCandidatePreserveEvenLattice: " << iNorm2 << endl;
+    const unsigned int &norm2) const {
+  cout << "bCandidatePreserveEvenLattice: " << norm2 << endl;
 
-  long int iSumCoordinates(iVectorCurrent[0]);
+  long int iSumCoordinates(vectorCurrent[0]);
   unsigned int i;
   for (i = 1; i <= dimension; i++)
-    iSumCoordinates += iVectorCurrent[i];
+    iSumCoordinates += vectorCurrent[i];
 
   if (iSumCoordinates % 4 == 0)
     return true;
@@ -171,12 +170,12 @@ bool RationalInteger_AlVin::bCandidatePreserveEvenLattice(
   iSumCoordinates *= 2;
 
   if (iSumCoordinates *
-      (riQF[0] * iVectorCurrent[0] + riQF[1] * iVectorCurrent[1]) % 2)
+      (riQF[0] * vectorCurrent[0] + riQF[1] * vectorCurrent[1]) % 2)
     return false;
 
   for (i = 1; i <= dimension; i++) {
     if (iSumCoordinates *
-        (-riQF[0] * iVectorCurrent[0] + riQF[i] * iVectorCurrent[i]) % 2)
+        (-riQF[0] * vectorCurrent[0] + riQF[i] * vectorCurrent[i]) % 2)
       return false;
   }
 
@@ -186,65 +185,64 @@ bool RationalInteger_AlVin::bCandidatePreserveEvenLattice(
 }
 
 void RationalInteger_AlVin::addCandidate() {
-  vector<AlgebraicInteger *> aiV;
-  for (auto i : iVectorCurrent)
-    aiV.push_back(new RationalInteger(i));
+  vector<AlgebraicInteger *> v;
+  for (const auto &i : vectorCurrent)
+    v.push_back(new RationalInteger(i));
 
-  candidateVectors.push_back(aiV);
+  candidateVectors.push_back(v);
 }
 
 void RationalInteger_AlVin::addVectorChild(
-    const std::vector<AlgebraicInteger *> &aiVector) {
+    const std::vector<AlgebraicInteger *> &v) {
   vector<int> iV;
-  for (auto ai : aiVector)
-    iV.push_back(dynamic_cast<RationalInteger *>(ai)->iVal);
+  for (const auto &ai : v)
+    iV.push_back(dynamic_cast<RationalInteger *>(ai)->val);
 
-  iVectors.push_back(iV);
+  vectors.push_back(iV);
 }
 
-int RationalInteger_AlVin::addVector_findWeight(
-    AlgebraicInteger *aiNumerator, AlgebraicInteger *aiDenominator) {
+int RationalInteger_AlVin::addVector_findWeight(AlgebraicInteger *numerator,
+                                                AlgebraicInteger *denominator) {
   return -2;
 }
 
 void RationalInteger_AlVin::findVector(const unsigned int &i0,
-                                       const unsigned int &iNorm2,
-                                       unsigned int iIndex,
-                                       unsigned int iSumComp,
-                                       unsigned int iGCDComponents) {
-  if (iIndex == 1) {
-    iSumComp = iNorm2 + riQF[0] * i0 * i0;
-    iVectorCurrent[0] = i0;
-    iGCDComponents = i0;
+                                       const unsigned int &norm2,
+                                       unsigned int index, unsigned int sumComp,
+                                       unsigned int gcdComponents) {
+  if (index == 1) {
+    sumComp = norm2 + riQF[0] * i0 * i0;
+    vectorCurrent[0] = i0;
+    gcdComponents = i0;
 
     for (unsigned int i(0); i < vectorsCountSecond; i++)
-      iBilinearProducts[i] = -riQF[0] * i0 * iVectors[i + dimension][0];
-  } else if (iGCDs[iIndex] &&
-             iSumComp % iGCDs[iIndex]) // equation a * x + b * y = z has a
-                                       // solution only if gcd(a, b) | z
+      bilinearProducts[i] = -riQF[0] * i0 * vectors[i + dimension][0];
+  } else if (iGCDs[index] &&
+             sumComp % iGCDs[index]) // equation a * x + b * y = z has a
+                                     // solution only if gcd(a, b) | z
     return;
 
-  if (!iSumComp) {
-    for (; iIndex <= dimension; iIndex++)
-      iVectorCurrent[iIndex] = 0;
+  if (!sumComp) {
+    for (; index <= dimension; index++)
+      vectorCurrent[index] = 0;
 
-    if (iGCDComponents == 1)
+    if (gcdComponents == 1)
       addCandidate();
 
     return;
   }
 
-  if (iIndex == dimension - 1) {
+  if (index == dimension - 1) {
     if (bLastTwoCoefficientsQFAre1Mod4 &&
-        iSumComp % 4 == 3) // Sum of two squares cannot be 3 mod 4
+        sumComp % 4 == 3) // Sum of two squares cannot be 3 mod 4
       return;
 
-    unsigned int a(riQF[iIndex]), b(riQF[dimension]), c(iSumComp);
+    unsigned int a(riQF[index]), b(riQF[dimension]), c(sumComp);
 
-    if (iGCDs[iIndex]) {
-      a /= iGCDs[iIndex];
-      b /= iGCDs[iIndex];
-      c *= iGCDs[iIndex];
+    if (iGCDs[index]) {
+      a /= iGCDs[index];
+      b /= iGCDs[index];
+      c *= iGCDs[index];
     }
 
     unsigned int iGCD(ugcd(a, c));
@@ -274,59 +272,58 @@ void RationalInteger_AlVin::findVector(const unsigned int &i0,
   }
 
   unsigned int iMax(
-      componentLessThan[iIndex]
-          ? min((unsigned int)iVectorCurrent[componentLessThan[iIndex]],
-                integerSqrt(iSumComp) / integerSqrt(riQF[iIndex]))
-          : integerSqrt(iSumComp) / integerSqrt(riQF[iIndex]));
+      componentLessThan[index]
+          ? min((unsigned int)vectorCurrent[componentLessThan[index]],
+                integerSqrt(sumComp) / integerSqrt(riQF[index]))
+          : integerSqrt(sumComp) / integerSqrt(riQF[index]));
 
-  iVectorCurrent[iIndex] = 0;
-  if (iIndex < dimension)
-    findVector(i0, iNorm2, iIndex + 1, iSumComp, iGCDComponents);
+  vectorCurrent[index] = 0;
+  if (index < dimension)
+    findVector(i0, norm2, index + 1, sumComp, gcdComponents);
 
   unsigned int iLastCoeff(0);
-  for (unsigned int i(ceilQuotient(iNorm2, 2 * riQF[iIndex])); i <= iMax; i++) {
-    if (!(2 * i * riQF[iIndex] % iNorm2)) {
+  for (unsigned int i(ceilQuotient(norm2, 2 * riQF[index])); i <= iMax; i++) {
+    if (!(2 * i * riQF[index] % norm2)) {
       for (unsigned int j(0); j < vectorsCountSecond; j++) {
-        iBilinearProducts[j] +=
-            riQF[iIndex] * (i - iLastCoeff) * iVectors[j + dimension][iIndex];
+        bilinearProducts[j] +=
+            riQF[index] * (i - iLastCoeff) * vectors[j + dimension][index];
 
-        if (iBilinearProducts[j] > 0) // iVectorCurrent is not admissible
+        if (bilinearProducts[j] > 0) // iVectorCurrent is not admissible
         {
           // we restore the value of iBilinearProducts
           for (unsigned int k(0); k < vectorsCountSecond; k++)
-            iBilinearProducts[k] -= riQF[iIndex] *
-                                    iVectors[k + dimension][iIndex] *
-                                    (k <= j ? i : iLastCoeff);
+            bilinearProducts[k] -= riQF[index] * vectors[k + dimension][index] *
+                                   (k <= j ? i : iLastCoeff);
 
           return;
         }
       }
 
-      iVectorCurrent[iIndex] = i;
+      vectorCurrent[index] = i;
       iLastCoeff = i;
 
-      if (iIndex == dimension && riQF[iIndex] * i * i == iSumComp) {
-        if (ugcd(i, iGCDComponents) == 1)
+      if (index == dimension && riQF[index] * i * i == sumComp) {
+        if (ugcd(i, gcdComponents) == 1)
           addCandidate();
 
         for (unsigned int i(0); i < vectorsCountSecond; i++)
-          iBilinearProducts[i] -=
-              riQF[iIndex] * iLastCoeff * iVectors[i + dimension][iIndex];
+          bilinearProducts[i] -=
+              riQF[index] * iLastCoeff * vectors[i + dimension][index];
 
         return;
       }
 
-      if (iIndex < dimension) {
-        if (riQF[iIndex] * i * i <= iSumComp)
-          findVector(i0, iNorm2, iIndex + 1, iSumComp - riQF[iIndex] * i * i,
-                     ugcd(iGCDComponents, i));
+      if (index < dimension) {
+        if (riQF[index] * i * i <= sumComp)
+          findVector(i0, norm2, index + 1, sumComp - riQF[index] * i * i,
+                     ugcd(gcdComponents, i));
       }
     }
   }
 
   for (unsigned int i(0); i < vectorsCountSecond; i++)
-    iBilinearProducts[i] -=
-        riQF[iIndex] * iLastCoeff * iVectors[i + dimension][iIndex];
+    bilinearProducts[i] -=
+        riQF[index] * iLastCoeff * vectors[i + dimension][index];
 }
 
 string RationalInteger_AlVin::get_strField() const { return string("Q"); }

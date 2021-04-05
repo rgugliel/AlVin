@@ -66,7 +66,7 @@ private:
 
   bool PreRun();
 
-  void findVector(AlgebraicInteger *aiX0, AlgebraicInteger *aiNorm2);
+  void findVector(AlgebraicInteger *x0, AlgebraicInteger *norm2);
 
   /*!	\fn findVector( QuadraticInteger* qi0, QuadraticInteger* qiNorm2,
    * unsigned int iIndex, QuadraticInteger qiSumComp, QuadraticInteger
@@ -86,9 +86,9 @@ private:
                   QuadraticInteger qiGCDComponents);
 
   void addCandidate();
-  virtual void addVectorChild(const vector<AlgebraicInteger *> &aiVector);
-  virtual int addVector_findWeight(AlgebraicInteger *aiNumerator,
-                                   AlgebraicInteger *aiDenominator);
+  virtual void addVectorChild(const vector<AlgebraicInteger *> &v);
+  virtual int addVector_findWeight(AlgebraicInteger *numerator,
+                                   AlgebraicInteger *denominator);
 };
 
 #endif // QUADRATICINTEGER_ALVIN_H

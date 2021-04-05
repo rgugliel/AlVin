@@ -10,18 +10,18 @@ void RationalInteger_NotReflective::createSystemEquations(
 
   string strGlobalEquation("");
 
-  for (auto aiNorm : aiPossibleNorm2) {
+  for (auto norm2 : possibleNorm2) {
     // The cristallographic condition implies that the coefficient x_i is
     // divisible by (e,e) / gcd( (e,e), 2 * alpha_i ) Hence, we will do a
     // substitution.
-    vector<AlgebraicInteger *> aiVariablesCoeff;
+    vector<AlgebraicInteger *> variablesCoeff;
     for (unsigned int i(0); i < iVariablesCount; i++) {
-      AlgebraicInteger *aiGCD(aiNorm->copy()), *aiRes(aiNorm->copy());
-      aiGCD->gcd(ai2QF[nrg.iVariablesToCoeff[i]]);
-      aiRes->divideBy(aiGCD);
-      aiVariablesCoeff.push_back(aiRes);
+      AlgebraicInteger *gcd(norm2->copy()), *res(norm2->copy());
+      gcd->gcd(ai2QF[nrg.iVariablesToCoeff[i]]);
+      res->divideBy(gcd);
+      variablesCoeff.push_back(res);
 
-      delete aiGCD;
+      delete gcd;
     }
 
     string strEquation(""), strInequalities("x1 > 0");
@@ -29,51 +29,51 @@ void RationalInteger_NotReflective::createSystemEquations(
     // ------------------------------------------------------------
     // norm equation
     for (unsigned int i(0); i < iVariablesCount; i++) {
-      AlgebraicInteger *aiTemp(aiVariablesCoeff[i]->copy());
+      AlgebraicInteger *temp(variablesCoeff[i]->copy());
 
-      aiTemp->multiplyBy(aiTemp);
-      aiTemp->multiplyBy(nrg.aiVariablesCount[i]);
-      strEquation += (i ? " + " : "-") + aiTemp->to_string() + " * x" +
+      temp->multiplyBy(temp);
+      temp->multiplyBy(nrg.variablesCount[i]);
+      strEquation += (i ? " + " : "-") + temp->to_string() + " * x" +
                      to_string(i + 1) + "^2";
 
-      if (nrg.iVariablesGreaterThan[i])
+      if (nrg.variablesGreaterThan[i])
         strInequalities += " && x" + to_string(i) + " >= x" +
-                           to_string(nrg.iVariablesGreaterThan[i]);
+                           to_string(nrg.variablesGreaterThan[i]);
 
-      delete aiTemp;
+      delete temp;
     }
-    strEquation += " == " + aiNorm->to_string();
+    strEquation += " == " + norm2->to_string();
 
     // ----------------------------------------
     // other equations
-    vector<AlgebraicInteger *> aiNumberVariablesCount;
+    vector<AlgebraicInteger *> numberVariablesCount;
     for (unsigned int i(0); i < iVariablesCount; i++)
-      aiNumberVariablesCount.push_back(aiQF[0]->copyToInteger(0));
-    AlgebraicInteger *aiTemp(aiQF[0]->copyToInteger(0));
+      numberVariablesCount.push_back(qf[0]->copyToInteger(0));
+    AlgebraicInteger *temp(qf[0]->copyToInteger(0));
 
     for (vector<short unsigned int>::const_iterator it(
              upper_bound(nrg.iGraphVertices.begin(), nrg.iGraphVertices.end(),
                          iDimension - 1));
          it != nrg.iGraphVertices.end(); ++it) {
       for (unsigned int i(0); i <= iDimension; i++) {
-        if (aiVectors[*it][i] && nrg.iVariablesName[i]) {
-          aiTemp->set(aiQF[i]);
-          aiTemp->multiplyBy(aiVectors[*it][i]);
-          aiTemp->multiplyBy(aiVariablesCoeff[nrg.iVariablesName[i] - 1]);
+        if (vectors[*it][i] && nrg.iVariablesName[i]) {
+          temp->set(qf[i]);
+          temp->multiplyBy(vectors[*it][i]);
+          temp->multiplyBy(variablesCoeff[nrg.iVariablesName[i] - 1]);
 
-          aiNumberVariablesCount[nrg.iVariablesName[i] - 1]->add(aiTemp);
+          numberVariablesCount[nrg.iVariablesName[i] - 1]->add(temp);
         }
       }
 
       strEquation += " && ";
       for (unsigned int i(0); i < iVariablesCount; i++)
         strEquation += (i ? " + " : "-") +
-                       aiNumberVariablesCount[i]->to_string(strOFormat, true) +
+                       numberVariablesCount[i]->to_string(strOFormat, true) +
                        "*x" + to_string(i + 1);
       strEquation += " == 0";
 
       for (unsigned int i(0); i < iVariablesCount; i++)
-        aiNumberVariablesCount[i]->set(0);
+        numberVariablesCount[i]->set(0);
     }
 
     // ----------------------------------------
@@ -83,10 +83,10 @@ void RationalInteger_NotReflective::createSystemEquations(
     strGlobalEquation += (strGlobalEquation == "" ? "" : " || ") + string("(") +
                          strEquation + ")";
 
-    delete aiTemp;
+    delete temp;
     for (unsigned int j(0); j < iVariablesCount; j++) {
-      delete aiVariablesCoeff[j];
-      delete aiNumberVariablesCount[j];
+      delete variablesCoeff[j];
+      delete numberVariablesCount[j];
     }
   }
 

@@ -43,10 +43,10 @@ using namespace std;
 
 class RationalInteger_VFs : public AlVinFractions {
 private:
-  unsigned iPossibleNorms2_max;
+  unsigned possibleNorms2Max;
 
 public:
-  RationalInteger_VFs(vector<AlgebraicInteger *> aiPossibleNorms2);
+  RationalInteger_VFs(vector<AlgebraicInteger *> possibleNorms2);
   ~RationalInteger_VFs();
 
 private:

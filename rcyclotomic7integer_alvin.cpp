@@ -88,10 +88,10 @@ RCyclotomic7Integer_AlVin::RCyclotomic7Integer_AlVin(
     print_initialInformation();
 }
 
-void RCyclotomic7Integer_AlVin::findVector(AlgebraicInteger *aiX0,
-                                           AlgebraicInteger *aiNorm2) {
-  RCyclotomic7Integer *rci0(dynamic_cast<RCyclotomic7Integer *>(aiX0));
-  RCyclotomic7Integer *rciNorm2(dynamic_cast<RCyclotomic7Integer *>(aiNorm2));
+void RCyclotomic7Integer_AlVin::findVector(AlgebraicInteger *x0,
+                                           AlgebraicInteger *norm2) {
+  RCyclotomic7Integer *rci0(dynamic_cast<RCyclotomic7Integer *>(x0));
+  RCyclotomic7Integer *rciNorm2(dynamic_cast<RCyclotomic7Integer *>(norm2));
 
   // -----------------------------------------------------
   // Preliminary work
@@ -115,7 +115,7 @@ void RCyclotomic7Integer_AlVin::findVector(AlgebraicInteger *aiX0,
 
   rciVectorCurrent[0].set(rci0);
 
-  findVector(rci0, dynamic_cast<RCyclotomic7Integer *>(aiNorm2), 1, rciSumComp,
+  findVector(rci0, dynamic_cast<RCyclotomic7Integer *>(norm2), 1, rciSumComp,
              *rci0);
 }
 
@@ -136,7 +136,7 @@ void RCyclotomic7Integer_AlVin::print_initialInformationChild() const {
 
 void RCyclotomic7Integer_AlVin::findVector(
     RCyclotomic7Integer *rci0, RCyclotomic7Integer *rciNorm2,
-    unsigned int iIndex, RCyclotomic7Integer rciSumComp,
+    unsigned int index, RCyclotomic7Integer rciSumComp,
     RCyclotomic7Integer rciGCDComponents) {
   // ----------------------------------------
   // Frequent values
@@ -148,8 +148,8 @@ void RCyclotomic7Integer_AlVin::findVector(
   if (rciSumComp.iC[0] == 0 && rciSumComp.iC[1] == 0 &&
       rciSumComp.iC[2] == 0) // We have a candidate
   {
-    for (; iIndex <= dimension; iIndex++)
-      rciVectorCurrent[iIndex] = 0;
+    for (; index <= dimension; index++)
+      rciVectorCurrent[index] = 0;
 
     if (rciGCDComponents.isInvertible())
       addCandidate();
@@ -173,18 +173,18 @@ void RCyclotomic7Integer_AlVin::findVector(
   long int aMin, aMax, bMax, cMin, cMax;
   bool bBoundsUncertain(false);
 
-  interval gaol_R1(gaol_SQRTQuotient(rciSumComp, rciQF[iIndex]));
+  interval gaol_R1(gaol_SQRTQuotient(rciSumComp, rciQF[index]));
 
   rciSumComp.conjugate(2);
-  rciQF[iIndex].conjugate(2);
-  interval gaol_R2(gaol_SQRTQuotient(rciSumComp, rciQF[iIndex]));
+  rciQF[index].conjugate(2);
+  interval gaol_R2(gaol_SQRTQuotient(rciSumComp, rciQF[index]));
 
   rciSumComp.conjugate(2);
-  rciQF[iIndex].conjugate(2);
-  interval gaol_R3(gaol_SQRTQuotient(rciSumComp, rciQF[iIndex]));
+  rciQF[index].conjugate(2);
+  interval gaol_R3(gaol_SQRTQuotient(rciSumComp, rciQF[index]));
 
   rciSumComp.conjugate(2);
-  rciQF[iIndex].conjugate(2);
+  rciQF[index].conjugate(2);
 
   // ----------------------------------------------------
   // Eventual simplifications in nice cases
@@ -319,7 +319,7 @@ void RCyclotomic7Integer_AlVin::findVector(
 
         // ------------------------------------------------------
         // crystallographic condition
-        rciTemp.set(&rci2QF[iIndex]);
+        rciTemp.set(&rci2QF[index]);
         rciTemp.multiplyBy(&rci);
         if (!rciTemp.isDivisibleBy(rciNorm2))
           continue;
@@ -329,7 +329,7 @@ void RCyclotomic7Integer_AlVin::findVector(
         RCyclotomic7Integer rciSquare(rci);
         rciSquare.multiplyBy(&rci);
         rciPartialNorm.set(&rciSquare);
-        rciPartialNorm.multiplyBy(&rciQF[iIndex]);
+        rciPartialNorm.multiplyBy(&rciQF[index]);
 
         if (bBoundsUncertain) // In this contexte, we have to check if rci <= R1
         {
@@ -354,8 +354,8 @@ void RCyclotomic7Integer_AlVin::findVector(
 
         // ------------------------------------------------------
         // If k_j should be less or equal than k_{j-1}
-        if (componentLessThan[iIndex] &&
-            !rci.isLessOEThan(rciVectorCurrent[componentLessThan[iIndex]]))
+        if (componentLessThan[index] &&
+            !rci.isLessOEThan(rciVectorCurrent[componentLessThan[index]]))
           continue;
 
         // ------------------------------------------------------
@@ -367,8 +367,8 @@ void RCyclotomic7Integer_AlVin::findVector(
           // + iDimension][iIndex]
           rciTemp.set(&rci);
           rciTemp.substract(&rciLastComponent);
-          rciTemp.multiplyBy(&rciQF[iIndex]);
-          rciTemp.multiplyBy(rciVectors[j + dimension][iIndex]);
+          rciTemp.multiplyBy(&rciQF[index]);
+          rciTemp.multiplyBy(rciVectors[j + dimension][index]);
           rciBilinearProducts[j].add(&rciTemp);
 
           // TODO: garder en mémoire la valeur max?
@@ -383,9 +383,9 @@ void RCyclotomic7Integer_AlVin::findVector(
         if (!bAdmissible)
           break;
 
-        rciVectorCurrent[iIndex] = rci;
+        rciVectorCurrent[index] = rci;
 
-        if (iIndex == dimension && rciSumComp.isEqualTo(rciPartialNorm)) {
+        if (index == dimension && rciSumComp.isEqualTo(rciPartialNorm)) {
           rciGCDComponents.gcd(&rci);
           if (rciGCDComponents.isInvertible())
             addCandidate();
@@ -394,42 +394,40 @@ void RCyclotomic7Integer_AlVin::findVector(
           break;
         }
 
-        if (iIndex < dimension) {
+        if (index < dimension) {
           RCyclotomic7Integer rciSumSub(rciSumComp);
           rciSumSub.substract(&rciPartialNorm);
 
           rciTemp.set(&rciGCDComponents);
           rciTemp.gcd(&rci);
 
-          findVector(rci0, rciNorm2, iIndex + 1, rciSumSub, rciTemp);
+          findVector(rci0, rciNorm2, index + 1, rciSumSub, rciTemp);
         }
       }
     }
   }
 
   for (unsigned int i(0); i < vectorsCountSecond; i++) {
-    rciTemp.set(&rciQF[iIndex]);
-    rciTemp.multiplyBy(rciVectors[i + dimension][iIndex]);
+    rciTemp.set(&rciQF[index]);
+    rciTemp.multiplyBy(rciVectors[i + dimension][index]);
     rciTemp.multiplyBy(&rciLastComponent);
     rciBilinearProducts[i].substract(&rciTemp);
   }
 }
 
 void RCyclotomic7Integer_AlVin::addCandidate() {
-  vector<AlgebraicInteger *> aiV;
+  vector<AlgebraicInteger *> v;
 
-  for (auto i : rciVectorCurrent)
-    aiV.push_back(new RCyclotomic7Integer(i));
+  for (const auto &i : rciVectorCurrent)
+    v.push_back(new RCyclotomic7Integer(i));
 
-  candidateVectors.push_back(aiV);
+  candidateVectors.push_back(v);
 }
 
 int RCyclotomic7Integer_AlVin::addVector_findWeight(
-    AlgebraicInteger *aiNumerator, AlgebraicInteger *aiDenominator) {
-  RCyclotomic7Integer *rciNumerator(
-      dynamic_cast<RCyclotomic7Integer *>(aiNumerator));
-  RCyclotomic7Integer *rciDenominator(
-      dynamic_cast<RCyclotomic7Integer *>(aiDenominator));
+    AlgebraicInteger *numerator, AlgebraicInteger *denominator) {
+  auto rciNumerator(dynamic_cast<RCyclotomic7Integer *>(numerator));
+  auto rciDenominator(dynamic_cast<RCyclotomic7Integer *>(denominator));
 
   if (rciNumerator->iC == array<mpz_class, 3>({-1, -2, -2}) &&
       rciDenominator->isEqualTo(4))
@@ -439,7 +437,7 @@ int RCyclotomic7Integer_AlVin::addVector_findWeight(
 }
 
 void RCyclotomic7Integer_AlVin::findPossibleNorms2() {
-  vector<AlgebraicInteger *> aiPossibleNorms2(
+  vector<AlgebraicInteger *> possibleNorms2(
       {new RCyclotomic7Integer(1)}); ///< Possible values for (e,e)
   vector<RCyclotomic7Integer>
       rciFactors; ///< Prime numbers and fundamental unit
@@ -501,24 +499,24 @@ void RCyclotomic7Integer_AlVin::findPossibleNorms2() {
     rciProduct->conjugate(2);
 
     // yes, we keep it
-    aiPossibleNorms2.push_back(rciProduct);
+    possibleNorms2.push_back(rciProduct);
   }
 
   // removing duplicates
-  sort(aiPossibleNorms2.begin(), aiPossibleNorms2.end(),
+  sort(possibleNorms2.begin(), possibleNorms2.end(),
        isLessThanPtrAlgebraicInteger);
-  aiPossibleNorms2 = vector<AlgebraicInteger *>(
-      aiPossibleNorms2.begin(),
-      unique(aiPossibleNorms2.begin(), aiPossibleNorms2.end(),
+  possibleNorms2 = vector<AlgebraicInteger *>(
+      possibleNorms2.begin(),
+      unique(possibleNorms2.begin(), possibleNorms2.end(),
              isEqualToPtrAlgebraicInteger));
 
-  vf = new RCyclotomic7Integer_VFs(aiPossibleNorms2, rciQF[0]);
+  vf = new RCyclotomic7Integer_VFs(possibleNorms2, rciQF[0]);
 }
 
 void RCyclotomic7Integer_AlVin::addVectorChild(
-    const vector<AlgebraicInteger *> &aiVector) {
+    const vector<AlgebraicInteger *> &v) {
   vector<RCyclotomic7Integer *> rciV;
-  for (auto ai : aiVector)
+  for (const auto &ai : v)
     rciV.push_back(dynamic_cast<RCyclotomic7Integer *>(ai));
 
   rciVectors.push_back(rciV);

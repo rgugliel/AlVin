@@ -45,19 +45,19 @@ struct NotReflective_Graph {
                          ///< in the quadratic form
 
   vector<short unsigned int>
-      iVariablesGreaterThan; ///< [ i ] = j means x_i >= x_j
+      variablesGreaterThan; ///< [ i ] = j means x_i >= x_j
   vector<AlgebraicInteger *>
-      aiVariablesCount; ///< Number of time each variable appear (useful for the
-                        ///< norm equation)
+      variablesCount; ///< Number of time each variable appear (useful for the
+                      ///< norm equation)
 };
 
 class NotReflective {
 protected:
   AlVin *alvin;
-  vector<vector<AlgebraicInteger *>> aiVectors;
+  vector<vector<AlgebraicInteger *>> vectors;
   unsigned int iDimension;
 
-  vector<AlgebraicInteger *> aiQF;
+  vector<AlgebraicInteger *> qf;
   vector<AlgebraicInteger *> ai2QF;
 
   vector<vector<NotReflective_Graph>>
@@ -67,7 +67,7 @@ protected:
   string strOFormat;
   string strAlgebraicIntegerType;
 
-  vector<AlgebraicInteger *> aiPossibleNorm2;
+  vector<AlgebraicInteger *> possibleNorm2;
 
 public:
   NotReflective(AlVin *v);

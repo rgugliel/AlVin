@@ -3,12 +3,12 @@
 using namespace RCyclotomic7Integer_constants;
 
 RCyclotomic7Integer_VFs::RCyclotomic7Integer_VFs(
-    vector<AlgebraicInteger *> aiPossibleNorms2,
+    vector<AlgebraicInteger *> possibleNorms2,
     const RCyclotomic7Integer &rciAlpha0)
     : rciAlpha0(rciAlpha0), rciMinusAlpha0(rciAlpha0),
-      AlVinFractions(aiPossibleNorms2),
+      AlVinFractions(possibleNorms2),
       rciPossibleNorms2_max(dynamic_cast<RCyclotomic7Integer *>(
-          aiPossibleNorms2[aiPossibleNorms2.size() - 1])) {
+          possibleNorms2[possibleNorms2.size() - 1])) {
   rciMinusAlpha0.multiplyBy(-1);
 }
 
@@ -24,19 +24,19 @@ void RCyclotomic7Integer_VFs::computeNextAlVinFractions() {
 
   // ----------------------------------------
   // Bounds
-  unsigned int iMin(iLastMaximum),
-      iSizeTemp((iMin + iBatchSize) * (iMin + iBatchSize) - iLastMaximum);
-  iLastMaximum += min(iSizeTemp, (unsigned int)10000);
+  unsigned int iMin(lastMaximum),
+      iSizeTemp((iMin + batchSize) * (iMin + batchSize) - lastMaximum);
+  lastMaximum += min(iSizeTemp, (unsigned int)10000);
 
   long int iTemp, iSqrtTemp;
   interval gaol_b, gaol_a;
 
   // We generate fractions f such that: iMin < f <= iLastMaximum
-  for (auto aiE : possibleNorms2) {
+  for (auto norm2 : possibleNorms2) {
     // We write the numerator: a * l1 + b * l2 + c * l3
-    RCyclotomic7Integer *rciE(dynamic_cast<RCyclotomic7Integer *>(aiE));
+    RCyclotomic7Integer *rciE(dynamic_cast<RCyclotomic7Integer *>(norm2));
 
-    interval gaol_Mprime(sqrt(rciE->to_interval() * interval(iLastMaximum)));
+    interval gaol_Mprime(sqrt(rciE->to_interval() * interval(lastMaximum)));
     interval gaol_mprime(sqrt(rciE->to_interval() * interval(iMin)));
 
     bool bIsMprimeLongInt(false), bIsmprimeLongInt(false);
@@ -56,7 +56,7 @@ void RCyclotomic7Integer_VFs::computeNextAlVinFractions() {
       }
 
       // If M' is an integer
-      iTemp = -rciE->iC[0].get_si() * iLastMaximum;
+      iTemp = -rciE->iC[0].get_si() * lastMaximum;
 
       iSqrtTemp = integerSqrt<unsigned long int>(
           iTemp);                         // rciE & iLastMaximum are positive

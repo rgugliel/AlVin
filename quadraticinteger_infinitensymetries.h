@@ -93,8 +93,8 @@ private:
   vector<Rational<QuadraticIntegerBig>>
       rqiQF; ///< Coefficients of the diagonal quadratic form (in fractions)
   vector<vector<QuadraticIntegerBig>>
-      riVectorsProducts;               ///< Products of each pair of vecteurs
-  vector<long int> iVectorsNormsFloor; ///< Length of vectors
+      riVectorsProducts;              ///< Products of each pair of vecteurs
+  vector<long int> vectorsNormsFloor; ///< Length of vectors
 
 public:
   QuadraticInteger_InfiniteNSymetries(AlVin *alvin);

@@ -61,19 +61,19 @@ struct GraphInvolution {
 class InfiniteNSymetries {
 protected:
   AlVin *alvin;
-  vector<AlgebraicInteger *> aiQF;
+  vector<AlgebraicInteger *> qf;
 
   vector<vector<unsigned int>>
-      iGraphMatrix; ///< 1 if bold, 2 if dotted, weight otherwise
-  vector<vector<unsigned int>> iCoxeterMatrix;
+      graphMatrix; ///< 1 if bold, 2 if dotted, weight otherwise
+  vector<vector<unsigned int>> coxeterMatrix;
 
-  unsigned int iVectorsCount;     ///< Number of vectors computed
-  unsigned int iDimension;        ///< Dimension of the hyperbolic space
+  unsigned int vectorsCount;      ///< Number of vectors computed
+  unsigned int dimension;         ///< Dimension of the hyperbolic space
   const unsigned int iVectorSize; ///< iDimension + 1
 
   unsigned int
-      iFixedPointsDimension; ///< Actual dimension of the space of fixed points
-  bool bFinished;            ///< If true, the form is non-reflective
+      fixedPointsDimension; ///< Actual dimension of the space of fixed points
+  bool isFinished;          ///< If true, the form is non-reflective
 
   vector<GraphInvolution> usefulInvolutions;
 

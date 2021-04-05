@@ -2,11 +2,11 @@
 
 RationalInteger::~RationalInteger() {}
 
-RationalInteger::RationalInteger() : iVal(0) {}
+RationalInteger::RationalInteger() : val(0) {}
 
-RationalInteger::RationalInteger(long int iVal) : iVal(iVal) {}
+RationalInteger::RationalInteger(long int iVal) : val(iVal) {}
 
-RationalInteger::RationalInteger(const RationalInteger &ri) : iVal(ri.iVal) {}
+RationalInteger::RationalInteger(const RationalInteger &ri) : val(ri.val) {}
 
 AlgebraicInteger *RationalInteger::copyToInteger(const int &n) const {
   return new RationalInteger(n);
@@ -16,21 +16,21 @@ AlgebraicInteger *RationalInteger::copy() const {
   return new RationalInteger(*this);
 }
 
-void RationalInteger::set(const int &n) { iVal = n; }
+void RationalInteger::set(const int &n) { val = n; }
 
 void RationalInteger::set(AlgebraicInteger *ai) {
   RationalInteger *ri(dynamic_cast<RationalInteger *>(ai));
-  iVal = ri->iVal;
+  val = ri->val;
 }
 
-bool RationalInteger::isInvertible() const { return (iVal == 1 || iVal == -1); }
+bool RationalInteger::isInvertible() const { return (val == 1 || val == -1); }
 
-bool RationalInteger::isSquareOfIvertible() const { return (iVal == 1); }
+bool RationalInteger::isSquareOfIvertible() const { return (val == 1); }
 
 void RationalInteger::gcd(const AlgebraicInteger *ai) {
   const RationalInteger *ri(dynamic_cast<const RationalInteger *>(ai));
 
-  long u(iVal < 0 ? -iVal : iVal), v(ri->iVal < 0 ? -ri->iVal : ri->iVal);
+  long u(val < 0 ? -val : val), v(ri->val < 0 ? -ri->val : ri->val);
 
   while (v != 0) {
     unsigned int r = u % v;
@@ -38,162 +38,158 @@ void RationalInteger::gcd(const AlgebraicInteger *ai) {
     v = r;
   }
 
-  iVal = u;
+  val = u;
 }
 
-long int RationalInteger::get_iValue() const { return iVal; }
+long int RationalInteger::get_iValue() const { return val; }
 
 void RationalInteger::removeSquareFactors() {
   unsigned long int iDivisor(3), iDivisorSquared;
   unsigned long int iResult(1);
 
-  if (iVal == 1)
+  if (val == 1)
     return;
 
-  while (!(iVal % 4))
-    iVal /= 4;
+  while (!(val % 4))
+    val /= 4;
 
-  if (!(iVal % 2)) {
+  if (!(val % 2)) {
     iResult *= 2;
     do {
-      iVal /= 2;
-    } while (!(iVal % 2));
+      val /= 2;
+    } while (!(val % 2));
   }
 
-  while (iVal > 1) {
+  while (val > 1) {
     iDivisorSquared = iDivisor * iDivisor;
-    while (!(iVal % iDivisorSquared))
-      iVal /= iDivisorSquared;
+    while (!(val % iDivisorSquared))
+      val /= iDivisorSquared;
 
-    if (!(iVal % iDivisor)) {
+    if (!(val % iDivisor)) {
       iResult *= iDivisor;
       do {
-        iVal /= iDivisor;
-      } while (!(iVal % iDivisor));
+        val /= iDivisor;
+      } while (!(val % iDivisor));
     }
 
     iDivisor += 2;
   }
 
-  iVal = iResult;
+  val = iResult;
 }
 
 bool operator<(const RationalInteger &i1, const RationalInteger &i2) {
-  return (i1.iVal < i2.iVal);
+  return (i1.val < i2.val);
 }
 
 bool RationalInteger::isLessThan(const AlgebraicInteger &ai) const {
-  return (iVal < dynamic_cast<const RationalInteger &>(ai).iVal);
+  return (val < dynamic_cast<const RationalInteger &>(ai).val);
 }
 
 bool RationalInteger::isLessOEThan(const AlgebraicInteger &ai) const {
-  return (iVal <= dynamic_cast<const RationalInteger &>(ai).iVal);
+  return (val <= dynamic_cast<const RationalInteger &>(ai).val);
 }
 
-bool RationalInteger::isLessThan(const int &n) const { return (iVal < n); }
+bool RationalInteger::isLessThan(const int &n) const { return (val < n); }
 
-bool RationalInteger::isGreaterThan(const int &n) const { return (iVal > n); }
+bool RationalInteger::isGreaterThan(const int &n) const { return (val > n); }
 
-bool RationalInteger::isGreaterOEThan(const int &n) const {
-  return (iVal >= n);
-}
+bool RationalInteger::isGreaterOEThan(const int &n) const { return (val >= n); }
 
 bool RationalInteger::isEqualTo(const AlgebraicInteger &ai) const {
-  return (iVal == dynamic_cast<const RationalInteger &>(ai).iVal);
+  return (val == dynamic_cast<const RationalInteger &>(ai).val);
 }
 
-bool RationalInteger::isEqualTo(const int &n) const { return (iVal == n); }
+bool RationalInteger::isEqualTo(const int &n) const { return (val == n); }
 
 bool RationalInteger::isDivisibleBy(const AlgebraicInteger *ai) const {
-  return !(iVal % dynamic_cast<const RationalInteger *>(ai)->iVal);
+  return !(val % dynamic_cast<const RationalInteger *>(ai)->val);
 }
 
 bool RationalInteger::divideByIfDivisible(const AlgebraicInteger *ai) {
-  long int iV(dynamic_cast<const RationalInteger *>(ai)->iVal);
+  long int iV(dynamic_cast<const RationalInteger *>(ai)->val);
 
-  if (iVal % iV)
+  if (val % iV)
     return false;
 
-  iVal /= iV;
+  val /= iV;
 
   return true;
 }
 
 void RationalInteger::divideBy(const AlgebraicInteger *ai) {
-  iVal /= dynamic_cast<const RationalInteger *>(ai)->iVal;
+  val /= dynamic_cast<const RationalInteger *>(ai)->val;
 }
 
 void RationalInteger::add(const AlgebraicInteger *ai) {
-  iVal += dynamic_cast<const RationalInteger *>(ai)->iVal;
+  val += dynamic_cast<const RationalInteger *>(ai)->val;
 }
 
-void RationalInteger::multiplyBy(const int &n) { iVal *= n; }
+void RationalInteger::multiplyBy(const int &n) { val *= n; }
 
 void RationalInteger::multiplyBy(const AlgebraicInteger *ai) {
-  iVal *= dynamic_cast<const RationalInteger *>(ai)->iVal;
+  val *= dynamic_cast<const RationalInteger *>(ai)->val;
 }
 
 void RationalInteger::substract(const AlgebraicInteger *ai) {
-  iVal -= dynamic_cast<const RationalInteger *>(ai)->iVal;
+  val -= dynamic_cast<const RationalInteger *>(ai)->val;
 }
 
-void RationalInteger::opp() { iVal *= -1; }
+void RationalInteger::opp() { val *= -1; }
 
 ostream &RationalInteger::print(ostream &o) const {
-  o << iVal;
+  o << val;
 
   return o;
 }
 
 string RationalInteger::to_string(const string &strFormat,
                                   const bool &bProtect) const {
-  return std::to_string(iVal);
+  return std::to_string(val);
 }
 
-double RationalInteger::to_double() const { return (double)iVal; }
+double RationalInteger::to_double() const { return (double)val; }
 
 string RationalInteger::get_classname() const { return "RationalInteger"; }
 
 // ------------------------------------------------------------------------
 // Operators
 RationalInteger &RationalInteger::operator=(const RationalInteger &ri) {
-  iVal = ri.iVal;
+  val = ri.val;
 
   return *this;
 }
 
 RationalInteger &RationalInteger::operator/=(const RationalInteger &ri) {
-  iVal /= ri.iVal;
+  val /= ri.val;
   return *this;
 }
 
 RationalInteger &RationalInteger::operator*=(const RationalInteger &ri) {
-  iVal *= ri.iVal;
+  val *= ri.val;
   return *this;
 }
 
 RationalInteger RationalInteger::operator-() const {
-  return RationalInteger(-iVal);
+  return RationalInteger(-val);
 }
 
 RationalInteger RationalInteger::operator+(const RationalInteger &ri2) const {
-  return RationalInteger(iVal + ri2.iVal);
+  return RationalInteger(val + ri2.val);
 }
 
 RationalInteger RationalInteger::operator*(const RationalInteger &ri2) const {
-  return RationalInteger(iVal * ri2.iVal);
+  return RationalInteger(val * ri2.val);
 }
 
 RationalInteger RationalInteger::operator-(const RationalInteger &ri2) const {
-  return RationalInteger(iVal - ri2.iVal);
+  return RationalInteger(val - ri2.val);
 }
 
-bool RationalInteger::operator==(const long int &i) const {
-  return (iVal == i);
-}
+bool RationalInteger::operator==(const long int &i) const { return (val == i); }
 
 bool RationalInteger::operator==(const RationalInteger &ri) const {
-  return (iVal == ri.iVal);
+  return (val == ri.val);
 }
 
 bool RationalInteger::operator>(const RationalInteger &ri) const {

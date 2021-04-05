@@ -5,68 +5,66 @@ QuadraticInteger_VFs::QuadraticInteger_VFs(
     : alpha0(alpha0), AlVinFractions(possibleNorms2),
       possibleNorms2Max(dynamic_cast<QuadraticInteger *>(
           possibleNorms2[possibleNorms2.size() - 1])) {
-  iBatchSize = 1;
+  batchSize = 1;
 }
 
 QuadraticInteger_VFs::~QuadraticInteger_VFs() {}
 
 void QuadraticInteger_VFs::computeNextAlVinFractions() {
-  unsigned int iMin(iLastMaximum),
-      iSizeTemp((iMin + iBatchSize) * (iMin + iBatchSize) - iLastMaximum);
+  unsigned int iMin(lastMaximum),
+      iSizeTemp((iMin + batchSize) * (iMin + batchSize) - lastMaximum);
 
-  iLastMaximum += min(iSizeTemp, (unsigned int)1000000);
+  lastMaximum += min(iSizeTemp, (unsigned int)1000000);
 
   // We generate fractions f such that: iMin < f <= iLastMaximum
-  for (auto aiE : possibleNorms2) {
-    QuadraticInteger *qiE(dynamic_cast<QuadraticInteger *>(aiE));
-    long int y, iYMax, iYMin, x, iXMin, iXMax, iSqrtEp, iTemp, iSqrtY2d;
+  for (const auto &norm2 : possibleNorms2) {
+    QuadraticInteger *qiE(dynamic_cast<QuadraticInteger *>(norm2));
+    long int y, yMax, yMin, x, xMin, xMax, sqrtEp, temp, sqrtY2d;
 
-    QuadraticInteger qiMinEpsilon(*qiE), qiMaxEpsilon(*qiE),
-        qiConjEpsilon(*qiE);
-    qiMinEpsilon.multiplyBy(iMin);
-    qiMaxEpsilon.multiplyBy(iLastMaximum);
-    qiConjEpsilon.conjugate();
+    QuadraticInteger minEpsilon(*qiE), maxEpsilon(*qiE), conjEpsilon(*qiE);
+    minEpsilon.multiplyBy(iMin);
+    maxEpsilon.multiplyBy(lastMaximum);
+    conjEpsilon.conjugate();
 
     if (QuadraticInteger::bIsOneMod4) {
-      // iSqrtEp = isqrt( \bar epsilon / ( -d * \bar \alpha_0 ) )
+      // sqrtEp = isqrt( \bar epsilon / ( -d * \bar \alpha_0 ) )
       QuadraticInteger qiTemp(*qiE);
       qiTemp.conjugate();
       QuadraticInteger qiDen(alpha0);
       qiDen.conjugate();
       qiDen.multiplyBy(-QuadraticInteger::d);
-      iSqrtEp = QuadraticInteger::iSQRT_quotient(qiTemp, qiDen);
+      sqrtEp = QuadraticInteger::iSQRT_quotient(qiTemp, qiDen);
 
       // isqrt( iLastMaximum * epsilon / d )
-      iYMax = iSqrtEp +
-              QuadraticInteger::iSQRT_quotient(
-                  qiMaxEpsilon, QuadraticInteger(QuadraticInteger::d)) +
-              1;
+      yMax = sqrtEp +
+             QuadraticInteger::iSQRT_quotient(
+                 maxEpsilon, QuadraticInteger(QuadraticInteger::d)) +
+             1;
 
       // isqrt( iMin * epsilon / d )
-      iYMin = QuadraticInteger::iSQRT_quotient(
-                  qiMinEpsilon, QuadraticInteger(QuadraticInteger::d)) -
-              iSqrtEp;
+      yMin = QuadraticInteger::iSQRT_quotient(
+                 minEpsilon, QuadraticInteger(QuadraticInteger::d)) -
+             sqrtEp;
 
-      qiTemp.set(&qiMinEpsilon);
+      qiTemp.set(&minEpsilon);
       qiTemp.multiplyBy(4);
 
       long int iSQRTi4MinEpsilon(
           QuadraticInteger::iSQRT_quotient(qiTemp, QuadraticInteger(1)));
 
       long int iSQRTMaxEpsilon(
-          QuadraticInteger::iSQRT_quotient(qiMaxEpsilon, QuadraticInteger(1)));
+          QuadraticInteger::iSQRT_quotient(maxEpsilon, QuadraticInteger(1)));
 
       // TODO: est ce que y < ymax et x < xmax --> pas de vérifications à faire?
 
-      for (y = iYMin; y <= iYMax; y++) {
-        iSqrtY2d =
-            integerSqrt((unsigned long int)(y * y * QuadraticInteger::d));
-        iTemp = iSQRTi4MinEpsilon - y - iSqrtY2d - 1;
+      for (y = yMin; y <= yMax; y++) {
+        sqrtY2d = integerSqrt((unsigned long int)(y * y * QuadraticInteger::d));
+        temp = iSQRTi4MinEpsilon - y - sqrtY2d - 1;
 
-        iXMin = (iTemp % 2) ? iTemp / 2 + 1 : iTemp / 2;
-        iXMax = iSQRTMaxEpsilon + 1 - (y + iSqrtY2d) / 2;
+        xMin = (temp % 2) ? temp / 2 + 1 : temp / 2;
+        xMax = iSQRTMaxEpsilon + 1 - (y + sqrtY2d) / 2;
 
-        for (x = iXMin; x <= iXMax; x++) {
+        for (x = xMin; x <= xMax; x++) {
           QuadraticInteger qi(QuadraticInteger(x, y)),
               qiSquare(QuadraticInteger(x, y));
 
@@ -75,17 +73,17 @@ void QuadraticInteger_VFs::computeNextAlVinFractions() {
 
           qiSquare.multiplyBy(&qi);
 
-          if (!qiMinEpsilon.isLessThan(qiSquare))
+          if (!minEpsilon.isLessThan(qiSquare))
             continue;
 
-          if (!qiSquare.isLessOEThan(qiMaxEpsilon))
+          if (!qiSquare.isLessOEThan(maxEpsilon))
             continue;
 
           qiSquare.multiplyBy(-1);
           qiSquare.multiplyBy(&alpha0);
           qiSquare.conjugate();
 
-          if (!qiSquare.isLessOEThan(qiConjEpsilon))
+          if (!qiSquare.isLessOEThan(conjEpsilon))
             continue;
 
           QuadraticInteger *qiNum(new QuadraticInteger(qi));
@@ -107,28 +105,27 @@ void QuadraticInteger_VFs::computeNextAlVinFractions() {
       qiMinConjAlpha0.multiplyBy(-1);
 
       long int iSQRTsupConjEpsilonMinConjAlpha0(
-          QuadraticInteger::iSQRTsup_quotient(qiConjEpsilon, qiMinConjAlpha0));
+          QuadraticInteger::iSQRTsup_quotient(conjEpsilon, qiMinConjAlpha0));
 
-      iTemp =
-          QuadraticInteger::iSQRT_quotient(qiMinEpsilon, QuadraticInteger(1)) -
-          iSQRTsupConjEpsilonMinConjAlpha0;
-      iXMin = (iTemp % 2) ? iTemp / 2 + 1 : iTemp / 2; // ceil
-      iXMax = (QuadraticInteger::iSQRTsup_quotient(qiMaxEpsilon,
-                                                   QuadraticInteger(1)) +
-               iSQRTsupConjEpsilonMinConjAlpha0) /
-              2;
+      temp = QuadraticInteger::iSQRT_quotient(minEpsilon, QuadraticInteger(1)) -
+             iSQRTsupConjEpsilonMinConjAlpha0;
+      xMin = (temp % 2) ? temp / 2 + 1 : temp / 2; // ceil
+      xMax = (QuadraticInteger::iSQRTsup_quotient(maxEpsilon,
+                                                  QuadraticInteger(1)) +
+              iSQRTsupConjEpsilonMinConjAlpha0) /
+             2;
 
-      for (x = iXMin; x <= iXMax; x++) {
-        iTemp = sqrtQuotient((unsigned long int)x * x,
-                             (unsigned long int)QuadraticInteger::d);
-        iYMin = QuadraticInteger::iSQRT_quotient(
-                    qiMinEpsilon, QuadraticInteger(QuadraticInteger::d)) -
-                iTemp;
-        iYMax = QuadraticInteger::iSQRT_quotient(qiMaxEpsilon,
-                                                 QuadraticInteger::d) -
-                iTemp;
+      for (x = xMin; x <= xMax; x++) {
+        temp = sqrtQuotient((unsigned long int)x * x,
+                            (unsigned long int)QuadraticInteger::d);
+        yMin = QuadraticInteger::iSQRT_quotient(
+                   minEpsilon, QuadraticInteger(QuadraticInteger::d)) -
+               temp;
+        yMax =
+            QuadraticInteger::iSQRT_quotient(maxEpsilon, QuadraticInteger::d) -
+            temp;
 
-        for (y = iYMin; y <= iYMax; y++) {
+        for (y = yMin; y <= yMax; y++) {
           QuadraticInteger qi(QuadraticInteger(x, y)),
               qiSquare(QuadraticInteger(x, y));
 
@@ -137,17 +134,17 @@ void QuadraticInteger_VFs::computeNextAlVinFractions() {
 
           qiSquare.multiplyBy(&qi);
 
-          if (!qiMinEpsilon.isLessThan(qiSquare))
+          if (!minEpsilon.isLessThan(qiSquare))
             continue;
 
-          if (!qiSquare.isLessOEThan(qiMaxEpsilon))
+          if (!qiSquare.isLessOEThan(maxEpsilon))
             continue;
 
           qiSquare.multiplyBy(-1);
           qiSquare.multiplyBy(&alpha0);
           qiSquare.conjugate();
 
-          if (!qiSquare.isLessOEThan(qiConjEpsilon))
+          if (!qiSquare.isLessOEThan(conjEpsilon))
             continue;
 
           QuadraticInteger *qiNum(new QuadraticInteger(qi));

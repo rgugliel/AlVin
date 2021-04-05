@@ -47,10 +47,10 @@ private:
                                        ///< the quadratic form are 1 mod 4
 
   vector<int>
-      iBilinearProducts; ///< To control during findVector that the vector has
-                         ///< negative product with the preceding ones
-  vector<int> iVectorCurrent;   ///< Current working vector
-  vector<vector<int>> iVectors; ///< List of vectors found
+      bilinearProducts; ///< To control during findVector that the vector has
+                        ///< negative product with the preceding ones
+  vector<int> vectorCurrent;   ///< Current working vector
+  vector<vector<int>> vectors; ///< List of vectors found
 
 public:
   RationalInteger_AlVin(const vector<int> &iQuadraticFormCoeffs,
@@ -64,11 +64,13 @@ private:
 
   bool PreRun();
 
-  void findVector(AlgebraicInteger *aiX0, AlgebraicInteger *aiNorm2);
+  void findVector(AlgebraicInteger *x0, AlgebraicInteger *norm2);
 
   /*!	\fn findVector( const unsigned int& i0, const unsigned int& iNorm2,
    * unsigned int iIndex = 1, unsigned int iSumComp = 0, unsigned int
-   * iGCDComponents = 1 ); \brief Find a potential vector The vector e must
+   * iGCDComponents = 1 );
+   *
+   *  \brief Find a potential vector The vector e must
    * satisfy the cristallographic condition, (e,e) = iNorm2 and the first
    * component is specified Remark: we do not run other tests
    *
@@ -80,15 +82,15 @@ private:
    * ): GCD of the found components of the vector
    */
   void findVector(const unsigned int &i0, const unsigned int &iNorm2,
-                  unsigned int iIndex = 1, unsigned int iSumComp = 0,
+                  unsigned int index = 1, unsigned int iSumComp = 0,
                   unsigned int iGCDComponents = 1);
 
   void addCandidate();
   bool bCandidatePreserveEvenLattice(const unsigned int &iNorm2) const;
 
-  virtual void addVectorChild(const vector<AlgebraicInteger *> &aiVector);
-  virtual int addVector_findWeight(AlgebraicInteger *aiNumerator,
-                                   AlgebraicInteger *aiDenominator);
+  virtual void addVectorChild(const vector<AlgebraicInteger *> &v);
+  virtual int addVector_findWeight(AlgebraicInteger *numerator,
+                                   AlgebraicInteger *denominator);
 };
 
 #endif // RATIONAL_INTEGER_ALVIN_H

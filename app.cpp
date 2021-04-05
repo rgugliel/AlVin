@@ -8,7 +8,7 @@ App::App()
       strField("rationals"), strOuputMathematicalFormat("generic") {}
 
 App::~App() {
-  for (auto c : aiQF)
+  for (auto c : qf)
     delete c;
 }
 
@@ -158,7 +158,7 @@ void App::readMainParameters(int argc, char **argv) {
 
       try {
         for (auto strCo : strQF)
-          aiQF.push_back(new RationalInteger(stoi(strCo)));
+          qf.push_back(new RationalInteger(stoi(strCo)));
       } catch (std::exception &ex) {
         cout << "Quadratic form: unknown coefficient: " << strTemp << endl;
         exit(0);
@@ -175,7 +175,7 @@ void App::readMainParameters(int argc, char **argv) {
 
       for (auto c : strQF) {
         if (regexp.preg_match_all("^([-[:digit:]]+)$", c, regexpRes)) // integer
-          aiQF.push_back(new QuadraticInteger(stoi(c), 0));
+          qf.push_back(new QuadraticInteger(stoi(c), 0));
         else if (regexp.preg_match_all("([+-]{0,1})([[:digit:]]+)([+-]{1,1})([["
                                        ":digit:]]*)[\\*]*T",
                                        c, regexpRes)) {
@@ -184,7 +184,7 @@ void App::readMainParameters(int argc, char **argv) {
 
           strN2 += regexpRes[4][0] == "" ? "1" : regexpRes[4][0];
 
-          aiQF.push_back(new QuadraticInteger(stoi(strN1), stoi(strN2)));
+          qf.push_back(new QuadraticInteger(stoi(strN1), stoi(strN2)));
         } else if (regexp.preg_match_all("([+-]{0,1})([[:digit:]]*)[\\*]*T([+-]"
                                          "{1,1})([[:digit:]]*)",
                                          c, regexpRes)) {
@@ -193,14 +193,14 @@ void App::readMainParameters(int argc, char **argv) {
           strN1 += regexpRes[2][0] == "" ? "1" : regexpRes[2][0];
           strN2 += regexpRes[4][0] == "" ? "1" : regexpRes[4][0];
 
-          aiQF.push_back(new QuadraticInteger(stoi(strN2), stoi(strN1)));
+          qf.push_back(new QuadraticInteger(stoi(strN2), stoi(strN1)));
         } else if (regexp.preg_match_all("^([-[:digit:]]+)[*]?(T|t)$", c,
                                          regexpRes)) // non-integer part only
         {
           if (regexpRes[1][0] == "-")
             regexpRes[1][0] = "-1";
 
-          aiQF.push_back(new QuadraticInteger(0, stoi(regexpRes[1][0])));
+          qf.push_back(new QuadraticInteger(0, stoi(regexpRes[1][0])));
         } else
           throw(string("Quadratic form: unknown coefficient: " + c));
       }
@@ -253,7 +253,7 @@ void App::readMainParameters(int argc, char **argv) {
           if (strCoeffs.size() != 3)
             throw(string("RCyclotomic: Bad integer: " + regexpRes2[0][i]));
 
-          aiQF.push_back(new RCyclotomic7Integer(
+          qf.push_back(new RCyclotomic7Integer(
               {iCoefficient * (strCoeffs[0] == "" ? 0 : stoi(strCoeffs[0])),
                iCoefficient * (strCoeffs[1] == "" ? 0 : stoi(strCoeffs[1])),
                iCoefficient * (strCoeffs[2] == "" ? 0 : stoi(strCoeffs[2]))}));
@@ -266,7 +266,7 @@ void App::readMainParameters(int argc, char **argv) {
 
       for (auto c : strQF) {
         if (c != "")
-          aiQF.push_back(new RCyclotomic7Integer(stoi(c)));
+          qf.push_back(new RCyclotomic7Integer(stoi(c)));
       }
     }
   }
@@ -282,8 +282,8 @@ AlVin *App::instanciateAlVin() {
 
   if (strField == "rationals") {
     vector<int> iQF;
-    for (auto c : aiQF)
-      iQF.push_back(dynamic_cast<RationalInteger *>(c)->iVal);
+    for (auto c : qf)
+      iQF.push_back(dynamic_cast<RationalInteger *>(c)->val);
 
     v = new RationalInteger_AlVin(iQF, strOuputMathematicalFormat, true,
                                   bDebug);
@@ -291,7 +291,7 @@ AlVin *App::instanciateAlVin() {
     QuadraticInteger::set_d(iFieldSupp);
 
     vector<QuadraticInteger> qiQF;
-    for (auto c : aiQF) {
+    for (auto c : qf) {
       QuadraticInteger *qi(dynamic_cast<QuadraticInteger *>(c));
 
       qiQF.push_back(*qi);
@@ -303,7 +303,7 @@ AlVin *App::instanciateAlVin() {
 #ifdef _RC7AVAILABLE_
   else if (strField == "rc7") {
     vector<RCyclotomic7Integer> rciQF;
-    for (auto c : aiQF) {
+    for (const auto &c : qf) {
       RCyclotomic7Integer *rci(dynamic_cast<RCyclotomic7Integer *>(c));
 
       rciQF.push_back(*rci);
@@ -367,7 +367,7 @@ void App::Run() {
     return;
   }
 
-  if (!aiQF.size())
+  if (!qf.size())
     throw(string("No quadratic form given"));
 
   try {
@@ -549,7 +549,7 @@ void App::Run() {
     if (bComputeInvariantsQF) {
       cout << "\nCommensurability invariant:" << endl;
       vector<int> iQF;
-      for (auto ai : aiQF)
+      for (auto ai : qf)
         iQF.push_back(dynamic_cast<RationalInteger *>(ai)->get_iValue());
 
       InvariantsQF invqf(iQF);

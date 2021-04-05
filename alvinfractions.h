@@ -51,16 +51,15 @@ protected:
   vector<AlVinFraction *>::const_iterator
       alvinfractions_it; ///< Iterator to the next element to be returned
 
-  unsigned int iLastMaximum;
-  unsigned int iBatchSize;
+  unsigned int lastMaximum;
+  unsigned int batchSize;
 
 public:
-  /*! \fn AlVinFractions( const unsigned int& iPossibleNorm2_max )
+  /*! \fn AlVinFractions(const unsigned int& iPossibleNorm2)
    * 	\brief Normal constructor
-   * 	\param iPossibleNorm2_max( const unsigned int& ): Biggest value for
-   * (e,e)
+   * 	\param iPossibleNorm2(const unsigned int&): Possible values for (e,e)
    */
-  AlVinFractions(vector<AlgebraicInteger *> aiPossibleNorms2);
+  AlVinFractions(vector<AlgebraicInteger *> possibleNorms2);
 
   virtual ~AlVinFractions();
 
@@ -71,8 +70,8 @@ public:
    */
   vector<AlVinFraction *> getNextAlVinFraction();
 
-  vector<AlgebraicInteger *> get_aiPossibleNorm2() const;
-  const vector<AlgebraicInteger *> *get_ptraiPossibleNorm2() const;
+  vector<AlgebraicInteger *> get_possibleNorm2() const;
+  const vector<AlgebraicInteger *> *get_ptrPossibleNorm2() const;
 
 private:
   virtual void computeNextAlVinFractions() = 0;

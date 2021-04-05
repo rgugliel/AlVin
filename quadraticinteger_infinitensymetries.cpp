@@ -7,85 +7,80 @@ QuadraticInteger_InfiniteNSymetries::QuadraticInteger_InfiniteNSymetries(
 
   QuadraticIntegerBig::set_d(QuadraticInteger::d);
 
-  auto aiVectors(alvin->get_vectors());
+  const auto vectors(alvin->get_vectors());
 
   riVectorsProducts = vector<vector<QuadraticIntegerBig>>(
-      iVectorsCount, vector<QuadraticIntegerBig>(iVectorsCount, 0));
-  iVectorsNormsFloor = vector<long int>(iVectorsCount, 0);
+      vectorsCount, vector<QuadraticIntegerBig>(vectorsCount, 0));
+  vectorsNormsFloor = vector<long int>(vectorsCount, 0);
 
   // -------------------------------------------------
   // Quadratic form
-  for (auto ai : aiQF)
+  for (auto ai : qf)
     rqiQF.push_back(
         Rational<QuadraticIntegerBig>(*dynamic_cast<QuadraticInteger *>(ai)));
 
   // -------------------------------------------------
   // Vectors
-  for (i = 0; i < iVectorsCount; i++) {
+  for (i = 0; i < vectorsCount; i++) {
     auto v(vector<Rational<QuadraticIntegerBig>>(0));
 
     Matrix<Rational<QuadraticIntegerBig>, Dynamic, 1> v2;
 
-    for (j = 0; j <= iDimension; j++)
+    for (j = 0; j <= dimension; j++)
       v.push_back(Rational<QuadraticIntegerBig>(
-          *dynamic_cast<QuadraticInteger *>(aiVectors[i][j])));
+          *dynamic_cast<QuadraticInteger *>(vectors[i][j])));
 
     v2 = Matrix<Rational<QuadraticIntegerBig>, 1, Dynamic>::Map(&v[0], 1,
-                                                                iDimension + 1);
+                                                                dimension + 1);
     rqiVectorsC.push_back(v2);
   }
 
   // -------------------------------------------------
   // Products
-  for (i = 0; i < iVectorsCount; i++) {
-    AlgebraicInteger *aiNorm(
-        alvin->bilinearProduct(aiVectors[i], aiVectors[i]));
-    riVectorsProducts[i][i] = *dynamic_cast<QuadraticInteger *>(aiNorm);
+  for (i = 0; i < vectorsCount; i++) {
+    AlgebraicInteger *norm(alvin->bilinearProduct(vectors[i], vectors[i]));
+    riVectorsProducts[i][i] = *dynamic_cast<QuadraticInteger *>(norm);
 
     mpz_class iT(riVectorsProducts[i][i].floor());
     if (!iT.fits_slong_p())
       throw(string("QuadraticInteger_InfiniteNSymetries::QuadraticInteger_"
                    "InfiniteNSymetries: Number too big"));
 
-    iVectorsNormsFloor[i] = iT.get_si();
+    vectorsNormsFloor[i] = iT.get_si();
 
-    delete aiNorm;
+    delete norm;
 
-    for (j = i + 1; j < iVectorsCount; j++) {
-      AlgebraicInteger *aiProd(
-          alvin->bilinearProduct(aiVectors[i], aiVectors[j]));
+    for (j = i + 1; j < vectorsCount; j++) {
+      auto product = alvin->bilinearProduct(vectors[i], vectors[j]);
       riVectorsProducts[i][j] = riVectorsProducts[j][i] =
-          *dynamic_cast<QuadraticInteger *>(aiProd);
-      delete aiProd;
+          *dynamic_cast<QuadraticInteger *>(product);
+      delete product;
     }
   }
 
   // -------------------------------------------------
   // Weights of dotted lines
   qiDottedWeights = vector<vector<Rational<QuadraticIntegerBig>>>(
-      iVectorsCount, vector<Rational<QuadraticIntegerBig>>(iVectorsCount, 0));
-  for (i = 0; i < iVectorsCount; i++) {
-    for (j = i + 1; j < iVectorsCount; j++) {
-      if (iGraphMatrix[i][j] == 2) // dotted
+      vectorsCount, vector<Rational<QuadraticIntegerBig>>(vectorsCount, 0));
+  for (i = 0; i < vectorsCount; i++) {
+    for (j = i + 1; j < vectorsCount; j++) {
+      if (graphMatrix[i][j] == 2) // dotted
       {
-        AlgebraicInteger *aiNum(
-            alvin->bilinearProduct(aiVectors[i], aiVectors[j]));
-        AlgebraicInteger *aiNorm1(
-            alvin->bilinearProduct(aiVectors[i], aiVectors[i]));
-        AlgebraicInteger *aiNorm2(
-            alvin->bilinearProduct(aiVectors[j], aiVectors[j]));
+        auto num(alvin->bilinearProduct(vectors[i], vectors[j]));
+        auto norm1(alvin->bilinearProduct(vectors[i], vectors[i]));
+        auto norm2(alvin->bilinearProduct(vectors[j], vectors[j]));
 
-        aiNum->multiplyBy(aiNum);
-        aiNorm1->multiplyBy(aiNorm2);
+        num->multiplyBy(num);
+        norm1->multiplyBy(norm2);
 
         qiDottedWeights[i][j] = qiDottedWeights[j][i] =
             Rational<QuadraticIntegerBig>(
-                *dynamic_cast<QuadraticInteger *>(aiNum),
-                *dynamic_cast<QuadraticInteger *>(aiNorm1));
+                *dynamic_cast<QuadraticInteger *>(num),
+                *dynamic_cast<QuadraticInteger *>(norm1));
 
-        delete aiNum;
-        delete aiNorm1;
-        delete aiNorm2;
+        delete num;
+        delete norm1;
+        delete norm2;
       }
     }
   }
@@ -169,10 +164,10 @@ QuadraticInteger_InfiniteNSymetries::FindIsomorphismsInSubgraph(
   igraph_vector_int_init(&verticesColors, iVerticesCount);
 
   for (i = 0; i < iVerticesCount; i++) {
-    VECTOR(verticesColors)[i] = iVectorsNormsFloor[iVertices[i]];
+    VECTOR(verticesColors)[i] = vectorsNormsFloor[iVertices[i]];
 
     for (j = i + 1; j < iVerticesCount; j++)
-      MATRIX(adjMat, i, j) = iGraphMatrix[iVertices[i]][iVertices[j]];
+      MATRIX(adjMat, i, j) = graphMatrix[iVertices[i]][iVertices[j]];
   }
 
   if (igraph_adjacency(&graph, &adjMat, IGRAPH_ADJ_UNDIRECTED) !=
@@ -221,10 +216,10 @@ QuadraticInteger_InfiniteNSymetries::FindIsomorphismsInSubgraph(
     for (i = 0; i < iVerticesCount && bIsIsomorphism; i++) {
       for (j = i + 1; j < iVerticesCount; j++) {
         // Weight not preserved or dotted and weight of the dotted not preserved
-        if ((iGraphMatrix[iVertices[i]][iVertices[j]] !=
-             iGraphMatrix[iVertices[iPermutation[i]]]
-                         [iVertices[iPermutation[j]]]) ||
-            (iGraphMatrix[iVertices[i]][iVertices[j]] == 2 &&
+        if ((graphMatrix[iVertices[i]][iVertices[j]] !=
+             graphMatrix[iVertices[iPermutation[i]]]
+                        [iVertices[iPermutation[j]]]) ||
+            (graphMatrix[iVertices[i]][iVertices[j]] == 2 &&
              !bDottedSameWeight(iVertices[i], iVertices[j],
                                 iVertices[iPermutation[i]],
                                 iVertices[iPermutation[j]]))) {
@@ -306,28 +301,28 @@ bool QuadraticInteger_InfiniteNSymetries::FindIntegralSymmetryFromSubgraph(
       iVerticesCount, vector<unsigned int>(iVerticesCount, 2)));
   for (i = 0; i < iVerticesCount; i++) {
     for (j = i + 1; j < iVerticesCount; j++)
-      iCox[i][j] = iCox[j][i] = iCoxeterMatrix[iVertices[i]][iVertices[j]];
+      iCox[i][j] = iCox[j][i] = coxeterMatrix[iVertices[i]][iVertices[j]];
   }
 
-  CoxIter ci(iCox, iDimension);
+  CoxIter ci(iCox, dimension);
   ci.exploreGraph();
   ci.computeGraphsProducts();
   ci.computeEulerCharacteristicFVector();
   vector<unsigned int> iFV(ci.get_fVector());
   if (!iFV[0])
-    return bFinished;
+    return isFinished;
 
   // -------------------------------------------------------------
   // Finding the isomorphisms
   vector<GraphInvolution> iIsomorphisms(FindIsomorphismsInSubgraph(iVertices));
   if (!iIsomorphisms.size())
-    return bFinished;
+    return isFinished;
 
   // -------------------------------------------------------------
   // Going through
   WorkWithIsomorphisms(iVertices, iIsomorphisms);
 
-  return bFinished;
+  return isFinished;
 }
 
 bool QuadraticInteger_InfiniteNSymetries::bDottedSameWeight(
@@ -380,7 +375,7 @@ void QuadraticInteger_InfiniteNSymetries::WorkWithIsomorphisms(
       if (!rqiBasisFixedPoints.cols()) // These are the first fixed points
       {
         rqiBasisFixedPoints = basisFixedPoints;
-        iFixedPointsDimension = iFixedPointDimTemp;
+        fixedPointsDimension = iFixedPointDimTemp;
         usefulInvolutions.push_back(iIso);
       } else // We already have fixed points
       {
@@ -392,7 +387,7 @@ void QuadraticInteger_InfiniteNSymetries::WorkWithIsomorphisms(
         tempVectors.conservativeResize(iVectorSize,
                                        tempVectors.cols() + iFixedPointDimTemp);
         for (j = 0; j < iFixedPointDimTemp; j++)
-          tempVectors.col(j + iFixedPointsDimension) = basisFixedPoints.col(j);
+          tempVectors.col(j + fixedPointsDimension) = basisFixedPoints.col(j);
 
         FullPivLU<Matrix<Rational<QuadraticIntegerBig>, Dynamic, Dynamic>>
             luTemp(tempVectors);
@@ -400,14 +395,14 @@ void QuadraticInteger_InfiniteNSymetries::WorkWithIsomorphisms(
             luTemp.kernel());
 
         if (luTemp.dimensionOfKernel() == 0) {
-          bFinished = true;
-          iFixedPointsDimension = 0;
+          isFinished = true;
+          fixedPointsDimension = 0;
           rqiBasisFixedPoints.resize(iVectorSize, 0);
           usefulInvolutions.push_back(iIso);
         }
 
-        if (ker.cols() < iFixedPointsDimension &&
-            !bFinished) // If we earned something
+        if (ker.cols() < fixedPointsDimension &&
+            !isFinished) // If we earned something
         {
           usefulInvolutions.push_back(iIso);
           unsigned int iIntersectionDimension(ker.cols());
@@ -417,38 +412,38 @@ void QuadraticInteger_InfiniteNSymetries::WorkWithIsomorphisms(
             Matrix<Rational<QuadraticIntegerBig>, Dynamic, 1> v(
                 ker(0, j) * tempVectors.col(0));
 
-            for (k = 1; k < iFixedPointsDimension; k++)
+            for (k = 1; k < fixedPointsDimension; k++)
               v += ker(k, j) * tempVectors.col(k);
 
             rqiBasisFixedPoints.col(j) = v;
           }
 
-          iFixedPointsDimension = ker.cols();
+          fixedPointsDimension = ker.cols();
 
-          if (iFixedPointsDimension == 1) {
+          if (fixedPointsDimension == 1) {
             if (rqiVectorNorm(rqiBasisFixedPoints.col(0)) >= 0) {
-              bFinished = true;
+              isFinished = true;
             }
-          } else if (iFixedPointsDimension == 2) {
+          } else if (fixedPointsDimension == 2) {
             // If the basis has two orthogonal vector of positive norm
             if (rqiVectorNorm(rqiBasisFixedPoints.col(0)) >= 0 &&
                 rqiVectorNorm(rqiBasisFixedPoints.col(1)) >= 0 &&
                 rqiVectorsProduct(rqiBasisFixedPoints.col(0),
                                   rqiBasisFixedPoints.col(1)) == 0)
-              bFinished = true;
+              isFinished = true;
           }
         }
       }
     }
 
-    if (bFinished)
+    if (isFinished)
       return;
   }
 }
 
 void QuadraticInteger_InfiniteNSymetries::print_basisFixedPoints(
     const string &strSpacer) const {
-  for (unsigned int i(0); i < iFixedPointsDimension; i++)
+  for (unsigned int i(0); i < fixedPointsDimension; i++)
     cout << strSpacer
          << Matrix<Rational<QuadraticIntegerBig>, 1, Eigen::Dynamic>(
                 rqiBasisFixedPoints.col(i).transpose())

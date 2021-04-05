@@ -36,11 +36,11 @@ along with AlVin. If not, see <http://www.gnu.org/licenses/>.
 class RationalInteger : public AlgebraicInteger // TODO: tout passer en long
 {
 public:
-  long int iVal; // TODO: version avec gmp?
+  long int val; // TODO: version avec gmp?
 
 public:
   RationalInteger();
-  RationalInteger(long int iVal);
+  RationalInteger(long int val);
   RationalInteger(const RationalInteger &ri);
   virtual ~RationalInteger();
 

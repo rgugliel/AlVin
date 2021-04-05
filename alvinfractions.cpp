@@ -3,7 +3,7 @@
 AlVinFractions::AlVinFractions(vector<AlgebraicInteger *> possibleNorms2)
     : possibleNorms2(possibleNorms2),
       possibleNorms2Max(possibleNorms2[possibleNorms2.size() - 1]),
-      iLastMaximum(0), iBatchSize(1) {}
+      lastMaximum(0), batchSize(1) {}
 
 AlVinFractions::~AlVinFractions() {
   for (auto i : alvinFractions)
@@ -34,7 +34,7 @@ vector<AlVinFraction *> AlVinFractions::getNextAlVinFraction() {
 
   vector<AlVinFraction *> vf;
 
-  AlgebraicInteger *aiNumerator((*alvinfractions_it)->numerator);
+  AlgebraicInteger *numerator((*alvinfractions_it)->numerator);
 
   do // We may have to return more than one fraction
   {
@@ -43,16 +43,16 @@ vector<AlVinFraction *> AlVinFractions::getNextAlVinFraction() {
     ++alvinfractions_it;
 
   } while (alvinfractions_it != alvinFractions.end() &&
-           aiNumerator->isEqualTo(*(*alvinfractions_it)->numerator));
+           numerator->isEqualTo(*(*alvinfractions_it)->numerator));
 
   return vf;
 }
 
-std::vector<AlgebraicInteger *> AlVinFractions::get_aiPossibleNorm2() const {
+std::vector<AlgebraicInteger *> AlVinFractions::get_possibleNorm2() const {
   return possibleNorms2;
 }
 
 const std::vector<AlgebraicInteger *> *
-AlVinFractions::get_ptraiPossibleNorm2() const {
+AlVinFractions::get_ptrPossibleNorm2() const {
   return &possibleNorms2;
 }

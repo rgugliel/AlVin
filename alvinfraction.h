@@ -36,7 +36,7 @@ along with AlVin. If not, see <http://www.gnu.org/licenses/>.
 class AlVinFraction {
 public: // For simplicity, variables are public be are meant to be read-only.
         // Careful.
-  AlgebraicInteger *aiX0;  ///< x_0
+  AlgebraicInteger *x0;    ///< x_0
   AlgebraicInteger *norm2; ///< (e,e)
   AlgebraicInteger
       *numerator; ///< When normalized with respect to the biggest possible
@@ -44,8 +44,8 @@ public: // For simplicity, variables are public be are meant to be read-only.
                   ///< e_max)/(e,e) ) / (e_max, e_max)
 
 public:
-  AlVinFraction(AlgebraicInteger *aiX0, AlgebraicInteger *aiNorm2,
-                AlgebraicInteger *aiNumerator);
+  AlVinFraction(AlgebraicInteger *x0, AlgebraicInteger *norm2,
+                AlgebraicInteger *numerator);
   ~AlVinFraction();
 
   bool operator==(AlVinFraction const &) const;

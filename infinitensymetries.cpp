@@ -1,29 +1,29 @@
 #include "infinitensymetries.h"
 
 InfiniteNSymetries::InfiniteNSymetries(AlVin *alvin)
-    : alvin(alvin), iDimension(alvin->get_dimension()),
+    : alvin(alvin), dimension(alvin->get_dimension()),
       iVectorSize(alvin->get_dimension() + 1),
-      iCoxeterMatrix(alvin->get_coxeterMatrix()), bFinished(false),
-      aiQF(alvin->get_qf()), iFixedPointsDimension(alvin->get_dimension() + 1) {
-  iVectorsCount = iCoxeterMatrix.size();
-  iGraphMatrix = vector<vector<unsigned int>>(
-      iVectorsCount, vector<unsigned int>(iVectorsCount, 0));
+      coxeterMatrix(alvin->get_coxeterMatrix()), isFinished(false),
+      qf(alvin->get_qf()), fixedPointsDimension(alvin->get_dimension() + 1) {
+  vectorsCount = coxeterMatrix.size();
+  graphMatrix = vector<vector<unsigned int>>(
+      vectorsCount, vector<unsigned int>(vectorsCount, 0));
 
-  for (unsigned int i(0); i < iVectorsCount; i++) {
-    for (unsigned int j(i + 1); j < iVectorsCount; j++)
-      iGraphMatrix[i][j] = iGraphMatrix[j][i] =
-          iCoxeterMatrix[i][j] >= 3
-              ? iCoxeterMatrix[i][j]
-              : (iCoxeterMatrix[i][j] == 2 ? 0 : iCoxeterMatrix[i][j] + 1);
+  for (unsigned int i(0); i < vectorsCount; i++) {
+    for (unsigned int j(i + 1); j < vectorsCount; j++)
+      graphMatrix[i][j] = graphMatrix[j][i] =
+          coxeterMatrix[i][j] >= 3
+              ? coxeterMatrix[i][j]
+              : (coxeterMatrix[i][j] == 2 ? 0 : coxeterMatrix[i][j] + 1);
   }
 }
 
 bool InfiniteNSymetries::Run(const unsigned int &iNRMin,
                              const unsigned int &iNRMax) {
   string bitmask;
-  unsigned int i, j, N(iVectorsCount);
+  unsigned int i, j, N(vectorsCount);
 
-  bFinished = false;
+  isFinished = false;
 
 #pragma omp parallel for schedule(dynamic, 1)                                  \
     shared(N, iNRMax, iNRMin) private(bitmask, i, j) collapse(2)
@@ -39,7 +39,7 @@ bool InfiniteNSymetries::Run(const unsigned int &iNRMin,
       bitmask.resize(N, 0);                      // N-K trailing 0's
 
       do {
-        if (bFinished)
+        if (isFinished)
           break;
 
         j = 0;
@@ -49,8 +49,8 @@ bool InfiniteNSymetries::Run(const unsigned int &iNRMin,
         }
 
         try {
-          if (!bFinished && FindIntegralSymmetryFromSubgraph(iSubset)) {
-            bFinished = true;
+          if (!isFinished && FindIntegralSymmetryFromSubgraph(iSubset)) {
+            isFinished = true;
             break;
           }
         } catch (string strE) {
@@ -64,7 +64,7 @@ bool InfiniteNSymetries::Run(const unsigned int &iNRMin,
     }
   }
 
-  return bFinished;
+  return isFinished;
 }
 
 vector<GraphInvolution> InfiniteNSymetries::get_usefulInvolutions() const {
@@ -72,7 +72,7 @@ vector<GraphInvolution> InfiniteNSymetries::get_usefulInvolutions() const {
 }
 
 unsigned int InfiniteNSymetries::get_iFixedPointsDimension() const {
-  return iFixedPointsDimension;
+  return fixedPointsDimension;
 }
 
 InfiniteNSymetries::~InfiniteNSymetries() {}

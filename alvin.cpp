@@ -52,13 +52,13 @@ void AlVin::initializations() {
 
     for (unsigned int j(i + 1); j <= dimension; j++) {
       if (qf[j]->isDivisibleBy(qf[i])) {
-        unique_ptr<AlgebraicInteger> aiTest(qf[j]->copy());
-        aiTest->divideBy(qf[i]);
+        unique_ptr<AlgebraicInteger> test(qf[j]->copy());
+        test->divideBy(qf[i]);
 
-        if (aiTest->isSquareOfIvertible() && get_strField() == "RC7") {
-          cout << "Check that " << *aiTest
+        if (test->isSquareOfIvertible() && get_strField() == "RC7") {
+          cout << "Check that " << *test
                << " is not the square of an invertible element" << endl;
-          strFinalInformation += "Check that " + aiTest->to_string() +
+          strFinalInformation += "Check that " + test->to_string() +
                                  " is not the square of an invertible element";
         }
       }
@@ -90,15 +90,15 @@ void AlVin::findFirstVectors() {
   // We count the multiplicity of the coefficients
   unsigned int iCount(1);
 
-  unique_ptr<AlgebraicInteger> aiLastCoeff(qf[1]->copy());
+  unique_ptr<AlgebraicInteger> lastCoeff(qf[1]->copy());
 
   for (unsigned i(2); i <= dimension; i++) {
-    if (*qf[i] != *aiLastCoeff) {
+    if (*qf[i] != *lastCoeff) {
       iQBlocksSize.push_back(iCount);
       iCount = 0;
     }
 
-    aiLastCoeff->set(qf[i]);
+    lastCoeff->set(qf[i]);
     iCount++;
   }
 
@@ -110,31 +110,31 @@ void AlVin::findFirstVectors() {
       dimension, vector<unsigned int>(dimension, 2));
   componentLessThan = vector<unsigned int>(dimension + 1, 0);
 
-  unsigned int iVectorIndex(1), i;
-  for (auto iBlockSize : iQBlocksSize) {
-    for (i = 1; i <= iBlockSize; i++) {
-      vector<AlgebraicInteger *> aiV;
+  unsigned int vectorIndex(1), i;
+  for (const auto &blockSize : iQBlocksSize) {
+    for (i = 1; i <= blockSize; i++) {
+      vector<AlgebraicInteger *> vector;
       for (unsigned int j(0); j <= dimension; j++)
-        aiV.push_back(qf[0]->copyToInteger(0));
+        vector.push_back(qf[0]->copyToInteger(0));
 
       if (i >= 2)
-        componentLessThan[iVectorIndex] = iVectorIndex - 1;
+        componentLessThan[vectorIndex] = vectorIndex - 1;
 
-      if (i == iBlockSize)
-        aiV[iVectorIndex]->set(-1);
+      if (i == blockSize)
+        vector[vectorIndex]->set(-1);
       else {
-        aiV[iVectorIndex]->set(-1);
-        aiV[iVectorIndex + 1]->set(1);
+        vector[vectorIndex]->set(-1);
+        vector[vectorIndex + 1]->set(1);
 
-        coxeterMatrix[iVectorIndex - 1][iVectorIndex] =
-            coxeterMatrix[iVectorIndex][iVectorIndex - 1] =
-                i < iBlockSize - 1 ? 3 : 4;
+        const auto weight = i < blockSize - 1 ? 3 : 4;
+        coxeterMatrix[vectorIndex - 1][vectorIndex] = weight;
+        coxeterMatrix[vectorIndex][vectorIndex - 1] = weight;
       }
 
-      vectors.push_back(aiV);
-      addVectorChild(aiV);
+      vectors.push_back(vector);
+      addVectorChild(vector);
 
-      iVectorIndex++;
+      vectorIndex++;
     }
   }
 }
@@ -149,7 +149,7 @@ bool AlVin::Run(unsigned int iMinVectors, unsigned int iMaxVectors,
   while ((!iMaxVectors || vectorsCount < iMaxVectors)) {
     vector<AlVinFraction *> vfs(vf->getNextAlVinFraction());
     for (auto frac : vfs)
-      findVector(frac->aiX0, frac->norm2);
+      findVector(frac->x0, frac->norm2);
 
     // ------------------------------------------------
     // Are the candidates compatible between themselves
@@ -157,10 +157,10 @@ bool AlVin::Run(unsigned int iMinVectors, unsigned int iMaxVectors,
 
     for (i = 0; i < iCandidatesCount; i++) {
       for (j = i + 1; j < iCandidatesCount; j++) {
-        unique_ptr<AlgebraicInteger> aiProd(
+        unique_ptr<AlgebraicInteger> prod(
             bilinearProduct(candidateVectors[i], candidateVectors[j]));
 
-        if (aiProd->isGreaterThan(0)) // This should not happen
+        if (prod->isGreaterThan(0)) // This should not happen
           throw(string("AlVin::Run: Incompatible candidates"));
       }
     }
@@ -182,7 +182,7 @@ bool AlVin::Run(unsigned int iMinVectors, unsigned int iMaxVectors,
         throw(strE);
       }
 
-      // So that we don't try do free the memory (will be done via aiVectors)
+      // So that we don't try do free the memory (will be done via vectors)
       candidateVectors[i].clear();
 
       // --------------------------------------------------
@@ -278,29 +278,29 @@ bool AlVin::Run(unsigned int iMinVectors, unsigned int iMaxVectors,
 }
 
 void AlVin::addVector(const vector<AlgebraicInteger *> &iVect) {
-  int iWeight;
+  int weight;
 
-  AlgebraicInteger *aiNorm(bilinearProduct(iVect, iVect));
+  AlgebraicInteger *norm(bilinearProduct(iVect, iVect));
 
   coxeterMatrix.push_back(vector<unsigned int>(vectorsCount + 1, 2));
 
   vectors.push_back(iVect);
   for (unsigned int i(0); i < vectorsCount; i++) {
-    AlgebraicInteger *aiProd(bilinearProduct(vectors[i], iVect));
+    AlgebraicInteger *product(bilinearProduct(vectors[i], iVect));
 
-    iWeight = -2;
+    weight = -2;
 
-    if (aiProd->isEqualTo(0))
-      iWeight = 2;
+    if (product->isEqualTo(0))
+      weight = 2;
     else {
-      AlgebraicInteger *numerator(aiProd->copy());
-      numerator->multiplyBy(aiProd);
+      AlgebraicInteger *numerator(product->copy());
+      numerator->multiplyBy(product);
 
       AlgebraicInteger *denominator(bilinearProduct(vectors[i], vectors[i]));
-      denominator->multiplyBy(aiNorm);
+      denominator->multiplyBy(norm);
 
       if (denominator->isLessThan(*numerator))
-        iWeight = 1; // Dotted edge
+        weight = 1; // Dotted edge
       else {
         AlgebraicInteger *gcd(numerator->copy());
         gcd->gcd(denominator);
@@ -311,21 +311,21 @@ void AlVin::addVector(const vector<AlgebraicInteger *> &iVect) {
 
         if (numerator->isEqualTo(1)) {
           if (denominator->isEqualTo(4))
-            iWeight = 3;
+            weight = 3;
           else if (denominator->isEqualTo(2))
-            iWeight = 4;
+            weight = 4;
           else if (denominator->isEqualTo(1))
-            iWeight = 0; // Infty
+            weight = 0; // Infty
         } else if (numerator->isEqualTo(3)) {
           if (denominator->isEqualTo(4))
-            iWeight = 6;
+            weight = 6;
         }
 
-        if (iWeight == -2)
-          iWeight = addVector_findWeight(numerator, denominator);
+        if (weight == -2)
+          weight = addVector_findWeight(numerator, denominator);
       }
 
-      if (iWeight == -2)
+      if (weight == -2)
         throw(string("Unknown weight betweens vectors " + to_string(i + 1) +
                      " and " + to_string(vectorsCount + 1)));
 
@@ -333,38 +333,38 @@ void AlVin::addVector(const vector<AlgebraicInteger *> &iVect) {
       delete numerator;
     }
 
-    delete aiProd;
+    delete product;
 
-    coxeterMatrix[i].push_back(iWeight);
-    coxeterMatrix[vectorsCount][i] = iWeight;
+    coxeterMatrix[i].push_back(weight);
+    coxeterMatrix[vectorsCount][i] = weight;
   }
 
   vectorsCount++;
   vectorsCountSecond++;
 
-  delete aiNorm;
+  delete norm;
 }
 
-void AlVin::printFoundVector(std::vector<AlgebraicInteger *> aiV,
+void AlVin::printFoundVector(std::vector<AlgebraicInteger *> v,
                              const unsigned int &iIndex,
                              const bool &bFirst) const {
   if (strOuputMathematicalFormat == "latex") {
     cout << "\te_" << (iIndex > 9 ? "{" : "") << iIndex
          << (iIndex > 9 ? "}" : "") << " = \\left(";
-    for (auto it(aiV.begin()); it != aiV.end(); ++it)
-      cout << (it == aiV.begin() ? "" : ", ") << (*it)->to_string("latex");
+    for (auto it(v.begin()); it != v.end(); ++it)
+      cout << (it == v.begin() ? "" : ", ") << (*it)->to_string("latex");
     cout << "\\right)" << endl;
   } else if (strOuputMathematicalFormat == "mathematica") {
     if (bFirst) {
       cout << "vectors := {{";
-      for (auto it(aiV.begin()); it != aiV.end(); ++it)
-        cout << (it == aiV.begin() ? "" : ", ")
+      for (auto it(v.begin()); it != v.end(); ++it)
+        cout << (it == v.begin() ? "" : ", ")
              << (*it)->to_string("mathematica");
       cout << "}};" << endl;
     } else {
       cout << "AppendTo[vectors, {";
-      for (auto it(aiV.begin()); it != aiV.end(); ++it)
-        cout << (it == aiV.begin() ? "" : ", ")
+      for (auto it(v.begin()); it != v.end(); ++it)
+        cout << (it == v.begin() ? "" : ", ")
              << (*it)->to_string("mathematica");
       cout << "}]; (* vector " << iIndex << " *); " << endl;
     }
@@ -374,13 +374,13 @@ void AlVin::printFoundVector(std::vector<AlgebraicInteger *> aiV,
     else
       cout << "vectors = concat(vectors, [";
 
-    for (auto it(aiV.begin()); it != aiV.end(); ++it)
-      cout << (it == aiV.begin() ? "" : ", ") << (*it)->to_string("pari");
+    for (auto it(v.begin()); it != v.end(); ++it)
+      cout << (it == v.begin() ? "" : ", ") << (*it)->to_string("pari");
     cout << "] );" << endl;
   } else {
     cout << "\te" << iIndex << " = (";
-    for (auto it(aiV.begin()); it != aiV.end(); ++it)
-      cout << (it == aiV.begin() ? "" : ", ") << **it;
+    for (auto it(v.begin()); it != v.end(); ++it)
+      cout << (it == v.begin() ? "" : ", ") << **it;
     cout << ")" << endl;
   }
 }
@@ -413,12 +413,13 @@ void AlVin::print_initialInformation() const {
     }
     cout << endl;
 
-    const vector<AlgebraicInteger *> *ptraiPN2(vf->get_ptraiPossibleNorm2());
-    unsigned int iMax(ptraiPN2->size());
+    const vector<AlgebraicInteger *> *ptrPossibleNorms2(
+        vf->get_ptrPossibleNorm2());
+    unsigned int iMax(ptrPossibleNorms2->size());
 
     cout << "Possible values for (e,e): ";
     for (unsigned int i(0); i < iMax; i++)
-      cout << (i ? ", " : "") << *(*ptraiPN2)[i];
+      cout << (i ? ", " : "") << *(*ptrPossibleNorms2)[i];
     cout << endl;
   }
 
@@ -527,11 +528,11 @@ unsigned int AlVin::get_vectorsCount() const { return vectorsCount; }
 vector<AlgebraicInteger *> AlVin::get_qf() const { return qf; }
 
 std::vector<AlgebraicInteger *> AlVin::get_possibleNorm2() const {
-  return vf->get_aiPossibleNorm2();
+  return vf->get_possibleNorm2();
 }
 
 const std::vector<AlgebraicInteger *> *AlVin::get_ptrPossibleNorm2() const {
-  return vf->get_ptraiPossibleNorm2();
+  return vf->get_ptrPossibleNorm2();
 }
 
 void AlVin::set_bComputeInvariantsPolyhedron(const bool &bValue) {

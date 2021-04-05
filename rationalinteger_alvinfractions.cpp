@@ -1,38 +1,37 @@
 #include "rationalinteger_alvinfractions.h"
 
 RationalInteger_VFs::RationalInteger_VFs(
-    vector<AlgebraicInteger *> aiPossibleNorms2)
-    : AlVinFractions(aiPossibleNorms2),
-      iPossibleNorms2_max(dynamic_cast<RationalInteger *>(
-                              aiPossibleNorms2[aiPossibleNorms2.size() - 1])
-                              ->get_iValue()) {}
+    vector<AlgebraicInteger *> possibleNorms2)
+    : AlVinFractions(possibleNorms2),
+      possibleNorms2Max(dynamic_cast<RationalInteger *>(
+                            possibleNorms2[possibleNorms2.size() - 1])
+                            ->get_iValue()) {}
 
 RationalInteger_VFs::~RationalInteger_VFs() {}
 
 void RationalInteger_VFs::computeNextAlVinFractions() {
-  unsigned int iMin(iLastMaximum);
+  unsigned int iMin(lastMaximum);
   unsigned int iNumerator;
 
-  iLastMaximum = (iMin + iBatchSize) * (iMin + iBatchSize);
+  lastMaximum = (iMin + batchSize) * (iMin + batchSize);
 
   // We generate fractions f such that: iMin < f <= iLastMaximum
 
-  for (auto aiE : possibleNorms2) {
-    unsigned int iE(dynamic_cast<RationalInteger *>(aiE)->get_iValue());
+  for (const auto &norm2 : possibleNorms2) {
+    unsigned int iE(dynamic_cast<RationalInteger *>(norm2)->get_iValue());
 
     // ceil( isqrt(x) ) = isqrt(x - 1) + 1
-    unsigned int iXMin(iMin ? integerSqrt(iE * iMin - 1) + 1 : 1),
-        iXMax(integerSqrt(iE * iLastMaximum));
+    unsigned int xMin(iMin ? integerSqrt(iE * iMin - 1) + 1 : 1);
+    unsigned int xMax(integerSqrt(iE * lastMaximum));
 
-    if (iXMin * iXMin ==
-        iE * iMin) // because we want iMin < f and not iMin <= f
-      iXMin++;
+    if (xMin * xMin == iE * iMin) // because we want iMin < f and not iMin <= f
+      xMin++;
 
-    for (; iXMin <= iXMax; iXMin++) {
-      iNumerator = iXMin * iXMin * iPossibleNorms2_max / iE;
+    for (; xMin <= xMax; xMin++) {
+      iNumerator = xMin * xMin * possibleNorms2Max / iE;
 
       AlVinFraction *vf =
-          new AlVinFraction(new RationalInteger(iXMin), new RationalInteger(iE),
+          new AlVinFraction(new RationalInteger(xMin), new RationalInteger(iE),
                             new RationalInteger(iNumerator));
 
       alvinFractions.insert(lower_bound(alvinFractions.begin(),

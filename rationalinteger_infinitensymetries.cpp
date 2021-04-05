@@ -5,76 +5,70 @@ RationalInteger_InfiniteNSymetries::RationalInteger_InfiniteNSymetries(
     : InfiniteNSymetries(alvin) {
   unsigned int i, j;
 
-  auto aiVectors(alvin->get_vectors());
+  auto vectors(alvin->get_vectors());
 
   riVectorsProducts = vector<vector<RationalInteger>>(
-      iVectorsCount, vector<RationalInteger>(iVectorsCount, 0));
+      vectorsCount, vector<RationalInteger>(vectorsCount, 0));
 
   // -------------------------------------------------
   // Quadratic form
-  for (auto ai : aiQF)
+  for (auto ai : qf)
     rriQF.push_back(
         Rational<RationalInteger>(*dynamic_cast<RationalInteger *>(ai)));
 
   // -------------------------------------------------
   // Vectors
-  for (i = 0; i < iVectorsCount; i++) {
+  for (i = 0; i < vectorsCount; i++) {
     auto v(vector<Rational<RationalInteger>>(0));
 
     Matrix<Rational<RationalInteger>, Dynamic, 1> v2;
 
-    for (j = 0; j <= iDimension; j++)
+    for (j = 0; j <= dimension; j++)
       v.push_back(Rational<RationalInteger>(
-          *dynamic_cast<RationalInteger *>(aiVectors[i][j])));
+          *dynamic_cast<RationalInteger *>(vectors[i][j])));
 
     v2 = Matrix<Rational<RationalInteger>, 1, Dynamic>::Map(&v[0], 1,
-                                                            iDimension + 1);
+                                                            dimension + 1);
     rriVectorsC.push_back(v2);
   }
 
   // -------------------------------------------------
   // Products
-  for (i = 0; i < iVectorsCount; i++) {
-    AlgebraicInteger *aiNorm(
-        alvin->bilinearProduct(aiVectors[i], aiVectors[i]));
-    riVectorsProducts[i][i] = *dynamic_cast<RationalInteger *>(aiNorm);
-    delete aiNorm;
+  for (i = 0; i < vectorsCount; i++) {
+    AlgebraicInteger *norm2(alvin->bilinearProduct(vectors[i], vectors[i]));
+    riVectorsProducts[i][i] = *dynamic_cast<RationalInteger *>(norm2);
+    delete norm2;
 
-    for (j = i + 1; j < iVectorsCount; j++) {
-      AlgebraicInteger *aiProd(
-          alvin->bilinearProduct(aiVectors[i], aiVectors[j]));
+    for (j = i + 1; j < vectorsCount; j++) {
+      AlgebraicInteger *product(alvin->bilinearProduct(vectors[i], vectors[j]));
       riVectorsProducts[i][j] = riVectorsProducts[j][i] =
-          *dynamic_cast<RationalInteger *>(aiProd);
-      delete aiProd;
+          *dynamic_cast<RationalInteger *>(product);
+      delete product;
     }
   }
 
   // -------------------------------------------------
   // Weights of dotted lines
   riDottedWeights = vector<vector<Rational<RationalInteger>>>(
-      iVectorsCount, vector<Rational<RationalInteger>>(iVectorsCount, 0));
-  for (i = 0; i < iVectorsCount; i++) {
-    for (j = i + 1; j < iVectorsCount; j++) {
-      if (iGraphMatrix[i][j] == 2) // dotted
+      vectorsCount, vector<Rational<RationalInteger>>(vectorsCount, 0));
+  for (i = 0; i < vectorsCount; i++) {
+    for (j = i + 1; j < vectorsCount; j++) {
+      if (graphMatrix[i][j] == 2) // dotted
       {
-        AlgebraicInteger *aiNum(
-            alvin->bilinearProduct(aiVectors[i], aiVectors[j]));
-        AlgebraicInteger *aiNorm1(
-            alvin->bilinearProduct(aiVectors[i], aiVectors[i]));
-        AlgebraicInteger *aiNorm2(
-            alvin->bilinearProduct(aiVectors[j], aiVectors[j]));
+        auto num(alvin->bilinearProduct(vectors[i], vectors[j]));
+        auto norm1(alvin->bilinearProduct(vectors[i], vectors[i]));
+        auto norm2(alvin->bilinearProduct(vectors[j], vectors[j]));
 
-        aiNum->multiplyBy(aiNum);
-        aiNorm1->multiplyBy(aiNorm2);
+        num->multiplyBy(num);
+        norm1->multiplyBy(norm2);
 
         riDottedWeights[i][j] = riDottedWeights[j][i] =
-            Rational<RationalInteger>(
-                *dynamic_cast<RationalInteger *>(aiNum),
-                *dynamic_cast<RationalInteger *>(aiNorm1));
+            Rational<RationalInteger>(*dynamic_cast<RationalInteger *>(num),
+                                      *dynamic_cast<RationalInteger *>(norm1));
 
-        delete aiNum;
-        delete aiNorm1;
-        delete aiNorm2;
+        delete num;
+        delete norm1;
+        delete norm2;
       }
     }
   }
@@ -157,10 +151,10 @@ RationalInteger_InfiniteNSymetries::FindIsomorphismsInSubgraph(
 
   for (i = 0; i < iVerticesCount; i++) {
     VECTOR(verticesColors)
-    [i] = riVectorsProducts[iVertices[i]][iVertices[i]].iVal;
+    [i] = riVectorsProducts[iVertices[i]][iVertices[i]].val;
 
     for (j = i + 1; j < iVerticesCount; j++)
-      MATRIX(adjMat, i, j) = iGraphMatrix[iVertices[i]][iVertices[j]];
+      MATRIX(adjMat, i, j) = graphMatrix[iVertices[i]][iVertices[j]];
   }
 
   if (igraph_adjacency(&graph, &adjMat, IGRAPH_ADJ_UNDIRECTED) !=
@@ -209,10 +203,10 @@ RationalInteger_InfiniteNSymetries::FindIsomorphismsInSubgraph(
     for (i = 0; i < iVerticesCount && bIsIsomorphism; i++) {
       for (j = i + 1; j < iVerticesCount; j++) {
         // Weight not preserved or dotted and weight of the dotted not preserved
-        if ((iGraphMatrix[iVertices[i]][iVertices[j]] !=
-             iGraphMatrix[iVertices[iPermutation[i]]]
-                         [iVertices[iPermutation[j]]]) ||
-            (iGraphMatrix[iVertices[i]][iVertices[j]] == 2 &&
+        if ((graphMatrix[iVertices[i]][iVertices[j]] !=
+             graphMatrix[iVertices[iPermutation[i]]]
+                        [iVertices[iPermutation[j]]]) ||
+            (graphMatrix[iVertices[i]][iVertices[j]] == 2 &&
              !bDottedSameWeight(iVertices[i], iVertices[j],
                                 iVertices[iPermutation[i]],
                                 iVertices[iPermutation[j]]))) {
@@ -293,28 +287,28 @@ bool RationalInteger_InfiniteNSymetries::FindIntegralSymmetryFromSubgraph(
       iVerticesCount, vector<unsigned int>(iVerticesCount, 2)));
   for (i = 0; i < iVerticesCount; i++) {
     for (j = i + 1; j < iVerticesCount; j++)
-      iCox[i][j] = iCox[j][i] = iCoxeterMatrix[iVertices[i]][iVertices[j]];
+      iCox[i][j] = iCox[j][i] = coxeterMatrix[iVertices[i]][iVertices[j]];
   }
 
-  CoxIter ci(iCox, iDimension);
+  CoxIter ci(iCox, dimension);
   ci.exploreGraph();
   ci.computeGraphsProducts();
   ci.computeEulerCharacteristicFVector();
   vector<unsigned int> iFV(ci.get_fVector());
   if (!iFV[0])
-    return bFinished;
+    return isFinished;
 
   // -------------------------------------------------------------
   // Finding the isomorphisms
   vector<GraphInvolution> iIsomorphisms(FindIsomorphismsInSubgraph(iVertices));
   if (!iIsomorphisms.size())
-    return bFinished;
+    return isFinished;
 
   // -------------------------------------------------------------
   // Going through
   WorkWithIsomorphisms(iVertices, iIsomorphisms);
 
-  return bFinished;
+  return isFinished;
 }
 
 bool RationalInteger_InfiniteNSymetries::bDottedSameWeight(
@@ -367,7 +361,7 @@ void RationalInteger_InfiniteNSymetries::WorkWithIsomorphisms(
       if (!rriBasisFixedPoints.cols()) // These are the first fixed points
       {
         rriBasisFixedPoints = basisFixedPoints;
-        iFixedPointsDimension = iFixedPointDimTemp;
+        fixedPointsDimension = iFixedPointDimTemp;
         usefulInvolutions.push_back(iIso);
       } else // We already have fixed points
       {
@@ -379,7 +373,7 @@ void RationalInteger_InfiniteNSymetries::WorkWithIsomorphisms(
         tempVectors.conservativeResize(iVectorSize,
                                        tempVectors.cols() + iFixedPointDimTemp);
         for (j = 0; j < iFixedPointDimTemp; j++)
-          tempVectors.col(j + iFixedPointsDimension) = basisFixedPoints.col(j);
+          tempVectors.col(j + fixedPointsDimension) = basisFixedPoints.col(j);
 
         FullPivLU<Matrix<Rational<RationalInteger>, Dynamic, Dynamic>> luTemp(
             tempVectors);
@@ -387,14 +381,14 @@ void RationalInteger_InfiniteNSymetries::WorkWithIsomorphisms(
             luTemp.kernel());
 
         if (luTemp.dimensionOfKernel() == 0) {
-          bFinished = true;
-          iFixedPointsDimension = 0;
+          isFinished = true;
+          fixedPointsDimension = 0;
           rriBasisFixedPoints.resize(iVectorSize, 0);
           usefulInvolutions.push_back(iIso);
         }
 
-        if (ker.cols() < iFixedPointsDimension &&
-            !bFinished) // If we earned something
+        if (ker.cols() < fixedPointsDimension &&
+            !isFinished) // If we earned something
         {
           usefulInvolutions.push_back(iIso);
           unsigned int iIntersectionDimension(ker.cols());
@@ -404,42 +398,42 @@ void RationalInteger_InfiniteNSymetries::WorkWithIsomorphisms(
             Matrix<Rational<RationalInteger>, Dynamic, 1> v(ker(0, j) *
                                                             tempVectors.col(0));
 
-            for (k = 1; k < iFixedPointsDimension; k++)
+            for (k = 1; k < fixedPointsDimension; k++)
               v += ker(k, j) * tempVectors.col(k);
 
             rriBasisFixedPoints.col(j) = v;
           }
 
-          iFixedPointsDimension = ker.cols();
+          fixedPointsDimension = ker.cols();
 
-          if (iFixedPointsDimension == 1) {
+          if (fixedPointsDimension == 1) {
             if (rriVectorNorm(rriBasisFixedPoints.col(0)) >= 0)
-              bFinished = true;
-          } else if (iFixedPointsDimension == 2) {
+              isFinished = true;
+          } else if (fixedPointsDimension == 2) {
             // If the basis has two orthogonal vector of positive norm
             if (rriVectorNorm(rriBasisFixedPoints.col(0)) >= 0 &&
                 rriVectorNorm(rriBasisFixedPoints.col(1)) >= 0 &&
                 rriVectorsProduct(rriBasisFixedPoints.col(0),
                                   rriBasisFixedPoints.col(1)) == 0)
-              bFinished = true;
+              isFinished = true;
           }
         }
       }
     }
 
-    if (bFinished)
+    if (isFinished)
       return;
   }
 }
 
 void RationalInteger_InfiniteNSymetries::print_basisFixedPoints(
     const string &strSpacer) const {
-  if (iFixedPointsDimension == iVectorSize) {
+  if (fixedPointsDimension == iVectorSize) {
     cout << strSpacer << "The fixed point space is full dimensional" << endl;
     return;
   }
 
-  for (unsigned int i(0); i < iFixedPointsDimension; i++)
+  for (unsigned int i(0); i < fixedPointsDimension; i++)
     cout << strSpacer
          << Matrix<Rational<RationalInteger>, 1, Eigen::Dynamic>(
                 rriBasisFixedPoints.col(i).transpose())

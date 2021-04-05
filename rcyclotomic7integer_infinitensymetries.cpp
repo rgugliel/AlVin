@@ -5,40 +5,39 @@ RCyclotomic7Integer_InfiniteNSymetries::RCyclotomic7Integer_InfiniteNSymetries(
     : InfiniteNSymetries(alvin) {
   unsigned int i, j;
 
-  auto aiVectors(alvin->get_vectors());
+  const auto vectors(alvin->get_vectors());
 
   riVectorsProducts = vector<vector<RCyclotomic7Integer>>(
-      iVectorsCount, vector<RCyclotomic7Integer>(iVectorsCount, 0));
-  iVectorsNormsFloor = vector<long int>(iVectorsCount, 0);
+      vectorsCount, vector<RCyclotomic7Integer>(vectorsCount, 0));
+  iVectorsNormsFloor = vector<long int>(vectorsCount, 0);
 
   // -------------------------------------------------
   // Quadratic form
-  for (auto ai : aiQF)
+  for (const auto &coeff : qf)
     rciQF.push_back(Rational<RCyclotomic7Integer>(
-        *dynamic_cast<RCyclotomic7Integer *>(ai)));
+        *dynamic_cast<RCyclotomic7Integer *>(coeff)));
 
   // -------------------------------------------------
   // Vectors
-  for (i = 0; i < iVectorsCount; i++) {
+  for (i = 0; i < vectorsCount; i++) {
     auto v(vector<Rational<RCyclotomic7Integer>>(0));
 
     Matrix<Rational<RCyclotomic7Integer>, Dynamic, 1> v2;
 
-    for (j = 0; j <= iDimension; j++)
+    for (j = 0; j <= dimension; j++)
       v.push_back(Rational<RCyclotomic7Integer>(
-          *dynamic_cast<RCyclotomic7Integer *>(aiVectors[i][j])));
+          *dynamic_cast<RCyclotomic7Integer *>(vectors[i][j])));
 
     v2 = Matrix<Rational<RCyclotomic7Integer>, 1, Dynamic>::Map(&v[0], 1,
-                                                                iDimension + 1);
+                                                                dimension + 1);
     rciVectorsC.push_back(v2);
   }
 
   // -------------------------------------------------
   // Products
-  for (i = 0; i < iVectorsCount; i++) {
-    AlgebraicInteger *aiNorm(
-        alvin->bilinearProduct(aiVectors[i], aiVectors[i]));
-    riVectorsProducts[i][i] = *dynamic_cast<RCyclotomic7Integer *>(aiNorm);
+  for (i = 0; i < vectorsCount; i++) {
+    AlgebraicInteger *norm2(alvin->bilinearProduct(vectors[i], vectors[i]));
+    riVectorsProducts[i][i] = *dynamic_cast<RCyclotomic7Integer *>(norm2);
 
     mpz_class iT(riVectorsProducts[i][i].floor());
     if (!iT.fits_slong_p())
@@ -47,43 +46,39 @@ RCyclotomic7Integer_InfiniteNSymetries::RCyclotomic7Integer_InfiniteNSymetries(
 
     iVectorsNormsFloor[i] = iT.get_si();
 
-    delete aiNorm;
+    delete norm2;
 
-    for (j = i + 1; j < iVectorsCount; j++) {
-      AlgebraicInteger *aiProd(
-          alvin->bilinearProduct(aiVectors[i], aiVectors[j]));
+    for (j = i + 1; j < vectorsCount; j++) {
+      AlgebraicInteger *prod(alvin->bilinearProduct(vectors[i], vectors[j]));
       riVectorsProducts[i][j] = riVectorsProducts[j][i] =
-          *dynamic_cast<RCyclotomic7Integer *>(aiProd);
-      delete aiProd;
+          *dynamic_cast<RCyclotomic7Integer *>(prod);
+      delete prod;
     }
   }
 
   // -------------------------------------------------
   // Weights of dotted lines
   qiDottedWeights = vector<vector<Rational<RCyclotomic7Integer>>>(
-      iVectorsCount, vector<Rational<RCyclotomic7Integer>>(iVectorsCount, 0));
-  for (i = 0; i < iVectorsCount; i++) {
-    for (j = i + 1; j < iVectorsCount; j++) {
-      if (iGraphMatrix[i][j] == 2) // dotted
+      vectorsCount, vector<Rational<RCyclotomic7Integer>>(vectorsCount, 0));
+  for (i = 0; i < vectorsCount; i++) {
+    for (j = i + 1; j < vectorsCount; j++) {
+      if (graphMatrix[i][j] == 2) // dotted
       {
-        AlgebraicInteger *aiNum(
-            alvin->bilinearProduct(aiVectors[i], aiVectors[j]));
-        AlgebraicInteger *aiNorm1(
-            alvin->bilinearProduct(aiVectors[i], aiVectors[i]));
-        AlgebraicInteger *aiNorm2(
-            alvin->bilinearProduct(aiVectors[j], aiVectors[j]));
+        auto num(alvin->bilinearProduct(vectors[i], vectors[j]));
+        auto norm1(alvin->bilinearProduct(vectors[i], vectors[i]));
+        auto norm2(alvin->bilinearProduct(vectors[j], vectors[j]));
 
-        aiNum->multiplyBy(aiNum);
-        aiNorm1->multiplyBy(aiNorm2);
+        num->multiplyBy(num);
+        norm1->multiplyBy(norm2);
 
         qiDottedWeights[i][j] = qiDottedWeights[j][i] =
             Rational<RCyclotomic7Integer>(
-                *dynamic_cast<RCyclotomic7Integer *>(aiNum),
-                *dynamic_cast<RCyclotomic7Integer *>(aiNorm1));
+                *dynamic_cast<RCyclotomic7Integer *>(num),
+                *dynamic_cast<RCyclotomic7Integer *>(norm1));
 
-        delete aiNum;
-        delete aiNorm1;
-        delete aiNorm2;
+        delete num;
+        delete norm1;
+        delete norm2;
       }
     }
   }
@@ -167,7 +162,7 @@ RCyclotomic7Integer_InfiniteNSymetries::FindIsomorphismsInSubgraph(
     VECTOR(verticesColors)[i] = iVectorsNormsFloor[iVertices[i]];
 
     for (j = i + 1; j < iVerticesCount; j++)
-      MATRIX(adjMat, i, j) = iGraphMatrix[iVertices[i]][iVertices[j]];
+      MATRIX(adjMat, i, j) = graphMatrix[iVertices[i]][iVertices[j]];
   }
 
   if (igraph_adjacency(&graph, &adjMat, IGRAPH_ADJ_UNDIRECTED) !=
@@ -216,10 +211,10 @@ RCyclotomic7Integer_InfiniteNSymetries::FindIsomorphismsInSubgraph(
     for (i = 0; i < iVerticesCount && bIsIsomorphism; i++) {
       for (j = i + 1; j < iVerticesCount; j++) {
         // Weight not preserved or dotted and weight of the dotted not preserved
-        if ((iGraphMatrix[iVertices[i]][iVertices[j]] !=
-             iGraphMatrix[iVertices[iPermutation[i]]]
-                         [iVertices[iPermutation[j]]]) ||
-            (iGraphMatrix[iVertices[i]][iVertices[j]] == 2 &&
+        if ((graphMatrix[iVertices[i]][iVertices[j]] !=
+             graphMatrix[iVertices[iPermutation[i]]]
+                        [iVertices[iPermutation[j]]]) ||
+            (graphMatrix[iVertices[i]][iVertices[j]] == 2 &&
              !bDottedSameWeight(iVertices[i], iVertices[j],
                                 iVertices[iPermutation[i]],
                                 iVertices[iPermutation[j]]))) {
@@ -301,28 +296,28 @@ bool RCyclotomic7Integer_InfiniteNSymetries::FindIntegralSymmetryFromSubgraph(
       iVerticesCount, vector<unsigned int>(iVerticesCount, 2)));
   for (i = 0; i < iVerticesCount; i++) {
     for (j = i + 1; j < iVerticesCount; j++)
-      iCox[i][j] = iCox[j][i] = iCoxeterMatrix[iVertices[i]][iVertices[j]];
+      iCox[i][j] = iCox[j][i] = coxeterMatrix[iVertices[i]][iVertices[j]];
   }
 
-  CoxIter ci(iCox, iDimension);
+  CoxIter ci(iCox, dimension);
   ci.exploreGraph();
   ci.computeGraphsProducts();
   ci.computeEulerCharacteristicFVector();
   vector<unsigned int> iFV(ci.get_fVector());
   if (!iFV[0])
-    return bFinished;
+    return isFinished;
 
   // -------------------------------------------------------------
   // Finding the isomorphisms
   vector<GraphInvolution> iIsomorphisms(FindIsomorphismsInSubgraph(iVertices));
   if (!iIsomorphisms.size())
-    return bFinished;
+    return isFinished;
 
   // -------------------------------------------------------------
   // Going through
   WorkWithIsomorphisms(iVertices, iIsomorphisms);
 
-  return bFinished;
+  return isFinished;
 }
 
 bool RCyclotomic7Integer_InfiniteNSymetries::bDottedSameWeight(
@@ -375,7 +370,7 @@ void RCyclotomic7Integer_InfiniteNSymetries::WorkWithIsomorphisms(
       if (!rciBasisFixedPoints.cols()) // These are the first fixed points
       {
         rciBasisFixedPoints = basisFixedPoints;
-        iFixedPointsDimension = iFixedPointDimTemp;
+        fixedPointsDimension = iFixedPointDimTemp;
         usefulInvolutions.push_back(iIso);
       } else // We already have fixed points
       {
@@ -387,7 +382,7 @@ void RCyclotomic7Integer_InfiniteNSymetries::WorkWithIsomorphisms(
         tempVectors.conservativeResize(iVectorSize,
                                        tempVectors.cols() + iFixedPointDimTemp);
         for (j = 0; j < iFixedPointDimTemp; j++)
-          tempVectors.col(j + iFixedPointsDimension) = basisFixedPoints.col(j);
+          tempVectors.col(j + fixedPointsDimension) = basisFixedPoints.col(j);
 
         FullPivLU<Matrix<Rational<RCyclotomic7Integer>, Dynamic, Dynamic>>
             luTemp(tempVectors);
@@ -395,14 +390,14 @@ void RCyclotomic7Integer_InfiniteNSymetries::WorkWithIsomorphisms(
             luTemp.kernel());
 
         if (luTemp.dimensionOfKernel() == 0) {
-          bFinished = true;
-          iFixedPointsDimension = 0;
+          isFinished = true;
+          fixedPointsDimension = 0;
           rciBasisFixedPoints.resize(iVectorSize, 0);
           usefulInvolutions.push_back(iIso);
         }
 
-        if (ker.cols() < iFixedPointsDimension &&
-            !bFinished) // If we earned something
+        if (ker.cols() < fixedPointsDimension &&
+            !isFinished) // If we earned something
         {
           usefulInvolutions.push_back(iIso);
           unsigned int iIntersectionDimension(ker.cols());
@@ -412,37 +407,37 @@ void RCyclotomic7Integer_InfiniteNSymetries::WorkWithIsomorphisms(
             Matrix<Rational<RCyclotomic7Integer>, Dynamic, 1> v(
                 ker(0, j) * tempVectors.col(0));
 
-            for (k = 1; k < iFixedPointsDimension; k++)
+            for (k = 1; k < fixedPointsDimension; k++)
               v += ker(k, j) * tempVectors.col(k);
 
             rciBasisFixedPoints.col(j) = v;
           }
 
-          iFixedPointsDimension = ker.cols();
-          if (iFixedPointsDimension == 1) {
+          fixedPointsDimension = ker.cols();
+          if (fixedPointsDimension == 1) {
             if (rciVectorNorm(rciBasisFixedPoints.col(0)) >= 0) {
-              bFinished = true;
+              isFinished = true;
             }
-          } else if (iFixedPointsDimension == 2) {
+          } else if (fixedPointsDimension == 2) {
             // If the basis has two orthogonal vector of positive norm
             if (rciVectorNorm(rciBasisFixedPoints.col(0)) >= 0 &&
                 rciVectorNorm(rciBasisFixedPoints.col(1)) >= 0 &&
                 rciVectorsProduct(rciBasisFixedPoints.col(0),
                                   rciBasisFixedPoints.col(1)) == 0)
-              bFinished = true;
+              isFinished = true;
           }
         }
       }
     }
 
-    if (bFinished)
+    if (isFinished)
       return;
   }
 }
 
 void RCyclotomic7Integer_InfiniteNSymetries::print_basisFixedPoints(
     const string &strSpacer) const {
-  for (unsigned int i(0); i < iFixedPointsDimension; i++)
+  for (unsigned int i(0); i < fixedPointsDimension; i++)
     cout << strSpacer
          << Matrix<Rational<RCyclotomic7Integer>, 1, Eigen::Dynamic>(
                 rciBasisFixedPoints.col(i).transpose())

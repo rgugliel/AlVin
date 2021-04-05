@@ -229,20 +229,18 @@ protected:
 
 private:
   virtual void findPossibleNorms2() = 0;
-  virtual void findVector(AlgebraicInteger *aiX0,
-                          AlgebraicInteger *aiNorm2) = 0;
+  virtual void findVector(AlgebraicInteger *x0, AlgebraicInteger *norm2) = 0;
 
   void findFirstVectors();
 
-  void addVector(const vector<AlgebraicInteger *> &aiVect);
-  virtual int addVector_findWeight(AlgebraicInteger *aiNumerator,
-                                   AlgebraicInteger *aiDenominator) = 0;
+  void addVector(const vector<AlgebraicInteger *> &v);
+  virtual int addVector_findWeight(AlgebraicInteger *numerator,
+                                   AlgebraicInteger *denominator) = 0;
 
-  void printFoundVector(vector<AlgebraicInteger *> aiV,
-                        const unsigned int &iIndex,
-                        const bool &bFirst = false) const;
+  void printFoundVector(vector<AlgebraicInteger *> v, const unsigned int &index,
+                        const bool &isFirst = false) const;
 
-  virtual void addVectorChild(const vector<AlgebraicInteger *> &aiVector) = 0;
+  virtual void addVectorChild(const vector<AlgebraicInteger *> &v) = 0;
 };
 
 inline AlgebraicInteger *
