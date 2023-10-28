@@ -43,7 +43,7 @@ vector<AlVinFraction *> AlVinFractions::getNextAlVinFraction() {
     ++alvinfractions_it;
 
   } while (alvinfractions_it != alvinfractions.end() &&
-           aiNumerator->bIsEqualTo(*(*alvinfractions_it)->aiNumerator));
+           aiNumerator->isEqualTo(*(*alvinfractions_it)->aiNumerator));
 
   return vf;
 }

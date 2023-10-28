@@ -51,11 +51,11 @@ void AlVin::initializations() {
       i++;
 
     for (unsigned int j(i + 1); j <= iDimension; j++) {
-      if (aiQF[j]->bIsDivisbleBy(aiQF[i])) {
+      if (aiQF[j]->isDivisbleBy(aiQF[i])) {
         unique_ptr<AlgebraicInteger> aiTest(aiQF[j]->copy());
         aiTest->divideBy(aiQF[i]);
 
-        if (aiTest->bIsSquareOfIvertible() && get_strField() == "RC7") {
+        if (aiTest->isSquareOfIvertible() && get_strField() == "RC7") {
           cout << "Check that " << *aiTest
                << " is not the square of an invertible element" << endl;
           strFinalInformation += "Check that " + aiTest->to_string() +
@@ -71,7 +71,7 @@ void AlVin::initializations() {
   for (unsigned int i(1); i <= iDimension; i++)
     igcd->gcd(aiQF[i]);
 
-  if (!igcd->bIsInvertible())
+  if (!igcd->isInvertible())
     throw(
         string("GCD of the coefficients of the quadratic form should be one"));
 
@@ -160,7 +160,7 @@ bool AlVin::Run(unsigned int iMinVectors, unsigned int iMaxVectors,
         unique_ptr<AlgebraicInteger> aiProd(aiBilinearProduct(
             aiVectors_candidates[i], aiVectors_candidates[j]));
 
-        if (aiProd->bIsGreaterThan(0)) // This should not happen
+        if (aiProd->isGreaterThan(0)) // This should not happen
           throw(string("AlVin::Run: Incompatible candidates"));
       }
     }
@@ -191,16 +191,16 @@ bool AlVin::Run(unsigned int iMinVectors, unsigned int iMaxVectors,
         continue; // No covolume test
 
       ptrCI = new CoxIter(iCoxeterMatrix, iDimension);
-      ptrCI->set_bCheckCofiniteness(true);
+      ptrCI->set_checkCofiniteness(true);
 
-      if (!ptrCI->bCanBeFiniteCovolume()) {
+      if (!ptrCI->canBeFiniteCovolume()) {
         delete ptrCI;
         ptrCI = nullptr;
         continue;
       }
 
       if ((iVectorsCount == iMaxVectors && !bLastCheckFV) ||
-          ptrCI->isFiniteCovolume() == 1) {
+          ptrCI->get_isFiniteCovolume() == 1) {
         if (bWriteInfo) {
           print_finallInformation();
 
@@ -212,8 +212,8 @@ bool AlVin::Run(unsigned int iMinVectors, unsigned int iMaxVectors,
           strFilename +=
               aiQF[j]->to_string("filename") + (j < iDimension ? "," : "");
 
-        if (!ptrCI->bWriteGraph("output/" + strFilename) ||
-            !ptrCI->bWriteGraphToDraw("output/" + strFilename))
+        if (!ptrCI->writeGraph("output/" + strFilename) ||
+            !ptrCI->writeGraphToDraw("output/" + strFilename))
           cout << "Error:\n\tCheck that the folder 'output/' exists and is "
                   "writable"
                << endl;
@@ -256,8 +256,8 @@ bool AlVin::Run(unsigned int iMinVectors, unsigned int iMaxVectors,
   for (j = 0; j <= iDimension; j++)
     strFilename += aiQF[j]->to_string() + (j < iDimension ? "," : "");
 
-  ci.bWriteGraph("output/" + strFilename);
-  ci.bWriteGraphToDraw("output/" + strFilename);
+  ci.writeGraph("output/" + strFilename);
+  ci.writeGraphToDraw("output/" + strFilename);
 
   if (bWriteInfo) {
     if (iCreateImage == 1 || (iCreateImage == -1 && iVectorsCount <= 25)) {
@@ -290,7 +290,7 @@ void AlVin::addVector(const vector<AlgebraicInteger *> &iVect) {
 
     iWeight = -2;
 
-    if (aiProd->bIsEqualTo(0))
+    if (aiProd->isEqualTo(0))
       iWeight = 2;
     else {
       AlgebraicInteger *aiNumerator(aiProd->copy());
@@ -300,7 +300,7 @@ void AlVin::addVector(const vector<AlgebraicInteger *> &iVect) {
           aiBilinearProduct(aiVectors[i], aiVectors[i]));
       aiDenominator->multiplyBy(aiNorm);
 
-      if (aiDenominator->bIsLessThan(*aiNumerator))
+      if (aiDenominator->isLessThan(*aiNumerator))
         iWeight = 1; // Dotted edge
       else {
         AlgebraicInteger *aiGCD(aiNumerator->copy());
@@ -310,15 +310,15 @@ void AlVin::addVector(const vector<AlgebraicInteger *> &iVect) {
         aiDenominator->divideBy(aiGCD);
         delete aiGCD;
 
-        if (aiNumerator->bIsEqualTo(1)) {
-          if (aiDenominator->bIsEqualTo(4))
+        if (aiNumerator->isEqualTo(1)) {
+          if (aiDenominator->isEqualTo(4))
             iWeight = 3;
-          else if (aiDenominator->bIsEqualTo(2))
+          else if (aiDenominator->isEqualTo(2))
             iWeight = 4;
-          else if (aiDenominator->bIsEqualTo(1))
+          else if (aiDenominator->isEqualTo(1))
             iWeight = 0; // Infty
-        } else if (aiNumerator->bIsEqualTo(3)) {
-          if (aiDenominator->bIsEqualTo(4))
+        } else if (aiNumerator->isEqualTo(3)) {
+          if (aiDenominator->isEqualTo(4))
             iWeight = 6;
         }
 

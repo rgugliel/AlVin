@@ -32,7 +32,7 @@ void NotReflective::prepareGraphsList() {
   // We get the euclidean graphs which cannot be extended
   CoxIter ci(alvin->get_iCoxeterMatrix(), iDimension);
   vector<vector<short unsigned int>> iGraphsNotExtendable(
-      ci.bCanBeFiniteCovolume_complete());
+      ci.canBeFiniteCovolume_complete());
 
   // If there is nothing to do
   if (!iGraphsNotExtendable.size()) {
@@ -87,7 +87,7 @@ void NotReflective::prepareGraphsList() {
     for (unsigned int i(0); i <= iDimension; i++) {
       if (iVariablesName[i]) {
         if (iVariablesName[i] != iLastVariable) {
-          if (iVariableIndex && aiQF[i]->bIsEqualTo(*aiQF[i - 1]))
+          if (iVariableIndex && aiQF[i]->isEqualTo(*aiQF[i - 1]))
             iVariablesGreaterThan[iVariableIndex] = iVariableIndex + 1;
 
           iVariablesToCoeff[iVariableIndex] = i;

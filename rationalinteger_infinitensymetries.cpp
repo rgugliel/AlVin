@@ -299,8 +299,8 @@ bool RationalInteger_InfiniteNSymetries::FindIntegralSymmetryFromSubgraph(
   CoxIter ci(iCox, iDimension);
   ci.exploreGraph();
   ci.computeGraphsProducts();
-  ci.bEulerCharacteristicFVector();
-  vector<unsigned int> iFV(ci.get_iFVector());
+  ci.computeEulerCharacteristicFVector();
+  vector<unsigned int> iFV(ci.get_fVector());
   if (!iFV[0])
     return bFinished;
 

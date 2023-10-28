@@ -20,7 +20,7 @@ RCyclotomic7Integer_AlVin::RCyclotomic7Integer_AlVin(
   // -------------------------------------------------
   // Checking the coefficients
   for (auto i : rciQuadraticFormCoeffs) {
-    if (i.bIsLessThan(0)) {
+    if (i.isLessThan(0)) {
       if (!bNegativeFound) {
         RCyclotomic7Integer *rci(
             new RCyclotomic7Integer({-i.iC[0], -i.iC[1], -i.iC[2]}));
@@ -28,11 +28,11 @@ RCyclotomic7Integer_AlVin::RCyclotomic7Integer_AlVin(
         RCyclotomic7Integer rciTemp(*rci);
 
         rciTemp.conjugate(2);
-        if (rciTemp.bIsGreaterThan(0))
+        if (rciTemp.isGreaterThan(0))
           throw(string("Quadratic form is not admissible"));
 
         rciTemp.conjugate(2);
-        if (rciTemp.bIsGreaterThan(0))
+        if (rciTemp.isGreaterThan(0))
           throw(string("Quadratic form is not admissible"));
 
         aiQF.insert(aiQF.begin(), rci);
@@ -40,17 +40,17 @@ RCyclotomic7Integer_AlVin::RCyclotomic7Integer_AlVin(
         bNegativeFound = true;
       } else
         throw(string("Quadratic form has incorrect signature"));
-    } else if (i.bIsGreaterThan(0)) {
+    } else if (i.isGreaterThan(0)) {
       RCyclotomic7Integer *rci(new RCyclotomic7Integer(i));
 
       RCyclotomic7Integer rciTemp(*rci);
 
       rciTemp.conjugate(2);
-      if (rciTemp.bIsLessThan(0))
+      if (rciTemp.isLessThan(0))
         throw(string("Quadratic form is not admissible"));
 
       rciTemp.conjugate(2);
-      if (rciTemp.bIsLessThan(0))
+      if (rciTemp.isLessThan(0))
         throw(string("Quadratic form is not admissible"));
 
       aiQF.insert(
@@ -151,7 +151,7 @@ void RCyclotomic7Integer_AlVin::findVector(
     for (; iIndex <= iDimension; iIndex++)
       rciVectorCurrent[iIndex] = 0;
 
-    if (rciGCDComponents.bIsInvertible())
+    if (rciGCDComponents.isInvertible())
       addCandidate();
 
     return;
@@ -292,14 +292,14 @@ void RCyclotomic7Integer_AlVin::findVector(
     for (long int a(aMin); a <= aMax && !bReturn; a++) {
       gaol_a = interval(a);
 
-      gaol_max = RCyclotomic7Integer({2 * a - 2 * b, -b, a - b}).to_interval();
+      gaol_max = RCyclotomic7Integer(2 * a - 2 * b, -b, a - b).to_interval();
 
       if (!bR1IsAnInt)
         gaol_min =
             gaol_max -
-            gaol_SQRTQuotient(rciSumComp, RCyclotomic7Integer({-1, -2, -2}));
+            gaol_SQRTQuotient(rciSumComp, RCyclotomic7Integer(-1, -2, -2));
       else
-        gaol_min = RCyclotomic7Integer({iR1 + 2 * a - 2 * b, -b, iR1 + a - b})
+        gaol_min = RCyclotomic7Integer(iR1 + 2 * a - 2 * b, -b, iR1 + a - b)
                        .to_interval();
 
       gaol_min = ceil(gaol_min);
@@ -321,7 +321,7 @@ void RCyclotomic7Integer_AlVin::findVector(
         // crystallographic condition
         rciTemp.set(&rci2QF[iIndex]);
         rciTemp.multiplyBy(&rci);
-        if (!rciTemp.bIsDivisbleBy(rciNorm2))
+        if (!rciTemp.isDivisbleBy(rciNorm2))
           continue;
 
         // ------------------------------------------------------
@@ -333,21 +333,21 @@ void RCyclotomic7Integer_AlVin::findVector(
 
         if (bBoundsUncertain) // In this contexte, we have to check if rci <= R1
         {
-          if (!rci.bIsGreaterOEThan(0))
+          if (!rci.isGreaterOEThan(0))
             continue;
 
-          if (!rci.bIsLessOEThan(rciSumComp))
+          if (!rci.isLessOEThan(rciSumComp))
             continue;
         }
 
         // ------------------------------------------------------
         // Inequalities 2&3 of the norm system
         rciPartialNorm.conjugate(2);
-        if (!rciPartialNorm.bIsLessOEThan(rciSumComp_conj2))
+        if (!rciPartialNorm.isLessOEThan(rciSumComp_conj2))
           continue;
 
         rciPartialNorm.conjugate(2);
-        if (!rciPartialNorm.bIsLessOEThan(rciSumComp_conj3))
+        if (!rciPartialNorm.isLessOEThan(rciSumComp_conj3))
           continue;
 
         rciPartialNorm.conjugate(2);
@@ -355,7 +355,7 @@ void RCyclotomic7Integer_AlVin::findVector(
         // ------------------------------------------------------
         // If k_j should be less or equal than k_{j-1}
         if (iComponentLessThan[iIndex] &&
-            !rci.bIsLessOEThan(rciVectorCurrent[iComponentLessThan[iIndex]]))
+            !rci.isLessOEThan(rciVectorCurrent[iComponentLessThan[iIndex]]))
           continue;
 
         // ------------------------------------------------------
@@ -373,7 +373,7 @@ void RCyclotomic7Integer_AlVin::findVector(
 
           // TODO: garder en mémoire la valeur max?
 
-          if (rciBilinearProducts[j].bIsGreaterThan(
+          if (rciBilinearProducts[j].isGreaterThan(
                   0)) // qiVectorCurrent is not admissible
             bAdmissible = false;
         }
@@ -385,9 +385,9 @@ void RCyclotomic7Integer_AlVin::findVector(
 
         rciVectorCurrent[iIndex] = rci;
 
-        if (iIndex == iDimension && rciSumComp.bIsEqualTo(rciPartialNorm)) {
+        if (iIndex == iDimension && rciSumComp.isEqualTo(rciPartialNorm)) {
           rciGCDComponents.gcd(&rci);
-          if (rciGCDComponents.bIsInvertible())
+          if (rciGCDComponents.isInvertible())
             addCandidate();
 
           bReturn = true;
@@ -432,7 +432,7 @@ int RCyclotomic7Integer_AlVin::addVector_iFindWeight(
       dynamic_cast<RCyclotomic7Integer *>(aiDenominator));
 
   if (rciNumerator->iC == array<mpz_class, 3>({-1, -2, -2}) &&
-      rciDenominator->bIsEqualTo(4))
+      rciDenominator->isEqualTo(4))
     return 7;
 
   return -2;
@@ -461,8 +461,8 @@ void RCyclotomic7Integer_AlVin::findPossibleNorms2() {
   rciFactors.push_back(2);
 
   // Fundamental units
-  rciFactors.push_back(RCyclotomic7Integer({0, 0, -1}));
-  rciFactors.push_back(RCyclotomic7Integer({0, -1, -1}));
+  rciFactors.push_back(RCyclotomic7Integer(0, 0, -1));
+  rciFactors.push_back(RCyclotomic7Integer(0, -1, -1));
 
   unsigned int iFactorsCount(rciFactors.size());
   if (iFactorsCount > 8)
@@ -488,12 +488,12 @@ void RCyclotomic7Integer_AlVin::findPossibleNorms2() {
 
     // is the product admissible (i.e. positive under galois embeddings)
     rciProduct->conjugate(2);
-    if (rciProduct->bIsLessThan(0)) {
+    if (rciProduct->isLessThan(0)) {
       delete rciProduct;
       continue;
     }
     rciProduct->conjugate(2);
-    if (rciProduct->bIsLessThan(0)) {
+    if (rciProduct->isLessThan(0)) {
       delete rciProduct;
       continue;
     }

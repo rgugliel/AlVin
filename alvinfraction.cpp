@@ -11,15 +11,15 @@ AlVinFraction::~AlVinFraction() {
 }
 
 bool operator<(const AlVinFraction &f1, const AlVinFraction &f2) {
-  return (f1.aiNumerator->bIsLessThan(*f2.aiNumerator));
+  return (f1.aiNumerator->isLessThan(*f2.aiNumerator));
 }
 
 bool AlVinFraction::operator==(const AlVinFraction &f2) const {
-  return (aiX0->bIsEqualTo(*f2.aiX0) && aiNorm2->bIsEqualTo(*f2.aiNorm2));
+  return (aiX0->isEqualTo(*f2.aiX0) && aiNorm2->isEqualTo(*f2.aiNorm2));
 }
 
 bool AlVinFraction::operator!=(const AlVinFraction &f2) const {
-  return (!aiX0->bIsEqualTo(*f2.aiX0) || !aiNorm2->bIsEqualTo(*f2.aiNorm2));
+  return (!aiX0->isEqualTo(*f2.aiX0) || !aiNorm2->isEqualTo(*f2.aiNorm2));
 }
 
 ostream &operator<<(ostream &o, AlVinFraction const &vf) {

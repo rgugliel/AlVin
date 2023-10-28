@@ -52,7 +52,7 @@ public:
 
   static int d;             ///< We work in Q[ sqrt d ]
   static mpf_class sqrtd;   ///< Square root of d
-  static bool bIsOneMod4;   ///< True if d is 1 mod 4, false otherwise
+  static bool isOneMod4;   ///< True if d is 1 mod 4, false otherwise
   static int iDiscriminant; ///< Discriminant of the quadratic field
 
   static map<unsigned int, vector<unsigned int>>
@@ -79,11 +79,11 @@ public:
 
   virtual void removeSquareFactors();
 
-  virtual bool bIsInvertible() const;
-  virtual bool bIsSquareOfIvertible() const;
+  virtual bool isInvertible() const;
+  virtual bool isSquareOfIvertible() const;
 
   virtual void gcd(const AlgebraicInteger *ai);
-  virtual bool bIsDivisbleBy(const AlgebraicInteger *) const;
+  virtual bool isDivisbleBy(const AlgebraicInteger *) const;
   virtual void divideBy(const AlgebraicInteger *ai);
   virtual bool divideByIfDivisible(const AlgebraicInteger *ai);
   virtual void multiplyBy(const int &n);
@@ -92,15 +92,15 @@ public:
   virtual void substract(const AlgebraicInteger *ai);
   virtual void opp();
 
-  virtual bool bIsLessThan(const int &n) const;
-  virtual bool bIsLessThan(const long int &n) const;
-  virtual bool bIsLessThan(const AlgebraicInteger &ai) const;
-  virtual bool bIsLessOEThan(const AlgebraicInteger &ai) const;
-  virtual bool bIsGreaterThan(const int &n) const;
-  virtual bool bIsGreaterThan(const long int &n) const;
-  virtual bool bIsGreaterOEThan(const int &n) const;
-  virtual bool bIsEqualTo(const AlgebraicInteger &ai) const;
-  virtual bool bIsEqualTo(const int &n) const;
+  virtual bool isLessThan(const int &n) const;
+  virtual bool isLessThan(const long int &n) const;
+  virtual bool isLessThan(const AlgebraicInteger &ai) const;
+  virtual bool isLessOEThan(const AlgebraicInteger &ai) const;
+  virtual bool isGreaterThan(const int &n) const;
+  virtual bool isGreaterThan(const long int &n) const;
+  virtual bool isGreaterOEThan(const int &n) const;
+  virtual bool isEqualTo(const AlgebraicInteger &ai) const;
+  virtual bool isEqualTo(const int &n) const;
 
   ostream &print(ostream &) const;
   virtual string to_string(const string &strFormat = "generic",
@@ -111,7 +111,7 @@ public:
   mpz_class floor() const;
 
 public:
-  static bool bIsDAdmissible(const unsigned int &d);
+  static bool isDAdmissible(const unsigned int &d);
   static void set_d(const unsigned int &d);
   static vector<QuadraticIntegerBig>
   qiFactorsRationalPrime(const unsigned int &iPrime,
@@ -131,7 +131,7 @@ public:
   vector<QuadraticIntegerBig> qiPrimeFactors() const;
   map<QuadraticIntegerBig, unsigned int> qiPrimeDecomposition() const;
 
-  bool bIsAssociateTo(QuadraticIntegerBig qi2);
+  bool isAssociateTo(QuadraticIntegerBig qi2);
 
   // --------------------------------------------
   // Operators

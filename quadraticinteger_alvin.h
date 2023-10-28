@@ -52,7 +52,7 @@ private:
 
   long int d;      ///< Local copy of QuadraticInteger::d
   long int dISqrt; ///< Local copy of isqrt( QuadraticInteger::d )
-  bool bIsOneMod4; ///< Local copy of QuadraticInteger::bIsOneMod4
+  bool isOneMod4; ///< Local copy of QuadraticInteger::isOneMod4
 
 public:
   QuadraticInteger_AlVin(const vector<QuadraticInteger> &iQuadraticFormCoeffs,
