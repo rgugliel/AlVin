@@ -21,8 +21,8 @@ void RationalInteger_VFs::computeNextAlVinFractions() {
     unsigned int iE(dynamic_cast<RationalInteger *>(aiE)->get_iValue());
 
     // ceil( isqrt( x ) ) = isqrt( x - 1 ) + 1
-    unsigned int iXMin(iMin ? iSQRT(iE * iMin - 1) + 1 : 1),
-        iXMax(iSQRT(iE * iLastMaximum));
+    unsigned int iXMin(iMin ? integerSqrt(iE * iMin - 1) + 1 : 1),
+        iXMax(integerSqrt(iE * iLastMaximum));
 
     if (iXMin * iXMin ==
         iE * iMin) // because we want iMin < f and not iMin <= f

@@ -55,7 +55,7 @@ void InvariantsQF::computeInvariants() {
           strSplitPrimes.push_back(to_string(2));
       } else {
         if (iSignedDeterminant % iP &&
-            iJacobiSymbol(iSignedDeterminant, iP) == 1)
+            jacobiSymbol(iSignedDeterminant, iP) == 1)
           strSplitPrimes.push_back(to_string(iP));
       }
     }
@@ -118,7 +118,7 @@ void InvariantsQF::computeRamification() {
   for (auto i : iQF)
     iDeterminant = iRemoveSquareFactors(iDeterminant * i);
 
-  iPrimesDeterminant = iPrimeFactors<unsigned>(iDeterminant);
+  iPrimesDeterminant = primeFactors<unsigned>(iDeterminant);
   iDeterminant *= -1;
 
   iSignedDeterminant =
@@ -207,7 +207,7 @@ InvariantsQF::iRamificationElementaryQuaternionAlgebra(int a, int b) const {
     return (iB8 == 1 || iB8 == 3 ? iRam : vector<unsigned int>{2, iBP});
   else if (iA < 0 && iB > 0) // here, two different odd primes
   {
-    int iLegendre(iJacobiSymbol(iAP, iBP));
+    int iLegendre(jacobiSymbol(iAP, iBP));
 
     if (iBP % 4 == 1)
       return (iLegendre == 1 ? iRam : vector<unsigned int>{iAP, iBP});
@@ -221,7 +221,7 @@ InvariantsQF::iRamificationElementaryQuaternionAlgebra(int a, int b) const {
     }
   } else if (iB < 0 && iA > 0) // here, two different odd primes
   {
-    int iLegendre(iJacobiSymbol(iBP, iAP));
+    int iLegendre(jacobiSymbol(iBP, iAP));
 
     if (iAP % 4 == 1)
       return (iLegendre == 1 ? iRam : vector<unsigned int>{iAP, iBP});
@@ -254,7 +254,7 @@ void InvariantsQF::primeNumbers() {
       continue;
     }
 
-    iQF_primes[i] = iPrimeFactorsWithoutSquares(iQF[i]);
+    iQF_primes[i] = primeFactorsWithoutSquares(iQF[i]);
   }
 }
 

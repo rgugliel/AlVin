@@ -5,8 +5,8 @@ QuadraticInteger_AlVin::QuadraticInteger_AlVin(
     const string &strOuputMathematicalFormat, const bool &bWriteInfo,
     const bool &bDebug)
     : AlVin(strOuputMathematicalFormat, bWriteInfo, bDebug),
-      d(QuadraticInteger::d), dISqrt(iSQRT((unsigned int)QuadraticInteger::d)),
-      bIsOneMod4(QuadraticInteger::bIsOneMod4) {
+      d(QuadraticInteger::d), dISqrt(integerSqrt((unsigned int)QuadraticInteger::d)),
+      isOneMod4(QuadraticInteger::isOneMod4) {
   bool bNegativeFound(false);
 
   if (QuadraticInteger::d == 0)
@@ -15,14 +15,14 @@ QuadraticInteger_AlVin::QuadraticInteger_AlVin(
   // -------------------------------------------------
   // Checking the coefficients
   for (auto i : iQuadraticFormCoeffs) {
-    if (i.bIsLessThan(0)) {
+    if (i.isLessThan(0)) {
       if (!bNegativeFound) {
         QuadraticInteger *qi(new QuadraticInteger(-i.a, -i.b));
 
         QuadraticInteger qiTemp(*qi);
         qiTemp.conjugate();
 
-        if (qiTemp.bIsGreaterThan(0))
+        if (qiTemp.isGreaterThan(0))
           throw(string("Quadratic form is not admissible"));
 
         aiQF.insert(aiQF.begin(), qi);
@@ -30,12 +30,12 @@ QuadraticInteger_AlVin::QuadraticInteger_AlVin(
         bNegativeFound = true;
       } else
         throw(string("Quadratic form has incorrect signature"));
-    } else if (i.bIsGreaterThan(0)) {
+    } else if (i.isGreaterThan(0)) {
       QuadraticInteger *qi(new QuadraticInteger(i));
 
       QuadraticInteger qiTemp(*qi);
       qiTemp.conjugate();
-      if (qiTemp.bIsLessThan(0))
+      if (qiTemp.isLessThan(0))
         throw(string("Quadratic form is not admissible"));
 
       aiQF.insert(
@@ -121,7 +121,7 @@ void QuadraticInteger_AlVin::findPossibleNorms2() {
 
     // is the product admissible (i.e. positive under galois embeddings)
     qiProduct->conjugate();
-    if (qiProduct->bIsLessThan(0)) {
+    if (qiProduct->isLessThan(0)) {
       qiProduct->conjugate();
 
       delete qiProduct;
@@ -194,59 +194,59 @@ int QuadraticInteger_AlVin::addVector_iFindWeight(
   aiNumerator->divideBy(aiGCD);
   aiDenominator->divideBy(aiGCD);
 
-  if (aiNumerator->bIsLessThan(-1)) {
+  if (aiNumerator->isLessThan(-1)) {
     aiNumerator->multiplyBy(-1);
     aiDenominator->multiplyBy(-1);
   }
 
   // -------------------------------------------
   // Proper tests
-  if (aiNumerator->bIsEqualTo(1)) {
+  if (aiNumerator->isEqualTo(1)) {
     if (QuadraticInteger::d == 2 &&
-        aiDenominator->bIsEqualTo(QuadraticInteger(4, -2)))
+        aiDenominator->isEqualTo(QuadraticInteger(4, -2)))
       return 8;
     else if (QuadraticInteger::d == 5 &&
-             aiDenominator->bIsEqualTo(QuadraticInteger(8, -4)))
+             aiDenominator->isEqualTo(QuadraticInteger(8, -4)))
       return 5;
 
-    if (aiDenominator->bIsEqualTo(4))
+    if (aiDenominator->isEqualTo(4))
       return 3;
-    else if (aiDenominator->bIsEqualTo(2))
+    else if (aiDenominator->isEqualTo(2))
       return 4;
   }
 
   if (QuadraticInteger::d == 2) {
-    if ((aiNumerator->bIsEqualTo(QuadraticInteger(1, 1)) &&
-         aiDenominator->bIsEqualTo(QuadraticInteger(0, 2))))
+    if ((aiNumerator->isEqualTo(QuadraticInteger(1, 1)) &&
+         aiDenominator->isEqualTo(QuadraticInteger(0, 2))))
       return 8;
   } else if (QuadraticInteger::d == 3) {
-    if (aiNumerator->bIsEqualTo(QuadraticInteger(7, -4)) &&
-        aiDenominator->bIsEqualTo(QuadraticInteger(28, -16)))
+    if (aiNumerator->isEqualTo(QuadraticInteger(7, -4)) &&
+        aiDenominator->isEqualTo(QuadraticInteger(28, -16)))
       return 3;
-    else if (aiNumerator->bIsEqualTo(QuadraticInteger(2, -1)) &&
-             aiDenominator->bIsEqualTo(QuadraticInteger(4, -2)))
+    else if (aiNumerator->isEqualTo(QuadraticInteger(2, -1)) &&
+             aiDenominator->isEqualTo(QuadraticInteger(4, -2)))
       return 4;
-    else if ((aiNumerator->bIsEqualTo(QuadraticInteger(2, -1)) &&
-              aiDenominator->bIsEqualTo(QuadraticInteger(28, -16))) ||
-             (aiNumerator->bIsEqualTo(1) &&
-              aiDenominator->bIsEqualTo(QuadraticInteger(8, -4))))
+    else if ((aiNumerator->isEqualTo(QuadraticInteger(2, -1)) &&
+              aiDenominator->isEqualTo(QuadraticInteger(28, -16))) ||
+             (aiNumerator->isEqualTo(1) &&
+              aiDenominator->isEqualTo(QuadraticInteger(8, -4))))
       return 12;
   } else if (QuadraticInteger::d == 5) {
-    if (aiNumerator->bIsEqualTo(QuadraticInteger(1, 1)) &&
-        aiDenominator->bIsEqualTo(4))
+    if (aiNumerator->isEqualTo(QuadraticInteger(1, 1)) &&
+        aiDenominator->isEqualTo(4))
       return 5;
-    else if (aiNumerator->bIsEqualTo(QuadraticInteger(5, 5)) &&
-             aiDenominator->bIsEqualTo(QuadraticInteger(8, 4)))
+    else if (aiNumerator->isEqualTo(QuadraticInteger(5, 5)) &&
+             aiDenominator->isEqualTo(QuadraticInteger(8, 4)))
       return 10;
-    else if (aiNumerator->bIsEqualTo(QuadraticInteger(2, 1)) &&
-             aiDenominator->bIsEqualTo(4))
+    else if (aiNumerator->isEqualTo(QuadraticInteger(2, 1)) &&
+             aiDenominator->isEqualTo(4))
       return 10;
   } else if (QuadraticInteger::d == 7) {
-    if (aiNumerator->bIsEqualTo(QuadraticInteger(127, -48)) &&
-        aiDenominator->bIsEqualTo(QuadraticInteger(508, -192)))
+    if (aiNumerator->isEqualTo(QuadraticInteger(127, -48)) &&
+        aiDenominator->isEqualTo(QuadraticInteger(508, -192)))
       return 3;
-    else if (aiNumerator->bIsEqualTo(QuadraticInteger(8, -3)) &&
-             aiDenominator->bIsEqualTo(QuadraticInteger(16, -6)))
+    else if (aiNumerator->isEqualTo(QuadraticInteger(8, -3)) &&
+             aiDenominator->isEqualTo(QuadraticInteger(16, -6)))
       return 4;
   }
 
@@ -294,7 +294,7 @@ void QuadraticInteger_AlVin::findVector(QuadraticInteger *qi0,
     for (; iIndex <= iDimension; iIndex++)
       qiVectorCurrent[iIndex] = 0;
 
-    if (qiGCDComponents.bIsInvertible())
+    if (qiGCDComponents.isInvertible())
       addCandidate();
 
     return;
@@ -317,7 +317,7 @@ void QuadraticInteger_AlVin::findVector(QuadraticInteger *qi0,
 
   // -------------------------------------------------------------------
   // First bounds for the loop
-  if (bIsOneMod4) {
+  if (isOneMod4) {
     qiSumComp.conjugate();
     iFirstMax = QuadraticInteger::iSQRT_quotient(qiSumComp, qiDQFConj[iIndex]);
 
@@ -336,8 +336,8 @@ void QuadraticInteger_AlVin::findVector(QuadraticInteger *qi0,
   }
 
   for (long int iFirst(iFirstMin); iFirst <= iFirstMax && !bReturn; iFirst++) {
-    if (bIsOneMod4) {
-      iTemp = iFirst + iSQRT((unsigned long int)iFirst * iFirst * d) + 1;
+    if (isOneMod4) {
+      iTemp = iFirst + integerSqrt((unsigned long int)iFirst * iFirst * d) + 1;
       iSecMin = -iTemp / 2;
 
       iSecMax = QuadraticInteger::iSQRT_quotient(qiSumComp, qiQF[iIndex]) + 1 -
@@ -349,10 +349,10 @@ void QuadraticInteger_AlVin::findVector(QuadraticInteger *qi0,
         if (iTemp2 >= 0)
           iTemp =
               qiVectorCurrent[iComponentLessThan[iIndex]].a +
-              (iTemp2 + iSQRTsup<unsigned long int>(d * iTemp2 * iTemp2)) / 2;
+              (iTemp2 + sqrtSup<unsigned long int>(d * iTemp2 * iTemp2)) / 2;
         else {
           iTemp2 = abs(iTemp2);
-          iTemp2 += iSQRT<unsigned long int>(iTemp2 * iTemp2 * d);
+          iTemp2 += integerSqrt<unsigned long int>(iTemp2 * iTemp2 * d);
 
           iTemp = qiVectorCurrent[iComponentLessThan[iIndex]].a -
                   ((iTemp2 % 2) ? iTemp2 / 2 + 1 : iTemp2 / 2);
@@ -361,7 +361,7 @@ void QuadraticInteger_AlVin::findVector(QuadraticInteger *qi0,
         iSecMax = min(iSecMax, iTemp);
       }
     } else {
-      iTemp = iSQRTQuotient((unsigned long int)iFirst * iFirst,
+      iTemp = sqrtQuotient((unsigned long int)iFirst * iFirst,
                             (unsigned long int)d);
       iSecMin = -iTemp - 1;
       iSecMax = QuadraticInteger::QuadraticInteger::iSQRT_quotient(
@@ -373,10 +373,10 @@ void QuadraticInteger_AlVin::findVector(QuadraticInteger *qi0,
         iTemp2 = qiVectorCurrent[iComponentLessThan[iIndex]].a - iFirst;
 
         if (iTemp2 >= 0)
-          iTemp = iSQRTQuotient<unsigned long int>(iTemp2 * iTemp2, d) +
+          iTemp = sqrtQuotient<unsigned long int>(iTemp2 * iTemp2, d) +
                   qiVectorCurrent[iComponentLessThan[iIndex]].b;
         else
-          iTemp = -iSQRTsupQuotient<unsigned long int>(iTemp2 * iTemp2, d) +
+          iTemp = -sqrtSupQuotient<unsigned long int>(iTemp2 * iTemp2, d) +
                   qiVectorCurrent[iComponentLessThan[iIndex]].b;
 
         iSecMax = min(iSecMax, iTemp);
@@ -384,7 +384,7 @@ void QuadraticInteger_AlVin::findVector(QuadraticInteger *qi0,
     }
 
     for (iSec = iSecMin; iSec <= iSecMax; iSec++) {
-      if (bIsOneMod4) {
+      if (isOneMod4) {
         qi.a = iSec;
         qi.b = iFirst;
       } else {
@@ -399,29 +399,29 @@ void QuadraticInteger_AlVin::findVector(QuadraticInteger *qi0,
       // crystallographic condition
       qiTemp.set(&qi2QF[iIndex]);
       qiTemp.multiplyBy(&qi);
-      if (!qiTemp.bIsDivisbleBy(qiNorm2))
+      if (!qiTemp.isDivisibleBy(qiNorm2))
         continue;
 
       qiPartialNorm.set(&qiSquare);
       qiPartialNorm.multiplyBy(&qiQF[iIndex]);
 
       qiPartialNorm.conjugate();
-      if (!qiPartialNorm.bIsLessOEThan(qiConjSumComp))
+      if (!qiPartialNorm.isLessOEThan(qiConjSumComp))
         continue;
       qiPartialNorm.conjugate();
 
       // ------------------------------------------------------
       // does iFirst + T * iSec satisfies the inequalities?
-      if (!qiPartialNorm.bIsLessOEThan(qiSumComp))
+      if (!qiPartialNorm.isLessOEThan(qiSumComp))
         continue;
 
-      if (!qi.bIsGreaterOEThan(0))
+      if (!qi.isGreaterOEThan(0))
         continue;
 
       // TODO: incorporer la valeur MAX pour les composantes suite à
       // qiBilinearProducts
       if (iComponentLessThan[iIndex] &&
-          !qi.bIsLessOEThan(qiVectorCurrent[iComponentLessThan[iIndex]]))
+          !qi.isLessOEThan(qiVectorCurrent[iComponentLessThan[iIndex]]))
         continue;
 
       // ------------------------------------------------------
@@ -439,7 +439,7 @@ void QuadraticInteger_AlVin::findVector(QuadraticInteger *qi0,
 
         // TODO: garder en mémoire la valeur max?
 
-        if (qiBilinearProducts[j].bIsGreaterThan(
+        if (qiBilinearProducts[j].isGreaterThan(
                 0)) // qiVectorCurrent is not admissible
           bAdmissible = false;
       }
@@ -458,9 +458,9 @@ void QuadraticInteger_AlVin::findVector(QuadraticInteger *qi0,
 
       qiVectorCurrent[iIndex] = qi;
 
-      if (iIndex == iDimension && qiSumComp.bIsEqualTo(qiPartialNorm)) {
+      if (iIndex == iDimension && qiSumComp.isEqualTo(qiPartialNorm)) {
         qiGCDComponents.gcd(&qi);
-        if (qiGCDComponents.bIsInvertible())
+        if (qiGCDComponents.isInvertible())
           addCandidate();
 
         bReturn = true;

@@ -48,7 +48,7 @@ public:
   long int
       b; ///< Second component of the quadratic integer (in the usual Z-basis)
   static int d;             ///< We work in Q[ sqrt d ]
-  static bool bIsOneMod4;   ///< True if d is 1 mod 4, false otherwise
+  static bool isOneMod4;   ///< True if d is 1 mod 4, false otherwise
   static int iDiscriminant; ///< Discriminant of the quadratic field
 
   static map<unsigned int, vector<unsigned int>>
@@ -72,11 +72,11 @@ public:
 
   virtual void removeSquareFactors();
 
-  virtual bool bIsInvertible() const;
-  virtual bool bIsSquareOfIvertible() const;
+  virtual bool isInvertible() const;
+  virtual bool isSquareOfIvertible() const;
 
   virtual void gcd(const AlgebraicInteger *ai);
-  virtual bool bIsDivisbleBy(const AlgebraicInteger *) const;
+  virtual bool isDivisibleBy(const AlgebraicInteger *) const;
   virtual void divideBy(const AlgebraicInteger *ai);
   virtual bool divideByIfDivisible(const AlgebraicInteger *ai);
   virtual void multiplyBy(const int &n);
@@ -85,15 +85,15 @@ public:
   virtual void substract(const AlgebraicInteger *ai);
   virtual void opp();
 
-  virtual bool bIsLessThan(const int &n) const;
-  virtual bool bIsLessThan(const long int &n) const;
-  virtual bool bIsLessThan(const AlgebraicInteger &ai) const;
-  virtual bool bIsLessOEThan(const AlgebraicInteger &ai) const;
-  virtual bool bIsGreaterThan(const int &n) const;
-  virtual bool bIsGreaterThan(const long int &n) const;
-  virtual bool bIsGreaterOEThan(const int &n) const;
-  virtual bool bIsEqualTo(const AlgebraicInteger &ai) const;
-  virtual bool bIsEqualTo(const int &n) const;
+  virtual bool isLessThan(const int &n) const;
+  virtual bool isLessThan(const long int &n) const;
+  virtual bool isLessThan(const AlgebraicInteger &ai) const;
+  virtual bool isLessOEThan(const AlgebraicInteger &ai) const;
+  virtual bool isGreaterThan(const int &n) const;
+  virtual bool isGreaterThan(const long int &n) const;
+  virtual bool isGreaterOEThan(const int &n) const;
+  virtual bool isEqualTo(const AlgebraicInteger &ai) const;
+  virtual bool isEqualTo(const int &n) const;
 
   ostream &print(ostream &) const;
   virtual string to_string(const string &strFormat = "generic",
@@ -104,7 +104,7 @@ public:
   long int floor() const;
 
 public:
-  static bool bIsDAdmissible(const unsigned int &d);
+  static bool isDAdmissible(const unsigned int &d);
   static void set_d(const unsigned int &d);
   static vector<QuadraticInteger>
   qiFactorsRationalPrime(const unsigned int &iPrime,
@@ -124,7 +124,7 @@ public:
   vector<QuadraticInteger> qiPrimeFactors() const;
   map<QuadraticInteger, unsigned int> qiPrimeDecomposition() const;
 
-  bool bIsAssociateTo(QuadraticInteger qi2);
+  bool isAssociateTo(QuadraticInteger qi2);
 
   // --------------------------------------------
   // Operators

@@ -3,7 +3,7 @@
 int QuadraticIntegerBig::d = 0;
 mpf_class QuadraticIntegerBig::sqrtd = 0;
 int QuadraticIntegerBig::iDiscriminant = 0;
-bool QuadraticIntegerBig::bIsOneMod4 = false;
+bool QuadraticIntegerBig::isOneMod4 = false;
 
 map<unsigned int, vector<long int>> QuadraticIntegerBig::iFundamentalUnits = {
     {2, vector<long int>({1, 1})},
@@ -123,7 +123,7 @@ QuadraticIntegerBig::QuadraticIntegerBig(const int &a, const int &b)
 QuadraticIntegerBig::QuadraticIntegerBig(const mpz_class &a, const mpz_class &b)
     : a(a), b(b) {}
 
-bool QuadraticIntegerBig::bIsDAdmissible(const unsigned int &d) {
+bool QuadraticIntegerBig::isDAdmissible(const unsigned int &d) {
   return (iPellMinimalSolution.find(d) != iPellMinimalSolution.end());
 }
 
@@ -134,8 +134,8 @@ void QuadraticIntegerBig::set_d(const unsigned int &dnew) {
   if (iPellMinimalSolution.find(d) == iPellMinimalSolution.end())
     throw(string("Invalid value for d: " + std::to_string(d)));
 
-  bIsOneMod4 = (d % 4 == 1);
-  iDiscriminant = bIsOneMod4 ? d : 4 * d;
+  isOneMod4 = (d % 4 == 1);
+  iDiscriminant = isOneMod4 ? d : 4 * d;
   sqrtd = sqrt(d);
 }
 
@@ -155,7 +155,7 @@ int QuadraticIntegerBig::iValuation(const QuadraticIntegerBig &qi) {
 }
 
 vector<QuadraticIntegerBig> QuadraticIntegerBig::qiPrimeFactors() const {
-  if ((a == 0 && b == 0) || bIsInvertible())
+  if ((a == 0 && b == 0) || isInvertible())
     return vector<QuadraticIntegerBig>(0);
 
   vector<QuadraticIntegerBig> qiPrimesFactors;
@@ -166,13 +166,13 @@ vector<QuadraticIntegerBig> QuadraticIntegerBig::qiPrimeFactors() const {
     cout << iN << endl;
     throw(string("QuadraticIntegerBig::qiPrimeFactors(): Norm too big"));
   }
-  auto iNormPrimesFactors(iPrimeFactors(iN.get_ui()));
+  auto iNormPrimesFactors(primeFactors(iN.get_ui()));
 
   for (auto iNPF : iNormPrimesFactors) {
     auto qiTemp(QuadraticIntegerBig::qiFactorsRationalPrime(iNPF));
 
     for (auto qiF : qiTemp) {
-      if (bIsDivisbleBy(
+      if (isDivisibleBy(
               &qiF)) // qiF divides either *this or the conjugate of *this
         qiPrimesFactors.push_back(qiF);
     }
@@ -192,12 +192,12 @@ array<long int, 2> QuadraticIntegerBig::iPellEquation(const unsigned int &iN) {
     // TODO: regarder si iSQRTsup
     if (iNegative == 0) {
       L1 = 0;
-      L2 = iSQRT(((iN * (iPellMinimalSolution[d][0] - 1)) % (2 * d))
+      L2 = integerSqrt(((iN * (iPellMinimalSolution[d][0] - 1)) % (2 * d))
                      ? (iN * (iPellMinimalSolution[d][0] - 1)) / (2 * d) + 1
                      : (iN * (iPellMinimalSolution[d][0] - 1)) / (2 * d));
     } else {
-      L1 = iSQRT(iN / d);
-      L2 = iSQRT(((iN * (iPellMinimalSolution[d][0] + 1)) % (2 * d))
+      L1 = integerSqrt(iN / d);
+      L2 = integerSqrt(((iN * (iPellMinimalSolution[d][0] + 1)) % (2 * d))
                      ? (iN * (iPellMinimalSolution[d][0] + 1)) / (2 * d) + 1
                      : (iN * (iPellMinimalSolution[d][0] + 1)) / (2 * d));
     }
@@ -207,10 +207,10 @@ array<long int, 2> QuadraticIntegerBig::iPellEquation(const unsigned int &iN) {
 
       if (iXTemp >= 0) // if it is a square
       {
-        iSqrt = iSQRT((unsigned long int)iXTemp);
+        iSqrt = integerSqrt((unsigned long int)iXTemp);
 
         if (iSqrt * iSqrt == iXTemp &&
-            (!bIsOneMod4 ||
+            (!isOneMod4 ||
              ((iXTemp % 2) == (y % 2)))) // if iXTemp is a square and if the x,y
                                          // have the same parity if d=1(4)
           return array<long int, 2>({iSqrt, y});
@@ -226,7 +226,7 @@ std::map<QuadraticIntegerBig, unsigned int>
 QuadraticIntegerBig::qiPrimeDecomposition() const {
   // TODO: mettre en cache?
 
-  if ((a == 0 && b == 0) || bIsInvertible())
+  if ((a == 0 && b == 0) || isInvertible())
     return map<QuadraticIntegerBig, unsigned int>();
 
   mpz_class iN(abs(iNorm()));
@@ -235,7 +235,7 @@ QuadraticIntegerBig::qiPrimeDecomposition() const {
 
   map<QuadraticIntegerBig, unsigned int> qiDecomp;
   map<unsigned long, unsigned int> iDecom(
-      iPrimeDecomposition<long unsigned>(iN.get_ui()));
+      primeDecomposition<long unsigned>(iN.get_ui()));
   unsigned int iPower;
 
   QuadraticIntegerBig qiTemp(*this);
@@ -264,10 +264,10 @@ QuadraticIntegerBig::qiFactorsRationalPrime(const unsigned int &iPrime,
     throw(string("d must be specified"));
 
   if (iPrime % 2 && d % iPrime) {
-    if (iJacobiSymbol(d, iPrime) == -1)
+    if (jacobiSymbol(d, iPrime) == -1)
       return vector<QuadraticIntegerBig>({QuadraticIntegerBig(iPrime)});
 
-    if (bIsOneMod4) {
+    if (isOneMod4) {
       array<long int, 2> iCoeffs(
           QuadraticIntegerBig::iPellEquation(4 * iPrime));
 
@@ -287,7 +287,7 @@ QuadraticIntegerBig::qiFactorsRationalPrime(const unsigned int &iPrime,
     }
   } else if (d % iPrime == 0) // p divides d
   {
-    if (bIsOneMod4) {
+    if (isOneMod4) {
       array<long int, 2> iCoeffs(
           QuadraticIntegerBig::iPellEquation(4 * iPrime));
 
@@ -328,7 +328,7 @@ QuadraticIntegerBig::qiFactorsRationalPrime(const unsigned int &iPrime,
 
 double QuadraticIntegerBig::to_double() const {
   mpf_class temp(a);
-  if (bIsOneMod4)
+  if (isOneMod4)
     temp += (sqrtd + 1) * b / 2;
   else
     temp += sqrtd * b;
@@ -338,7 +338,7 @@ double QuadraticIntegerBig::to_double() const {
 
 mpz_class QuadraticIntegerBig::floor() const {
   mpf_class temp(a);
-  if (bIsOneMod4)
+  if (isOneMod4)
     temp += (sqrtd + 1) * b / 2;
   else
     temp += sqrtd * b;
@@ -346,18 +346,18 @@ mpz_class QuadraticIntegerBig::floor() const {
   return (mpz_class)::floor(temp);
 }
 
-bool QuadraticIntegerBig::bIsEqualTo(const int &n) const {
+bool QuadraticIntegerBig::isEqualTo(const int &n) const {
   return (a == n && b == 0);
 }
 
-bool QuadraticIntegerBig::bIsEqualTo(const AlgebraicInteger &ai) const {
+bool QuadraticIntegerBig::isEqualTo(const AlgebraicInteger &ai) const {
   QuadraticIntegerBig qi(dynamic_cast<const QuadraticIntegerBig &>(ai));
 
   return (a == qi.a && b == qi.b);
 }
 
-bool QuadraticIntegerBig::bIsGreaterThan(const int &n) const {
-  mpz_class aTemp(bIsOneMod4 ? (mpz_class(n - a) * 2 - b) : mpz_class(n - a));
+bool QuadraticIntegerBig::isGreaterThan(const int &n) const {
+  mpz_class aTemp(isOneMod4 ? (mpz_class(n - a) * 2 - b) : mpz_class(n - a));
   mpz_class bTemp(-b);
 
   if (aTemp < 0) {
@@ -373,8 +373,8 @@ bool QuadraticIntegerBig::bIsGreaterThan(const int &n) const {
   }
 }
 
-bool QuadraticIntegerBig::bIsGreaterThan(const long int &n) const {
-  mpz_class aTemp(bIsOneMod4 ? (mpz_class(n - a) * 2 - b) : mpz_class(n - a));
+bool QuadraticIntegerBig::isGreaterThan(const long int &n) const {
+  mpz_class aTemp(isOneMod4 ? (mpz_class(n - a) * 2 - b) : mpz_class(n - a));
   mpz_class bTemp(-b);
 
   if (aTemp < 0) {
@@ -390,19 +390,19 @@ bool QuadraticIntegerBig::bIsGreaterThan(const long int &n) const {
   }
 }
 
-bool QuadraticIntegerBig::bIsGreaterOEThan(const int &n) const {
-  return ((b == 0 && a == n) || bIsGreaterThan(n));
+bool QuadraticIntegerBig::isGreaterOEThan(const int &n) const {
+  return ((b == 0 && a == n) || isGreaterThan(n));
 }
 
 bool operator<(const QuadraticIntegerBig &qi1, const QuadraticIntegerBig &qi2) {
-  return qi1.bIsLessThan(qi2);
+  return qi1.isLessThan(qi2);
 }
 
-bool QuadraticIntegerBig::bIsLessThan(const AlgebraicInteger &ai) const {
+bool QuadraticIntegerBig::isLessThan(const AlgebraicInteger &ai) const {
   mpz_class x(dynamic_cast<const QuadraticIntegerBig &>(ai).a);
   mpz_class y(dynamic_cast<const QuadraticIntegerBig &>(ai).b);
 
-  mpz_class aTemp(bIsOneMod4 ? (mpz_class(a - x) * 2 + b - y)
+  mpz_class aTemp(isOneMod4 ? (mpz_class(a - x) * 2 + b - y)
                              : mpz_class(a - x));
   mpz_class bTemp(b - y);
 
@@ -419,14 +419,14 @@ bool QuadraticIntegerBig::bIsLessThan(const AlgebraicInteger &ai) const {
   }
 }
 
-bool QuadraticIntegerBig::bIsLessOEThan(const AlgebraicInteger &ai) const {
+bool QuadraticIntegerBig::isLessOEThan(const AlgebraicInteger &ai) const {
   mpz_class x(dynamic_cast<const QuadraticIntegerBig &>(ai).a);
   mpz_class y(dynamic_cast<const QuadraticIntegerBig &>(ai).b);
 
   if (x == a && y == b)
     return true;
 
-  mpz_class aTemp(bIsOneMod4 ? (mpz_class(a - x) * 2 + b - y)
+  mpz_class aTemp(isOneMod4 ? (mpz_class(a - x) * 2 + b - y)
                              : mpz_class(a - x));
   mpz_class bTemp(b - y);
 
@@ -443,8 +443,8 @@ bool QuadraticIntegerBig::bIsLessOEThan(const AlgebraicInteger &ai) const {
   }
 }
 
-bool QuadraticIntegerBig::bIsLessThan(const int &n) const {
-  mpz_class aTemp(bIsOneMod4 ? (mpz_class(a - n) * 2 + b) : mpz_class(a - n));
+bool QuadraticIntegerBig::isLessThan(const int &n) const {
+  mpz_class aTemp(isOneMod4 ? (mpz_class(a - n) * 2 + b) : mpz_class(a - n));
 
   if (aTemp < 0) {
     if (b <= 0)
@@ -459,8 +459,8 @@ bool QuadraticIntegerBig::bIsLessThan(const int &n) const {
   }
 }
 
-bool QuadraticIntegerBig::bIsLessThan(const long int &n) const {
-  mpz_class aTemp(bIsOneMod4 ? (mpz_class(a - n) * 2 + b) : mpz_class(a - n));
+bool QuadraticIntegerBig::isLessThan(const long int &n) const {
+  mpz_class aTemp(isOneMod4 ? (mpz_class(a - n) * 2 + b) : mpz_class(a - n));
 
   if (aTemp < 0) {
     if (b <= 0)
@@ -481,7 +481,7 @@ void QuadraticIntegerBig::opp() {
 }
 
 void QuadraticIntegerBig::conjugate() {
-  if (bIsOneMod4)
+  if (isOneMod4)
     a += b;
 
   b *= -1;
@@ -507,7 +507,7 @@ void QuadraticIntegerBig::multiplyBy(const AlgebraicInteger *ai) {
   mpz_class iA2(dynamic_cast<const QuadraticIntegerBig *>(ai)->a);
   mpz_class iB2(dynamic_cast<const QuadraticIntegerBig *>(ai)->b);
 
-  if (bIsOneMod4) {
+  if (isOneMod4) {
     a = iA1 * iA2 + iB1 * iB2 * (d - 1) / 4;
     b = iB1 * iA2 + iA1 * iB2 + iB1 * iB2;
   } else {
@@ -528,7 +528,7 @@ bool QuadraticIntegerBig::divideByIfDivisible(const AlgebraicInteger *ai) {
   if (this->iNorm() % iNorm2 != 0)
     return false;
 
-  if (bIsOneMod4) {
+  if (isOneMod4) {
     if ((a * (2 * iA2 + iB2) + b * iA2 - b * iB2 * (d - 1) / 2) % iNorm2 != 0)
       return false;
 
@@ -551,7 +551,7 @@ void QuadraticIntegerBig::divideBy(const AlgebraicInteger *ai) {
   mpz_class iB2(dynamic_cast<const QuadraticIntegerBig *>(ai)->b);
   mpz_class iNorm2(dynamic_cast<const QuadraticIntegerBig *>(ai)->iNorm());
 
-  if (bIsOneMod4) {
+  if (isOneMod4) {
     a = (iA1 * (iA2 + iB2) - iB1 * iB2 * (d - 1) / 4) / iNorm2;
     b = (iB1 * iA2 - iA1 * iB2) / iNorm2;
   } else {
@@ -560,7 +560,7 @@ void QuadraticIntegerBig::divideBy(const AlgebraicInteger *ai) {
   }
 }
 
-bool QuadraticIntegerBig::bIsDivisbleBy(const AlgebraicInteger *ai) const {
+bool QuadraticIntegerBig::isDivisibleBy(const AlgebraicInteger *ai) const {
   const QuadraticIntegerBig *qi(dynamic_cast<const QuadraticIntegerBig *>(ai));
 
   mpz_class iNorm2(qi->iNorm());
@@ -568,7 +568,7 @@ bool QuadraticIntegerBig::bIsDivisbleBy(const AlgebraicInteger *ai) const {
   if (this->iNorm() % iNorm2 != 0)
     return false;
 
-  if (bIsOneMod4) {
+  if (isOneMod4) {
     if ((a * (2 * qi->a + qi->b) + b * qi->a - b * qi->b * (d - 1) / 2) %
             iNorm2 !=
         0)
@@ -581,9 +581,9 @@ bool QuadraticIntegerBig::bIsDivisbleBy(const AlgebraicInteger *ai) const {
   return true;
 }
 
-bool QuadraticIntegerBig::bIsAssociateTo(QuadraticIntegerBig qi2) {
+bool QuadraticIntegerBig::isAssociateTo(QuadraticIntegerBig qi2) {
   if (qi2.divideByIfDivisible(this)) {
-    if (qi2.bIsInvertible())
+    if (qi2.isInvertible())
       return true;
   }
 
@@ -595,10 +595,10 @@ void QuadraticIntegerBig::gcd(const AlgebraicInteger *ai) {
 
   // -----------------------------------------
   // If one of the two is zero
-  if (ai->bIsEqualTo(0))
+  if (ai->isEqualTo(0))
     return;
 
-  if (this->bIsEqualTo(0)) {
+  if (this->isEqualTo(0)) {
     const QuadraticIntegerBig *qi(
         dynamic_cast<const QuadraticIntegerBig *>(ai));
     a = qi->a;
@@ -607,7 +607,7 @@ void QuadraticIntegerBig::gcd(const AlgebraicInteger *ai) {
   }
 
   // -----------------------------------------
-  // If one is bIsInvertible
+  // If one is isInvertible
   mpz_class iNorm1(abs(this->iNorm())), iNorm2(abs(qi->iNorm()));
   if (iNorm1 == 1 || iNorm2 == 1) {
     a = 1;
@@ -619,9 +619,9 @@ void QuadraticIntegerBig::gcd(const AlgebraicInteger *ai) {
   // Some other trivial cases
   if (a == qi->a && b == qi->b)
     return;
-  else if (qi->bIsDivisbleBy(this))
+  else if (qi->isDivisibleBy(this))
     return;
-  else if (this->bIsDivisbleBy(qi)) {
+  else if (this->isDivisibleBy(qi)) {
     a = qi->a;
     b = qi->b;
     return;
@@ -650,14 +650,14 @@ void QuadraticIntegerBig::gcd(const AlgebraicInteger *ai) {
   }
 }
 
-bool QuadraticIntegerBig::bIsSquareOfIvertible() const {
-  if (this->bIsInvertible()) {
+bool QuadraticIntegerBig::isSquareOfIvertible() const {
+  if (this->isInvertible()) {
     QuadraticIntegerBig qiUnit(QuadraticIntegerBig::iFundamentalUnits[5][0],
                                QuadraticIntegerBig::iFundamentalUnits[5][1]);
     QuadraticIntegerBig qiTemp(*this);
     unsigned int iPower(0);
 
-    while (!qiTemp.bIsEqualTo(1)) {
+    while (!qiTemp.isEqualTo(1)) {
       qiTemp.divideBy(&qiUnit);
       iPower++;
     }
@@ -667,7 +667,7 @@ bool QuadraticIntegerBig::bIsSquareOfIvertible() const {
   return false;
 }
 
-bool QuadraticIntegerBig::bIsInvertible() const {
+bool QuadraticIntegerBig::isInvertible() const {
   mpz_class iNorm(this->iNorm());
   return (iNorm == 1 || iNorm == -1);
 }
@@ -694,14 +694,14 @@ void QuadraticIntegerBig::set(const int &n) {
 }
 
 mpz_class QuadraticIntegerBig::iNorm() const {
-  if (bIsOneMod4)
+  if (isOneMod4)
     return (a * (a + b) - b * b * (d - 1) / 4);
   else
     return (a * a - b * b * mpz_class(d));
 }
 
 mpz_class QuadraticIntegerBig::iTrace() const {
-  if (bIsOneMod4)
+  if (isOneMod4)
     return (a * 2 + b);
   else
     return a * 2;
@@ -713,7 +713,7 @@ QuadraticIntegerBig::iSQRTsup_quotient(const QuadraticIntegerBig &qiNum,
   mpz_class x, y, z, s;
   mpz_class iNumTrace(qiNum.iTrace()), iDenTrace(qiDen.iTrace());
 
-  if (bIsOneMod4) {
+  if (isOneMod4) {
     x = iNumTrace * iDenTrace - qiNum.b * qiDen.b * d;
     y = qiNum.b * iDenTrace - qiDen.b * iNumTrace;
     z = 4 * qiDen.iNorm();
@@ -738,7 +738,7 @@ QuadraticIntegerBig::iSQRTsup_quotient(const QuadraticIntegerBig &qiNum,
     } else
       is = 0;
 
-    s = iSQRTsupQuotient(x + is, z);
+    s = sqrtSupQuotient(x + is, z);
 
     while ((z * (s + 1) * (s + 1) - x) * (z * (s + 1) * (s + 1) - x) <=
            y * y * d)
@@ -747,7 +747,7 @@ QuadraticIntegerBig::iSQRTsup_quotient(const QuadraticIntegerBig &qiNum,
     mpz_class is(y * y * d);
     mpz_sqrt(is.get_mpz_t(), is.get_mpz_t());
 
-    s = iSQRTsupQuotient(x - is, z);
+    s = sqrtSupQuotient(x - is, z);
 
     mpz_class iTemp(x - (s - 1) * (s - 1) * z);
 
@@ -766,7 +766,7 @@ QuadraticIntegerBig::iSQRT_quotient(const QuadraticIntegerBig &qiNum,
   mpz_class x, y, z, s;
   mpz_class iNumTrace(qiNum.iTrace()), iDenTrace(qiDen.iTrace());
 
-  if (bIsOneMod4) {
+  if (isOneMod4) {
     x = iNumTrace * iDenTrace - qiNum.b * qiDen.b * d;
     y = qiNum.b * iDenTrace - qiDen.b * iNumTrace;
     z = 4 * qiDen.iNorm();
@@ -785,13 +785,13 @@ QuadraticIntegerBig::iSQRT_quotient(const QuadraticIntegerBig &qiNum,
   mpz_class is(y * y * d);
   mpz_sqrt(is.get_mpz_t(), is.get_mpz_t());
   if (y >= 0) {
-    s = iSQRTQuotient(x + is, z);
+    s = sqrtQuotient(x + is, z);
 
     while ((z * (s + 1) * (s + 1) - x) * (z * (s + 1) * (s + 1) - x) <=
            y * y * d)
       s++;
   } else {
-    s = iSQRTsupQuotient(x - is, z);
+    s = sqrtSupQuotient(x - is, z);
 
     mpz_class iTemp(z * s * s - x);
 
@@ -835,7 +835,7 @@ std::string QuadraticIntegerBig::to_string(const string &strFormat,
   mpz_class babs(abs(b));
 
   if (strFormat == "mathematica") {
-    if (bIsOneMod4) {
+    if (isOneMod4) {
       if (a == 0) {
         if (b == 0)
           return "0";
@@ -945,7 +945,7 @@ QuadraticIntegerBig QuadraticIntegerBig::operator-() const {
 }
 
 bool QuadraticIntegerBig::operator>(const QuadraticIntegerBig &ri) const {
-  return !bIsLessOEThan(ri);
+  return !isLessOEThan(ri);
 }
 
 bool QuadraticIntegerBig::operator==(const QuadraticIntegerBig &qi) const {

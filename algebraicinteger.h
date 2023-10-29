@@ -76,17 +76,17 @@ public:
    */
   virtual void removeSquareFactors() = 0;
 
-  /*!	\fn bIsInvertible()
+  /*!	\fn isInvertible()
    * 	\brief Check whether the number is invertible
    * 	\return True if invertible or not
    */
-  virtual bool bIsInvertible() const = 0;
+  virtual bool isInvertible() const = 0;
 
-  /*!	\fn bIsSquareOfIvertible()
+  /*!	\fn isSquareOfIvertible()
    * 	\brief Check whether the number is the square of an invertible element
    * 	\return True if invertible or not
    */
-  virtual bool bIsSquareOfIvertible() const = 0;
+  virtual bool isSquareOfIvertible() const = 0;
 
   /*!	\fn gcd( const AlgebraicInteger* ai )
    * 	\brief *this becomes the gcd of *this and the parameter
@@ -94,12 +94,12 @@ public:
    */
   virtual void gcd(const AlgebraicInteger *ai) = 0;
 
-  /*!	\fn bIsDivisbleBy( const AlgebraicInteger* ai )
+  /*!	\fn isDivisibleBy( const AlgebraicInteger* ai )
    * 	\brief Check whether *this is divisible by the parameter
    * 	\param ai( const AlgebraicInteger* ) Pointer to the divisor
    * 	\return True if *this is divisible by the parameter
    */
-  virtual bool bIsDivisbleBy(const AlgebraicInteger *ai) const = 0;
+  virtual bool isDivisibleBy(const AlgebraicInteger *ai) const = 0;
 
   /*!	\fn divideBy( const AlgebraicInteger* ai )
    * 	\brief Performs the division of *this by the parameter
@@ -138,40 +138,40 @@ public:
    */
   virtual void opp() = 0;
 
-  /*!	\fn bool bIsLessThan( const int& n ) const = 0
+  /*!	\fn bool isLessThan( const int& n ) const = 0
    * 	\brief Check whether *this < n
    */
-  virtual bool bIsLessThan(const int &n) const = 0;
+  virtual bool isLessThan(const int &n) const = 0;
 
-  /*!	\fn bool bIsLessThan( const AlgebraicInteger& ai )const = 0
+  /*!	\fn bool isLessThan( const AlgebraicInteger& ai )const = 0
    * 	\brief Check whether *this < ai
    */
-  virtual bool bIsLessThan(const AlgebraicInteger &ai) const = 0;
+  virtual bool isLessThan(const AlgebraicInteger &ai) const = 0;
 
-  /*!	\fn bIsLessOEThan( const AlgebraicInteger& ai ) const = 0
+  /*!	\fn isLessOEThan( const AlgebraicInteger& ai ) const = 0
    * 	\brief Check whether *this <= ai
    */
-  virtual bool bIsLessOEThan(const AlgebraicInteger &ai) const = 0;
+  virtual bool isLessOEThan(const AlgebraicInteger &ai) const = 0;
 
-  /*!	\fn bIsGreaterThan( const int& n ) const = 0
+  /*!	\fn isGreaterThan( const int& n ) const = 0
    * 	\brief Check whether *this > n
    */
-  virtual bool bIsGreaterThan(const int &n) const = 0;
+  virtual bool isGreaterThan(const int &n) const = 0;
 
-  /*!	\fn bIsGreaterOEThan( const int& n ) const = 0
+  /*!	\fn isGreaterOEThan( const int& n ) const = 0
    * 	\brief Check whether *this >= n
    */
-  virtual bool bIsGreaterOEThan(const int &n) const = 0;
+  virtual bool isGreaterOEThan(const int &n) const = 0;
 
-  /*!	\fn bIsEqualTo( const AlgebraicInteger& n ) const = 0
+  /*!	\fn isEqualTo( const AlgebraicInteger& n ) const = 0
    * 	\brief Check whether *this == ai
    */
-  virtual bool bIsEqualTo(const AlgebraicInteger &ai) const = 0;
+  virtual bool isEqualTo(const AlgebraicInteger &ai) const = 0;
 
-  /*!	\fn bIsEqualTo( const int& n ) const = 0
+  /*!	\fn isEqualTo( const int& n ) const = 0
    * 	\brief Check whether *this == n
    */
-  virtual bool bIsEqualTo(const int &n) const = 0;
+  virtual bool isEqualTo(const int &n) const = 0;
 
   /*!	\fn operator==( const AlgebraicInteger& ai ) const
    * 	\brief Check whether *this == ai

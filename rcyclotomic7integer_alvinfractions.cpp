@@ -43,12 +43,12 @@ void RCyclotomic7Integer_VFs::computeNextAlVinFractions() {
     long int iMprime(0),
         imprime(0); // Used only if bIsMprimeLongInt/bIsmprimeLongInt is true
 
-    if (rciE->bIsLongInt()) {
+    if (rciE->isLongInt()) {
       // If m' is an integer
       iTemp = -rciE->iC[0].get_si() * iMin;
 
       iSqrtTemp =
-          iSQRT<unsigned long int>(iTemp); // rciE & iLastMaximum are positive
+          integerSqrt<unsigned long int>(iTemp); // rciE & iLastMaximum are positive
       if (iSqrtTemp * iSqrtTemp == iTemp)  // if iTemp is a square
       {
         bIsmprimeLongInt = true;
@@ -59,7 +59,7 @@ void RCyclotomic7Integer_VFs::computeNextAlVinFractions() {
       iTemp = -rciE->iC[0].get_si() * iLastMaximum;
 
       iSqrtTemp =
-          iSQRT<unsigned long int>(iTemp); // rciE & iLastMaximum are positive
+          integerSqrt<unsigned long int>(iTemp); // rciE & iLastMaximum are positive
       if (iSqrtTemp * iSqrtTemp == iTemp)  // if iTemp is a square
       {
         bIsMprimeLongInt = true;
@@ -163,7 +163,7 @@ void RCyclotomic7Integer_VFs::computeNextAlVinFractions() {
         }
 
         for (long int c(cMin); c <= cMax; c++) {
-          RCyclotomic7Integer rci({a, b, c});
+          RCyclotomic7Integer rci(a, b, c);
           interval gaol_rci(rci.to_interval());
 
           if (gaol_rci.certainly_leq(gaol_mprime))
