@@ -711,7 +711,7 @@ bool RCyclotomic7Integer::isAssociateTo(const AlgebraicInteger *ai) {
        iNormb) == 0);
 }
 
-bool RCyclotomic7Integer::isDivisbleBy(const AlgebraicInteger *ai) const {
+bool RCyclotomic7Integer::isDivisibleBy(const AlgebraicInteger *ai) const {
   const RCyclotomic7Integer *rci(dynamic_cast<const RCyclotomic7Integer *>(ai));
 
   mpz_class a0(iC[0]), a1(iC[1]), a2(iC[2]);
@@ -765,9 +765,9 @@ void RCyclotomic7Integer::gcd(const AlgebraicInteger *ai) {
   // Some other trivial cases
   if (iC[0] == rci->iC[0] && iC[1] == rci->iC[1] && iC[2] == rci->iC[2])
     return;
-  else if (rci->isDivisbleBy(this))
+  else if (rci->isDivisibleBy(this))
     return;
-  else if (this->isDivisbleBy(rci)) {
+  else if (this->isDivisibleBy(rci)) {
     iC[0] = rci->iC[0];
     iC[1] = rci->iC[1];
     iC[2] = rci->iC[2];
@@ -847,7 +847,7 @@ vector<RCyclotomic7Integer> RCyclotomic7Integer::rciPrimeFactors() const {
     auto rciTemp(iPrimesDecomposition[iNPF]);
 
     for (auto rciF : rciTemp) {
-      if (isDivisbleBy(
+      if (isDivisibleBy(
               &rciF)) // rciF divides either *this or the conjugate of *this
         rciPrimesFactors.push_back(rciF);
     }

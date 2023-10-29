@@ -321,7 +321,7 @@ void RCyclotomic7Integer_AlVin::findVector(
         // crystallographic condition
         rciTemp.set(&rci2QF[iIndex]);
         rciTemp.multiplyBy(&rci);
-        if (!rciTemp.isDivisbleBy(rciNorm2))
+        if (!rciTemp.isDivisibleBy(rciNorm2))
           continue;
 
         // ------------------------------------------------------

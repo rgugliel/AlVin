@@ -106,7 +106,7 @@ bool RationalInteger::isEqualTo(const AlgebraicInteger &ai) const {
 
 bool RationalInteger::isEqualTo(const int &n) const { return (iVal == n); }
 
-bool RationalInteger::isDivisbleBy(const AlgebraicInteger *ai) const {
+bool RationalInteger::isDivisibleBy(const AlgebraicInteger *ai) const {
   return !(iVal % dynamic_cast<const RationalInteger *>(ai)->iVal);
 }
 

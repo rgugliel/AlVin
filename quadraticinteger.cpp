@@ -151,7 +151,7 @@ vector<QuadraticInteger> QuadraticInteger::qiPrimeFactors() const {
     auto qiTemp(QuadraticInteger::qiFactorsRationalPrime(iNPF));
 
     for (auto qiF : qiTemp) {
-      if (isDivisbleBy(
+      if (isDivisibleBy(
               &qiF)) // qiF divides either *this or the conjugate of *this
         qiPrimesFactors.push_back(qiF);
     }
@@ -527,7 +527,7 @@ void QuadraticInteger::divideBy(const AlgebraicInteger *ai) {
   }
 }
 
-bool QuadraticInteger::isDivisbleBy(const AlgebraicInteger *ai) const {
+bool QuadraticInteger::isDivisibleBy(const AlgebraicInteger *ai) const {
   const QuadraticInteger *qi(dynamic_cast<const QuadraticInteger *>(ai));
 
   long int iNorm2(qi->iNorm());
@@ -584,9 +584,9 @@ void QuadraticInteger::gcd(const AlgebraicInteger *ai) {
   // Some other trivial cases
   if (a == qi->a && b == qi->b)
     return;
-  else if (qi->isDivisbleBy(this))
+  else if (qi->isDivisibleBy(this))
     return;
-  else if (this->isDivisbleBy(qi)) {
+  else if (this->isDivisibleBy(qi)) {
     a = qi->a;
     b = qi->b;
     return;
