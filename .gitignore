@@ -1,4 +1,7 @@
 html/
 documents/
-tools/
+tools/benchmarks/
+tools/classification/
+tools/nr/
+tools/sharlau/
 .vscode/
